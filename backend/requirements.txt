@@ -8,7 +8,7 @@ cryptography==50.0.0
 dnspython==2.8.0
 ecdsa==0.19.2
 email-validator==2.3.0
-fastapi[standard]==0.141.1
+fastapi==0.141.1
 h11==0.16.0
 idna==3.18
 passlib==1.7.4
