@@ -1,10 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import LiquidGlassButton from "../ui/LiquidGlassButton";
 
@@ -14,14 +11,9 @@ import { getMedia } from "../../api/media";
 function Hero() {
   const navigate = useNavigate();
 
-  const [currentVideo, setCurrentVideo] =
-    useState(0);
-
-  const [videos, setVideos] =
-    useState([]);
-
-  const [settings, setSettings] =
-    useState(null);
+  const [currentVideo, setCurrentVideo] = useState(0);
+  const [videos, setVideos] = useState([]);
+  const [settings, setSettings] = useState(null);
 
   /*
   =====================================================
@@ -35,40 +27,28 @@ function Hero() {
         const data = await getMedia();
 
         const heroVideos = data.filter((file) => {
-          const filename =
-            file.filename?.toLowerCase() || "";
+          const filename = file.filename?.toLowerCase() || "";
 
           const isVideo =
-            file.mime_type
-              ?.toLowerCase()
-              .startsWith("video/") ||
-            /\.(mp4|webm|mov|avi|mkv)$/i.test(
-              filename
-            );
+            file.mime_type?.toLowerCase().startsWith("video/") ||
+            /\.(mp4|webm|mov|avi|mkv)$/i.test(filename);
 
-          return (
-            file.folder === "hero" &&
-            isVideo
-          );
+          return file.folder === "hero" && isVideo;
         });
 
-        const sortedVideos =
-          heroVideos.sort((a, b) =>
-            a.filename.localeCompare(
-              b.filename,
-              undefined,
-              {
-                numeric: true,
-              }
-            )
-          );
+        const sortedVideos = heroVideos.sort((a, b) =>
+          a.filename.localeCompare(
+            b.filename,
+            undefined,
+            {
+              numeric: true,
+            }
+          )
+        );
 
         setVideos(sortedVideos);
       } catch (error) {
-        console.error(
-          "Failed to load hero videos:",
-          error
-        );
+        console.error("Failed to load hero videos:", error);
       }
     };
 
@@ -85,7 +65,6 @@ function Hero() {
     const loadSettings = async () => {
       try {
         const data = await getSettings();
-
         setSettings(data);
       } catch (error) {
         console.error(
@@ -163,8 +142,7 @@ function Hero() {
 
     const interval = setInterval(() => {
       setCurrentVideo(
-        (prev) =>
-          (prev + 1) % videos.length
+        (prev) => (prev + 1) % videos.length
       );
     }, 6000);
 
@@ -200,8 +178,7 @@ function Hero() {
     }
 
     setCurrentVideo(
-      (prev) =>
-        (prev + 1) % videos.length
+      (prev) => (prev + 1) % videos.length
     );
   };
 
@@ -231,13 +208,10 @@ function Hero() {
 
   const currentVideoUrl =
     videos.length > 0
-      ? getVideoUrl(
-          videos[currentVideo]?.path
-        )
+      ? getVideoUrl(videos[currentVideo]?.path)
       : null;
 
-  const hasVideo =
-    Boolean(currentVideoUrl);
+  const hasVideo = Boolean(currentVideoUrl);
 
   /*
   =====================================================
@@ -279,7 +253,6 @@ function Hero() {
         bg-white
       "
     >
-
       {/* =================================================
           BACKGROUND VIDEOS
       ================================================= */}
@@ -295,24 +268,19 @@ function Hero() {
             muted
             playsInline
             preload="auto"
-
             initial={{
               opacity: 0,
             }}
-
             animate={{
               opacity: 1,
             }}
-
             exit={{
               opacity: 0,
             }}
-
             transition={{
               duration: 1.5,
               ease: "easeInOut",
             }}
-
             className="
               absolute
               inset-0
@@ -321,7 +289,6 @@ function Hero() {
               w-full
               object-cover
             "
-
             onError={(error) => {
               console.error(
                 "Hero video failed:",
@@ -347,7 +314,6 @@ function Hero() {
 
       {/* =================================================
           DARK READABILITY OVERLAY
-          Keeps video rich instead of washing it out
       ================================================= */}
 
       {hasVideo && (
@@ -414,8 +380,7 @@ function Hero() {
             position: "absolute",
             top: "50%",
             left: "2rem",
-            transform:
-              "translateY(-50%)",
+            transform: "translateY(-50%)",
             zIndex: 20,
           }}
         >
@@ -441,8 +406,7 @@ function Hero() {
             position: "absolute",
             top: "50%",
             right: "2rem",
-            transform:
-              "translateY(-50%)",
+            transform: "translateY(-50%)",
             zIndex: 20,
           }}
         >
@@ -480,11 +444,9 @@ function Hero() {
           "
           style={{
             perspective: "1000px",
-            perspectiveOrigin:
-              "50% 50%",
+            perspectiveOrigin: "50% 50%",
           }}
         >
-
           {/* =================================================
               COMPANY NAME
           ================================================= */}
@@ -503,8 +465,7 @@ function Hero() {
                 ${theme.labelClass}
               `}
               style={{
-                transformStyle:
-                  "preserve-3d",
+                transformStyle: "preserve-3d",
               }}
             >
               {(
@@ -512,37 +473,31 @@ function Hero() {
                 "TerraLens Innovations"
               )
                 .split("")
-                .map(
-                  (letter, index) => (
-                    <motion.span
-                      key={`${letter}-${index}`}
-                      custom={
-                        0.05 +
-                        index * 0.035
-                      }
-                      variants={
-                        letterReveal
-                      }
-                      initial="hidden"
-                      animate="visible"
-                      className="
-                        inline-block
-                        will-change-transform
-                      "
-                      style={{
-                        transformStyle:
-                          "preserve-3d",
-
-                        whiteSpace:
-                          letter === " "
-                            ? "pre"
-                            : "normal",
-                      }}
-                    >
-                      {letter}
-                    </motion.span>
-                  )
-                )}
+                .map((letter, index) => (
+                  <motion.span
+                    key={`${letter}-${index}`}
+                    custom={
+                      0.05 + index * 0.035
+                    }
+                    variants={letterReveal}
+                    initial="hidden"
+                    animate="visible"
+                    className="
+                      inline-block
+                      will-change-transform
+                    "
+                    style={{
+                      transformStyle:
+                        "preserve-3d",
+                      whiteSpace:
+                        letter === " "
+                          ? "pre"
+                          : "normal",
+                    }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
             </motion.p>
           </div>
 
@@ -567,7 +522,6 @@ function Hero() {
               style={{
                 textShadow:
                   theme.headingShadow,
-
                 transformStyle:
                   "preserve-3d",
               }}
@@ -577,37 +531,31 @@ function Hero() {
                 "TerraLens Homepage"
               )
                 .split("")
-                .map(
-                  (letter, index) => (
-                    <motion.span
-                      key={`${letter}-${index}`}
-                      custom={
-                        0.35 +
-                        index * 0.045
-                      }
-                      variants={
-                        letterReveal
-                      }
-                      initial="hidden"
-                      animate="visible"
-                      className="
-                        inline-block
-                        will-change-transform
-                      "
-                      style={{
-                        transformStyle:
-                          "preserve-3d",
-
-                        whiteSpace:
-                          letter === " "
-                            ? "pre"
-                            : "normal",
-                      }}
-                    >
-                      {letter}
-                    </motion.span>
-                  )
-                )}
+                .map((letter, index) => (
+                  <motion.span
+                    key={`${letter}-${index}`}
+                    custom={
+                      0.35 + index * 0.045
+                    }
+                    variants={letterReveal}
+                    initial="hidden"
+                    animate="visible"
+                    className="
+                      inline-block
+                      will-change-transform
+                    "
+                    style={{
+                      transformStyle:
+                        "preserve-3d",
+                      whiteSpace:
+                        letter === " "
+                          ? "pre"
+                          : "normal",
+                    }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
             </motion.h1>
           </div>
 
@@ -638,42 +586,42 @@ function Hero() {
                 "Hello From Terralens"
               )
                 .split("")
-                .map(
-                  (letter, index) => (
-                    <motion.span
-                      key={`${letter}-${index}`}
-                      custom={
-                        1.15 +
-                        index * 0.025
-                      }
-                      variants={
-                        letterReveal
-                      }
-                      initial="hidden"
-                      animate="visible"
-                      className="
-                        inline-block
-                        will-change-transform
-                      "
-                      style={{
-                        transformStyle:
-                          "preserve-3d",
-
-                        whiteSpace:
-                          letter === " "
-                            ? "pre"
-                            : "normal",
-                      }}
-                    >
-                      {letter}
-                    </motion.span>
-                  )
-                )}
+                .map((letter, index) => (
+                  <motion.span
+                    key={`${letter}-${index}`}
+                    custom={
+                      1.15 + index * 0.025
+                    }
+                    variants={letterReveal}
+                    initial="hidden"
+                    animate="visible"
+                    className="
+                      inline-block
+                      will-change-transform
+                    "
+                    style={{
+                      transformStyle:
+                        "preserve-3d",
+                      whiteSpace:
+                        letter === " "
+                          ? "pre"
+                          : "normal",
+                    }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
             </motion.p>
           </div>
 
           {/* =================================================
               BUTTONS
+              
+              Desktop:
+              Normal position and size.
+
+              Mobile:
+              Smaller and pushed down.
           ================================================= */}
 
           <div
@@ -682,6 +630,11 @@ function Hero() {
               flex
               justify-center
               gap-6
+
+              max-md:mt-14
+              max-md:translate-y-[150px]
+              max-md:scale-[0.78]
+              max-md:gap-3
             "
           >
             <LiquidGlassButton
@@ -735,32 +688,30 @@ function Hero() {
             gap-3
           "
         >
-          {videos.map(
-            (video, index) => (
-              <button
-                key={video.path}
-                type="button"
-                onClick={() =>
-                  setCurrentVideo(index)
-                }
-                aria-label={`Go to video ${
-                  index + 1
-                }`}
-                className={`
-                  cursor-pointer
-                  rounded-full
-                  transition-all
-                  duration-500
+          {videos.map((video, index) => (
+            <button
+              key={video.path}
+              type="button"
+              onClick={() =>
+                setCurrentVideo(index)
+              }
+              aria-label={`Go to video ${
+                index + 1
+              }`}
+              className={`
+                cursor-pointer
+                rounded-full
+                transition-all
+                duration-500
 
-                  ${
-                    currentVideo === index
-                      ? "h-2.5 w-8 bg-white shadow-[0_0_12px_rgba(255,255,255,0.5)]"
-                      : "h-2.5 w-2.5 bg-white/40 hover:bg-white/70"
-                  }
-                `}
-              />
-            )
-          )}
+                ${
+                  currentVideo === index
+                    ? "h-2.5 w-8 bg-white shadow-[0_0_12px_rgba(255,255,255,0.5)]"
+                    : "h-2.5 w-2.5 bg-white/40 hover:bg-white/70"
+                }
+              `}
+            />
+          ))}
         </div>
       )}
 

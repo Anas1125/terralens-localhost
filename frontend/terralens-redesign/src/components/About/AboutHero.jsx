@@ -537,21 +537,18 @@ export default function AboutHero() {
       ================================================= */}
 
       <div
-        style={{
-          position: "relative",
-          zIndex: 10,
-          width: "100%",
-          maxWidth: "85rem",
-          margin: "0 auto",
-          padding: "0 24px",
-          display: "grid",
-          gridTemplateColumns:
-            "minmax(0, 1fr) minmax(0, 1fr)",
-          alignItems: "center",
-          gap: "64px",
-          boxSizing: "border-box",
-        }}
-      >
+        className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16"
+          style={{
+            position: "relative",
+            zIndex: 10,
+            width: "100%",
+            maxWidth: "85rem",
+            margin: "0 auto",
+            padding: "0 24px",
+            alignItems: "center",
+            boxSizing: "border-box",
+          }}
+        >
         {/* =================================================
             LEFT SIDE
         ================================================= */}
