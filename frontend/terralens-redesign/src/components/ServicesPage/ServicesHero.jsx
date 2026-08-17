@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import {
   ArrowDown,
+  ArrowRight,
   Globe2,
   Code2,
   MapPinned,
@@ -42,20 +43,18 @@ export default function ServicesHero() {
   const theme = {
     sectionBg: "#ffffff",
     label: "#0ea5e9",
-
-    // Main heading: white with video, black without video
     heading: hasVideo ? "#ffffff" : "#0f172a",
 
     body: hasVideo ? "#ffffff" : "#475569",
     gridLine: "rgba(15,23,42,0.07)",
 
-    contactBg: "rgba(15,23,42,0.03)",
-    contactBorder: "1px solid rgba(15,23,42,0.3)",
-    contactText: "#0f172a",
-    contactHoverClass:
-      "hover:border-sky-500/50 hover:bg-sky-500/5 hover:text-sky-600 hover:-translate-y-0.5 group",
+    contactBg: "transparent",
+    contactBorder: hasVideo ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.2)",
+    contactText: hasVideo ? "#ffffff" : "#0f172a",
+    contactHoverClass: hasVideo
+      ? "hover:border-white/50 hover:bg-white/5 hover:-translate-y-0.5 transition-all group"
+      : "hover:border-sky-500/50 hover:bg-sky-500/5 hover:text-sky-600 hover:-translate-y-0.5 transition-all group",
 
-    // Transparent card — unchanged
     cardBg: hasVideo
       ? "rgba(17,17,19,0.05)"
       : "rgba(255,255,255,0.05)",
@@ -63,10 +62,7 @@ export default function ServicesHero() {
     cardBorder: "1px solid rgba(15,23,42,0.10)",
     cardShadow: "0 20px 60px rgba(15,23,42,0.08)",
 
-    // Card heading always black
     cardHeading: "#0f172a",
-
-    // Card paragraph: white with video, dark without video
     cardBody: hasVideo ? "#ffffff" : "#475569",
 
     bottomFade:
@@ -367,27 +363,37 @@ export default function ServicesHero() {
             </button>
 
             <button
+              type="button"
               onClick={() => navigate("/contact")}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
+                gap: "10px",
+                padding: "16px 34px",
                 borderRadius: "9999px",
+                background: theme.contactBg,
                 border: `1px solid ${theme.contactBorder}`,
-                backgroundColor: theme.contactBg,
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
-                padding: "16px 36px",
+                backdropFilter: "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
+                color: theme.contactText,
                 fontSize: "1rem",
                 fontWeight: "600",
-                color: theme.contactText,
                 cursor: "pointer",
                 transition: "all 0.3s ease",
-                boxSizing: "border-box",
               }}
               className={theme.contactHoverClass}
             >
               Contact Us
+
+              <ArrowRight
+                size={18}
+                className="
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                "
+              />
             </button>
           </motion.div>
         </div>

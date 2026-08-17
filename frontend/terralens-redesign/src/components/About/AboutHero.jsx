@@ -210,6 +210,7 @@ function SmoothBackgroundVideo({ sources }) {
           opacity: activeVideo === "a" ? 1 : 0,
           transition: "opacity 1.4s ease-in-out",
           zIndex: 1,
+          filter: "contrast(1.25) saturate(1.15) brightness(1)",
         }}
       />
 
@@ -455,7 +456,7 @@ export default function AboutHero() {
         overflow: "hidden",
         backgroundColor: theme.sectionBg,
         width: "100%",
-        minHeight: "760px",
+        minHeight: "100vh",
         padding: "128px 0 96px 0",
         display: "flex",
         alignItems: "center",

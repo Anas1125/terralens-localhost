@@ -512,11 +512,13 @@ function Hero() {
                 "TerraLens Homepage"
               }`}
               className={`
-                text-6xl
+                text-4xl
+                sm:text-5xl
+                md:text-7xl
+                lg:text-8xl
                 font-bold
                 leading-[0.95]
                 tracking-tight
-                md:text-8xl
                 ${theme.headingClass}
               `}
               style={{
