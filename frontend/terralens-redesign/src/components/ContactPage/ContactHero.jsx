@@ -239,34 +239,36 @@ export default function ContactHero() {
           </motion.p>
 
           <motion.h1
-            initial={{
-              opacity: 0,
-              y: 30,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              delay: 0.15,
-            }}
-            className="
-              text-5xl
-              lg:text-6xl
-              font-extrabold
-              leading-[1.1]
-            "
-            style={{ color: theme.heading }}
-          >
-            {settings?.contact_title || "Let's Build Something Great"}
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.15,
+          }}
+          className="
+            text-5xl
+            lg:text-6xl
+            font-extrabold
+            leading-[1.1]
+          "
+          style={{ color: theme.heading }}
+        >
+          <span className="block">
+            Let's Build
+          </span>
 
-            <span
-              className="block"
-              style={{ color: theme.label }}
-            >
-              Something Great
-            </span>
-          </motion.h1>
+          <span
+            className="block"
+            style={{ color: theme.label }}
+          >
+            Something Great
+          </span>
+        </motion.h1>
 
           <motion.p
             initial={{
