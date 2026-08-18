@@ -14,7 +14,7 @@ function Hero() {
   const [currentVideo, setCurrentVideo] = useState(0);
   const [videos, setVideos] = useState([]);
   const [settings, setSettings] = useState(null);
-
+  const [settingsLoading, setSettingsLoading] = useState(true);
   /*
   =====================================================
   LOAD HERO VIDEOS
@@ -71,6 +71,8 @@ function Hero() {
           "Failed to load homepage settings:",
           error
         );
+      } finally {
+        setSettingsLoading(false);
       }
     };
 
@@ -445,6 +447,8 @@ function Hero() {
           style={{
             perspective: "1000px",
             perspectiveOrigin: "50% 50%",
+            opacity: settingsLoading ? 0 : 1,
+            transition: "opacity 0.2s ease",
           }}
         >
           {/* =================================================
