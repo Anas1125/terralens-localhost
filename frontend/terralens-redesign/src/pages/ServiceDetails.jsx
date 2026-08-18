@@ -21,16 +21,49 @@ export default function ServiceDetails() {
         const data = await getServiceBySlug(slug);
 
         setService(data);
+
+        // =====================================================
+        // SEO
+        // =====================================================
+
+        document.title = `${data.name} | TerraLens Pvt Ltd`;
+
+        const description =
+          data.description ||
+          `Learn about ${data.name} services provided by TerraLens Pvt Ltd.`;
+
+        let meta = document.querySelector(
+          'meta[name="description"]'
+        );
+
+        if (!meta) {
+          meta = document.createElement("meta");
+          meta.name = "description";
+          document.head.appendChild(meta);
+        }
+
+        meta.setAttribute("content", description);
       } catch (err) {
         console.error(err);
         setError("Service not found.");
+
+        document.title = "Service Not Found | TerraLens Pvt Ltd";
       } finally {
         setLoading(false);
       }
     };
 
     loadService();
+
+    return () => {
+      document.title =
+        "TerraLens Pvt Ltd | GIS & IT Solutions";
+    };
   }, [slug]);
+
+  // =========================================================
+  // LOADING
+  // =========================================================
 
   if (loading) {
     return (
@@ -41,6 +74,10 @@ export default function ServiceDetails() {
       </section>
     );
   }
+
+  // =========================================================
+  // ERROR
+  // =========================================================
 
   if (error || !service) {
     return (
@@ -80,11 +117,19 @@ export default function ServiceDetails() {
     );
   }
 
+  // =========================================================
+  // IMAGE URL
+  // =========================================================
+
   const imageUrl = service.image
     ? service.image.startsWith("http")
       ? service.image
       : `${import.meta.env.VITE_API_URL}${service.image}`
     : null;
+
+  // =========================================================
+  // PAGE
+  // =========================================================
 
   return (
     <section className="bg-white min-h-screen">
@@ -170,7 +215,6 @@ export default function ServiceDetails() {
             lg:px-8
           "
         >
-
           <div className="max-w-5xl">
 
             {/* Back Button */}
@@ -244,10 +288,8 @@ export default function ServiceDetails() {
             <div className="mt-10 h-1 w-20 rounded-full bg-sky-400" />
 
           </div>
-
         </div>
       </div>
-
 
       {/* =====================================================
           DETAILS
@@ -262,7 +304,6 @@ export default function ServiceDetails() {
           lg:px-8
         "
       >
-
         <div
           className="
             grid
@@ -322,7 +363,6 @@ export default function ServiceDetails() {
 
           </div>
 
-
           {/* Image */}
 
           {imageUrl && (
@@ -353,7 +393,6 @@ export default function ServiceDetails() {
           )}
 
         </div>
-
 
         {/* =====================================================
             CTA
@@ -465,11 +504,8 @@ export default function ServiceDetails() {
             </button>
 
           </div>
-
         </div>
-
       </div>
-
     </section>
   );
 }
