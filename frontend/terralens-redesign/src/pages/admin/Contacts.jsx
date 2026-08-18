@@ -196,6 +196,7 @@ export default function Contacts() {
                   justifyContent: "space-between",
                   alignItems: "flex-start",
                   gap: "20px",
+                  flexWrap: "wrap",
                 }}
               >
                 <div>

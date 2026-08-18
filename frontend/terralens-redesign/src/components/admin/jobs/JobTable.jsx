@@ -8,16 +8,19 @@ export default function JobTable({
   return (
     <div
       style={{
-        background: "#ffffff",
+        width: "100%",
+        overflowX: "auto",
+        overflowY: "hidden",
+        WebkitOverflowScrolling: "touch",
         borderRadius: "20px",
-        overflow: "hidden",
-        border: "1px solid #e2e8f0",
       }}
     >
       <table
         style={{
           width: "100%",
+          minWidth: "850px",
           borderCollapse: "collapse",
+          background: "#ffffff",
         }}
       >
         <thead>
@@ -42,6 +45,7 @@ export default function JobTable({
                   color: "#475569",
                   fontWeight: "600",
                   borderBottom: "1px solid #e2e8f0",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {item}
@@ -60,9 +64,10 @@ export default function JobTable({
             >
               <td
                 style={{
-                  padding: 18,
+                  padding: "18px",
                   color: "#0f172a",
                   fontWeight: "600",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {job.title}
@@ -70,8 +75,9 @@ export default function JobTable({
 
               <td
                 style={{
-                  padding: 18,
+                  padding: "18px",
                   color: "#475569",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {job.department}
@@ -79,8 +85,9 @@ export default function JobTable({
 
               <td
                 style={{
-                  padding: 18,
+                  padding: "18px",
                   color: "#475569",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {job.location}
@@ -88,16 +95,23 @@ export default function JobTable({
 
               <td
                 style={{
-                  padding: 18,
+                  padding: "18px",
                   color: "#475569",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {job.employment_type}
               </td>
 
-              <td style={{ padding: 18 }}>
+              <td
+                style={{
+                  padding: "18px",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 <span
                   style={{
+                    display: "inline-block",
                     background: job.is_active
                       ? "#dcfce7"
                       : "#fee2e2",
@@ -114,8 +128,14 @@ export default function JobTable({
                 </span>
               </td>
 
-              <td style={{ padding: 18 }}>
+              <td
+                style={{
+                  padding: "18px",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 <button
+                  type="button"
                   onClick={() => onEdit(job)}
                   style={{
                     background: "#eff6ff",
@@ -133,6 +153,7 @@ export default function JobTable({
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => onDelete(job)}
                   style={{
                     background: "#fef2f2",

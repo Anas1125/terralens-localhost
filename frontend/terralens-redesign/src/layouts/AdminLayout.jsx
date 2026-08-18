@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getSettings } from "../api/settings";
 import {
   LayoutDashboard,
@@ -13,6 +13,8 @@ import {
   Mail,
   Handshake,
   LogOut,
+  Menu,
+  X,
 } from "lucide-react";
 
 const menu = [
@@ -100,6 +102,8 @@ const menu = [
 export default function AdminLayout() {
   const navigate = useNavigate();
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
 
@@ -147,9 +151,42 @@ export default function AdminLayout() {
         color: "#0f172a",
       }}
     >
-      {/* Sidebar */}
+      {/* =====================================================
+          MOBILE HEADER
+      ====================================================== */}
+
+      <header className="mobile-admin-header">
+        <button
+          type="button"
+          className="mobile-menu-button"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="Open admin menu"
+        >
+          <Menu size={22} />
+        </button>
+
+        <span>TerraLens CMS</span>
+      </header>
+
+      {/* =====================================================
+          MOBILE OVERLAY
+      ====================================================== */}
+
+      {mobileMenuOpen && (
+        <div
+          className="mobile-sidebar-overlay"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* =====================================================
+          SIDEBAR
+      ====================================================== */}
 
       <aside
+        className={`admin-sidebar ${
+          mobileMenuOpen ? "mobile-open" : ""
+        }`}
         style={{
           width: "270px",
           height: "100vh",
@@ -169,6 +206,21 @@ export default function AdminLayout() {
           flexDirection: "column",
         }}
       >
+        {/* Mobile close button */}
+
+        <button
+          type="button"
+          className="mobile-close-button"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close admin menu"
+        >
+          <X size={22} />
+        </button>
+
+        {/* ===================================================
+            LOGO / TITLE
+        ==================================================== */}
+
         <h1
           style={{
             fontSize: "1.8rem",
@@ -180,7 +232,9 @@ export default function AdminLayout() {
           TerraLens CMS
         </h1>
 
-        {/* Navigation */}
+        {/* ===================================================
+            NAVIGATION
+        ==================================================== */}
 
         <div
           style={{
@@ -228,6 +282,7 @@ export default function AdminLayout() {
                       <NavLink
                         key={item.path}
                         to={item.path}
+                        onClick={() => setMobileMenuOpen(false)}
                         style={({ isActive }) => ({
                           display: "flex",
                           alignItems: "center",
@@ -263,7 +318,9 @@ export default function AdminLayout() {
             ))}
           </div>
 
-          {/* Logout Button */}
+          {/* =================================================
+              LOGOUT
+          ================================================== */}
 
           <button
             type="button"
@@ -298,9 +355,12 @@ export default function AdminLayout() {
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* =====================================================
+          MAIN CONTENT
+      ====================================================== */}
 
       <main
+        className="admin-main"
         style={{
           marginLeft: "270px",
           width: "calc(100% - 270px)",
@@ -314,6 +374,245 @@ export default function AdminLayout() {
       >
         <Outlet />
       </main>
+
+      {/* =====================================================
+          RESPONSIVE CSS
+      ====================================================== */}
+
+      <style>{`
+        /* ================================================
+           DESKTOP
+        ================================================= */
+
+        .mobile-admin-header {
+          display: none;
+        }
+
+        .mobile-close-button {
+          display: none;
+        }
+
+        .mobile-sidebar-overlay {
+          display: none;
+        }
+
+
+        /* ================================================
+           TABLET / MOBILE
+        ================================================= */
+
+        @media (max-width: 768px) {
+
+          /* ----------------------------------------------
+             MOBILE HEADER
+          ---------------------------------------------- */
+
+          .mobile-admin-header {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 64px;
+
+            padding: 0 16px;
+
+            box-sizing: border-box;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #e2e8f0;
+
+            z-index: 90;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            color: #0f172a;
+          }
+
+
+          /* ----------------------------------------------
+             HAMBURGER BUTTON
+          ---------------------------------------------- */
+
+          .mobile-menu-button {
+            width: 42px;
+            height: 42px;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            color: #0f172a;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+
+            transition: 0.2s;
+          }
+
+          .mobile-menu-button:hover {
+            background: #f8fafc;
+          }
+
+
+          /* ----------------------------------------------
+             SIDEBAR
+          ---------------------------------------------- */
+
+          .admin-sidebar {
+            width: 270px !important;
+
+            max-width: 85vw;
+
+            transform: translateX(-100%);
+
+            transition:
+              transform 0.3s ease,
+              box-shadow 0.3s ease;
+
+            box-shadow: none;
+
+            z-index: 100 !important;
+          }
+
+
+          /* Sidebar opened */
+
+          .admin-sidebar.mobile-open {
+            transform: translateX(0);
+
+            box-shadow:
+              8px 0 30px rgba(15, 23, 42, 0.15);
+          }
+
+
+          /* ----------------------------------------------
+             CLOSE BUTTON
+          ---------------------------------------------- */
+
+          .mobile-close-button {
+            position: absolute;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            top: 18px;
+            right: 18px;
+
+            width: 38px;
+            height: 38px;
+
+            padding: 0;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            color: #475569;
+
+            cursor: pointer;
+
+            z-index: 5;
+          }
+
+
+          /* ----------------------------------------------
+             MAIN CONTENT
+          ---------------------------------------------- */
+
+          .admin-main {
+            margin-left: 0 !important;
+
+            width: 100% !important;
+
+            height: 100vh;
+
+            padding:
+              80px
+              16px
+              24px
+              16px !important;
+
+            box-sizing: border-box;
+          }
+
+
+          /* ----------------------------------------------
+             OVERLAY
+          ---------------------------------------------- */
+
+          .mobile-sidebar-overlay {
+            display: block;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+              rgba(15, 23, 42, 0.45);
+
+            z-index: 95;
+          }
+        }
+
+
+        /* ================================================
+           SMALL PHONES
+        ================================================= */
+
+        @media (max-width: 480px) {
+
+          .mobile-admin-header {
+            height: 60px;
+
+            padding: 0 12px;
+
+            font-size: 17px;
+          }
+
+
+          .mobile-menu-button {
+            width: 40px;
+            height: 40px;
+          }
+
+
+          .mobile-close-button {
+            top: 16px;
+            right: 16px;
+
+            width: 36px;
+            height: 36px;
+          }
+
+
+          .admin-main {
+            padding:
+              76px
+              12px
+              20px
+              12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

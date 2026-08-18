@@ -185,6 +185,8 @@ export default function Applications() {
           style={{
             width: "100%",
             overflowX: "auto",
+            overflowY: "hidden",
+            WebkitOverflowScrolling: "touch",
             border: "1px solid #e2e8f0",
             borderRadius: "20px",
             background: "#ffffff",
