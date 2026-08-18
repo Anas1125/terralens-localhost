@@ -19,7 +19,7 @@ from ..security import get_current_admin
 router = APIRouter()
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parents[2]
 UPLOAD_DIR = BASE_DIR / "uploads" / "applications"
 
 ALLOWED_EXTENSIONS = {
@@ -201,9 +201,8 @@ def delete_application(
     # =====================================================
 
     if application.resume:
-        file_path = Path(
-            application.resume.lstrip("/")
-        )
+        relative_path = application.resume.lstrip("/")
+        file_path = BASE_DIR / relative_path
 
         if file_path.exists():
             file_path.unlink()
