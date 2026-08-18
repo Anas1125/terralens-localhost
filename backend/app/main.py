@@ -1,22 +1,29 @@
-from .routers import contact
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine
-from . import models
-from .routers import jobs
-from .routers import admin
-from .routers import products
-from .routers import media
 from fastapi.staticfiles import StaticFiles
-from .routers import settings
-from .routers import services
-from .routers import projects
-from .routers import applications
-from .routers import partners
-from .routers import gallery
-from .routers import blog
+from pathlib import Path
+
+from app.database import engine
+from app import models
+
+from app.routers import (
+    contact,
+    jobs,
+    admin,
+    products,
+    media,
+    settings,
+    services,
+    projects,
+    applications,
+    partners,
+    gallery,
+    blog,
+)
+
 
 models.Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI(
     title="TerraLens API",
@@ -24,11 +31,6 @@ app = FastAPI(
     description="Backend API for TerraLens Innovations",
 )
 
-app.mount(
-    "/uploads",
-    StaticFiles(directory="uploads"),
-    name="uploads",
-)
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,6 +39,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+UPLOADS_DIR = BASE_DIR / "uploads"
+
+app.mount(
+    "/uploads",
+    StaticFiles(directory=str(UPLOADS_DIR)),
+    name="uploads",
+)
+
 
 app.include_router(
     contact.router,
@@ -109,6 +121,7 @@ app.include_router(
     prefix="/blogs",
     tags=["Blogs"],
 )
+
 
 @app.get("/")
 def home():

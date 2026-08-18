@@ -19,7 +19,8 @@ from ..security import get_current_admin
 router = APIRouter()
 
 
-UPLOAD_DIR = Path("uploads/applications")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+UPLOAD_DIR = BASE_DIR / "uploads" / "applications"
 
 ALLOWED_EXTENSIONS = {
     ".pdf",
