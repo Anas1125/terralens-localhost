@@ -518,12 +518,9 @@ function Hero() {
                 "TerraLens Homepage"
               }`}
               className={`
-                text-4xl
-                sm:text-5xl
-                md:text-7xl
-                lg:text-8xl
+                text-[clamp(2rem,4.5vw,4rem)]
                 font-bold
-                leading-[0.95]
+                leading-[1]
                 tracking-tight
                 ${theme.headingClass}
               `}
