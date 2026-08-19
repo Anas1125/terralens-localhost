@@ -208,10 +208,12 @@ function Hero() {
   =====================================================
   */
 
-  const currentVideoUrl =
+  const currentVideoPath =
     videos.length > 0
-      ? getVideoUrl(videos[currentVideo]?.path)
-      : null;
+      ? videos[currentVideo]?.path
+      : settings?.hero_video;
+
+  const currentVideoUrl = getVideoUrl(currentVideoPath);
 
   const hasVideo = Boolean(currentVideoUrl);
 
