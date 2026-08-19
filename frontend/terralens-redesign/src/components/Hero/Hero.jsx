@@ -576,9 +576,13 @@ function Hero() {
               }`}
               className={`
                 mx-auto
+                w-full
                 max-w-3xl
-                text-xl
-                leading-8
+                px-2
+                text-lg
+                sm:text-xl
+                leading-7
+                sm:leading-8
                 ${theme.subtitleClass}
               `}
               style={{
