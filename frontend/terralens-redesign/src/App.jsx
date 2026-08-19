@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate
 } from "react-router-dom";
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -121,6 +122,11 @@ function AdminRoutes() {
           </ProtectedRoute>
         }
       >
+
+      <Route
+        index
+        element={<Navigate to="dashboard" replace />}
+      />
 
         <Route
           path="dashboard"
