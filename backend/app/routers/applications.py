@@ -15,12 +15,11 @@ from ..database import get_db
 from .. import models, schemas
 from ..security import get_current_admin
 
-
 router = APIRouter()
 
+from ..storage import UPLOADS_DIR
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-UPLOAD_DIR = BASE_DIR / "uploads" / "applications"
+UPLOAD_DIR = UPLOADS_DIR / "applications"
 
 ALLOWED_EXTENSIONS = {
     ".pdf",
@@ -201,8 +200,8 @@ def delete_application(
     # =====================================================
 
     if application.resume:
-        relative_path = application.resume.lstrip("/")
-        file_path = BASE_DIR / relative_path
+        relative_path = application.resume.removeprefix("/uploads/")
+        file_path = UPLOADS_DIR / relative_path
 
         if file_path.exists():
             file_path.unlink()

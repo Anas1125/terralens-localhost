@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 
 from app.database import engine
 from app import models
+from app.storage import UPLOADS_DIR
 
 from app.routers import (
     contact,
@@ -39,9 +39,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-UPLOADS_DIR = BASE_DIR / "uploads"
 
 app.mount(
     "/uploads",

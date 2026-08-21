@@ -5,15 +5,14 @@ from fastapi import (
     Depends,
     HTTPException,
 )
-from pathlib import Path
 import shutil
 
 from ..security import get_current_admin
-
+from ..storage import UPLOADS_DIR
 
 router = APIRouter()
 
-UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR = UPLOADS_DIR
 
 
 # =====================================================
