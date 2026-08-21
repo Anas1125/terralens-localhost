@@ -22,6 +22,11 @@ export default function Login() {
         data.access_token
       );
 
+      localStorage.setItem(
+        "adminRole",
+        data.role
+      );
+
       scheduleTokenLogout();
 
       navigate("/admin/dashboard");

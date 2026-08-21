@@ -46,6 +46,9 @@ class Admin(Base):
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
 
+    role = Column(String, nullable=False, default="employee")
+    is_active = Column(Boolean, default=True)   
+
 class Product(Base):
     __tablename__ = "products"
 

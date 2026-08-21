@@ -31,6 +31,7 @@ import Applications from "./pages/admin/Applications";
 import Settings from "./pages/admin/Settings";
 import Media from "./pages/admin/Media";
 import Partners from "./pages/admin/Partners";
+import AdminManagement from "./pages/admin/AdminManagement";
 
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
@@ -176,6 +177,11 @@ function AdminRoutes() {
         <Route
           path="partners"
           element={<Partners />}
+        />
+
+        <Route
+          path="users"
+          element={<AdminManagement />}
         />
 
       </Route>

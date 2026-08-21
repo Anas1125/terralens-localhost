@@ -7,6 +7,9 @@ from passlib.context import CryptContext
 
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from sqlalchemy.orm import Session
+from .database import get_db
+from . import models
 
 
 load_dotenv()
@@ -55,6 +58,7 @@ security = HTTPBearer()
 
 def get_current_admin(
     credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db),
 ):
     token = credentials.credentials
 
@@ -73,7 +77,22 @@ def get_current_admin(
                 detail="Invalid authentication token",
             )
 
-        return username
+        admin = (
+            db.query(models.Admin)
+            .filter(models.Admin.username == username)
+            .first()
+        )
+
+        if not admin or not admin.is_active:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid or inactive admin account",
+            )
+
+        return admin
+
+    except HTTPException:
+        raise
 
     except Exception as e:
         print("JWT ERROR:", repr(e))
@@ -81,3 +100,14 @@ def get_current_admin(
             status_code=401,
             detail="Invalid or expired authentication token",
         )
+
+def get_current_manager(
+    current_admin: models.Admin = Depends(get_current_admin),
+):
+    if current_admin.role != "manager":
+        raise HTTPException(
+            status_code=403,
+            detail="Manager access required",
+        )
+
+    return current_admin

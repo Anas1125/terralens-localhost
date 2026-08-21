@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSettings } from "../api/settings";
+
 import {
   LayoutDashboard,
   Settings,
@@ -15,6 +16,7 @@ import {
   LogOut,
   Menu,
   X,
+  Shield,
 } from "lucide-react";
 
 const menu = [
@@ -102,10 +104,13 @@ const menu = [
 export default function AdminLayout() {
   const navigate = useNavigate();
 
+  const adminRole = localStorage.getItem("adminRole");
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminRole");
 
     navigate("/admin/login", {
       replace: true,
@@ -253,6 +258,72 @@ export default function AdminLayout() {
               paddingRight: "4px",
             }}
           >
+            {/* =================================================
+                ADMINISTRATION
+                MANAGER ONLY
+            ================================================== */}
+
+            {adminRole === "manager" && (
+              <div>
+                <p
+                  style={{
+                    color: "#94a3b8",
+                    fontSize: "12px",
+                    textTransform: "uppercase",
+                    letterSpacing: "2px",
+                    marginBottom: "12px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Administration
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <NavLink
+                    to="/admin/users"
+                    onClick={() => setMobileMenuOpen(false)}
+                    style={({ isActive }) => ({
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      padding: "14px 18px",
+                      borderRadius: "12px",
+                      textDecoration: "none",
+
+                      color: isActive
+                        ? "#0284c7"
+                        : "#475569",
+
+                      background: isActive
+                        ? "#e0f2fe"
+                        : "transparent",
+
+                      transition: ".3s",
+                      fontWeight: 500,
+
+                      border: isActive
+                        ? "1px solid #bae6fd"
+                        : "1px solid transparent",
+                    })}
+                  >
+                    <Shield size={18} />
+
+                    Admin Management
+                  </NavLink>
+                </div>
+              </div>
+            )}
+
+            {/* =================================================
+                EXISTING MENU
+            ================================================== */}
+
             {menu.map((section) => (
               <div key={section.title}>
                 <p
@@ -282,7 +353,9 @@ export default function AdminLayout() {
                       <NavLink
                         key={item.path}
                         to={item.path}
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={() =>
+                          setMobileMenuOpen(false)
+                        }
                         style={({ isActive }) => ({
                           display: "flex",
                           alignItems: "center",
@@ -396,7 +469,6 @@ export default function AdminLayout() {
           display: none;
         }
 
-
         /* ================================================
            TABLET / MOBILE
         ================================================= */
@@ -436,7 +508,6 @@ export default function AdminLayout() {
             color: #0f172a;
           }
 
-
           /* ----------------------------------------------
              HAMBURGER BUTTON
           ---------------------------------------------- */
@@ -468,7 +539,6 @@ export default function AdminLayout() {
             background: #f8fafc;
           }
 
-
           /* ----------------------------------------------
              SIDEBAR
           ---------------------------------------------- */
@@ -489,7 +559,6 @@ export default function AdminLayout() {
             z-index: 100 !important;
           }
 
-
           /* Sidebar opened */
 
           .admin-sidebar.mobile-open {
@@ -498,7 +567,6 @@ export default function AdminLayout() {
             box-shadow:
               8px 0 30px rgba(15, 23, 42, 0.15);
           }
-
 
           /* ----------------------------------------------
              CLOSE BUTTON
@@ -533,7 +601,6 @@ export default function AdminLayout() {
             z-index: 5;
           }
 
-
           /* ----------------------------------------------
              MAIN CONTENT
           ---------------------------------------------- */
@@ -554,7 +621,6 @@ export default function AdminLayout() {
             box-sizing: border-box;
           }
 
-
           /* ----------------------------------------------
              OVERLAY
           ---------------------------------------------- */
@@ -573,7 +639,6 @@ export default function AdminLayout() {
           }
         }
 
-
         /* ================================================
            SMALL PHONES
         ================================================= */
@@ -588,12 +653,10 @@ export default function AdminLayout() {
             font-size: 17px;
           }
 
-
           .mobile-menu-button {
             width: 40px;
             height: 40px;
           }
-
 
           .mobile-close-button {
             top: 16px;
@@ -602,7 +665,6 @@ export default function AdminLayout() {
             width: 36px;
             height: 36px;
           }
-
 
           .admin-main {
             padding:

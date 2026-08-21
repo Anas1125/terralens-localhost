@@ -40,6 +40,28 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+class AdminCreate(BaseModel):
+    username: str
+    password: str
+    role: str = "employee"
+
+
+class AdminUpdate(BaseModel):
+    username: str | None = None
+    password: str | None = None
+    role: str | None = None
+    is_active: bool | None = None
+
+
+class AdminResponse(BaseModel):
+    id: int
+    username: str
+    role: str
+    is_active: bool
+
+    class Config:
+        from_attributes = True
+
 class SiteSettingsBase(BaseModel):
     company_name: str | None = None
     tagline: str | None = None
