@@ -19,6 +19,10 @@ import {
   Shield,
 } from "lucide-react";
 
+// =====================================================
+// SIDEBAR MENU
+// =====================================================
+
 const menu = [
   {
     title: "Dashboard",
@@ -101,12 +105,51 @@ const menu = [
   },
 ];
 
+// =====================================================
+// GET ROLE FROM JWT
+// =====================================================
+
+const getAdminRole = () => {
+  const token = localStorage.getItem("adminToken");
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const payload = JSON.parse(
+      atob(token.split(".")[1])
+    );
+
+    return payload.role || null;
+  } catch (error) {
+    console.error("Failed to read admin role:", error);
+    return null;
+  }
+};
+
+// =====================================================
+// ADMIN LAYOUT
+// =====================================================
+
 export default function AdminLayout() {
   const navigate = useNavigate();
 
-  const adminRole = localStorage.getItem("adminRole");
-
+  const [adminRole, setAdminRole] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // ===================================================
+  // GET CURRENT ADMIN ROLE
+  // ===================================================
+
+  useEffect(() => {
+    const role = getAdminRole();
+    setAdminRole(role);
+  }, []);
+
+  // ===================================================
+  // LOGOUT
+  // ===================================================
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
@@ -117,18 +160,26 @@ export default function AdminLayout() {
     });
   };
 
+  // ===================================================
+  // LOAD FAVICON
+  // ===================================================
+
   useEffect(() => {
     const loadFavicon = async () => {
       try {
         const settings = await getSettings();
 
-        if (!settings?.favicon) return;
+        if (!settings?.favicon) {
+          return;
+        }
 
         const faviconUrl = settings.favicon.startsWith("http")
           ? settings.favicon
           : `${import.meta.env.VITE_API_URL}${settings.favicon}`;
 
-        let favicon = document.querySelector("link[rel='icon']");
+        let favicon = document.querySelector(
+          "link[rel='icon']"
+        );
 
         if (!favicon) {
           favicon = document.createElement("link");
@@ -145,6 +196,14 @@ export default function AdminLayout() {
     loadFavicon();
   }, []);
 
+  // ===================================================
+  // CLOSE MOBILE MENU
+  // ===================================================
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <div
       style={{
@@ -156,9 +215,9 @@ export default function AdminLayout() {
         color: "#0f172a",
       }}
     >
-      {/* =====================================================
+      {/* =================================================
           MOBILE HEADER
-      ====================================================== */}
+      ================================================== */}
 
       <header className="mobile-admin-header">
         <button
@@ -173,20 +232,20 @@ export default function AdminLayout() {
         <span>TerraLens CMS</span>
       </header>
 
-      {/* =====================================================
+      {/* =================================================
           MOBILE OVERLAY
-      ====================================================== */}
+      ================================================== */}
 
       {mobileMenuOpen && (
         <div
           className="mobile-sidebar-overlay"
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={closeMobileMenu}
         />
       )}
 
-      {/* =====================================================
+      {/* =================================================
           SIDEBAR
-      ====================================================== */}
+      ================================================== */}
 
       <aside
         className={`admin-sidebar ${
@@ -211,20 +270,22 @@ export default function AdminLayout() {
           flexDirection: "column",
         }}
       >
-        {/* Mobile close button */}
+        {/* =================================================
+            MOBILE CLOSE BUTTON
+        ================================================== */}
 
         <button
           type="button"
           className="mobile-close-button"
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={closeMobileMenu}
           aria-label="Close admin menu"
         >
           <X size={22} />
         </button>
 
-        {/* ===================================================
-            LOGO / TITLE
-        ==================================================== */}
+        {/* =================================================
+            LOGO
+        ================================================== */}
 
         <h1
           style={{
@@ -237,9 +298,9 @@ export default function AdminLayout() {
           TerraLens CMS
         </h1>
 
-        {/* ===================================================
+        {/* =================================================
             NAVIGATION
-        ==================================================== */}
+        ================================================== */}
 
         <div
           style={{
@@ -287,7 +348,7 @@ export default function AdminLayout() {
                 >
                   <NavLink
                     to="/admin/users"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                     style={({ isActive }) => ({
                       display: "flex",
                       alignItems: "center",
@@ -295,18 +356,14 @@ export default function AdminLayout() {
                       padding: "14px 18px",
                       borderRadius: "12px",
                       textDecoration: "none",
-
                       color: isActive
                         ? "#0284c7"
                         : "#475569",
-
                       background: isActive
                         ? "#e0f2fe"
                         : "transparent",
-
                       transition: ".3s",
                       fontWeight: 500,
-
                       border: isActive
                         ? "1px solid #bae6fd"
                         : "1px solid transparent",
@@ -314,7 +371,9 @@ export default function AdminLayout() {
                   >
                     <Shield size={18} />
 
-                    Admin Management
+                    <span>
+                      Admin Management
+                    </span>
                   </NavLink>
                 </div>
               </div>
@@ -353,9 +412,7 @@ export default function AdminLayout() {
                       <NavLink
                         key={item.path}
                         to={item.path}
-                        onClick={() =>
-                          setMobileMenuOpen(false)
-                        }
+                        onClick={closeMobileMenu}
                         style={({ isActive }) => ({
                           display: "flex",
                           alignItems: "center",
@@ -363,18 +420,14 @@ export default function AdminLayout() {
                           padding: "14px 18px",
                           borderRadius: "12px",
                           textDecoration: "none",
-
                           color: isActive
                             ? "#0284c7"
                             : "#475569",
-
                           background: isActive
                             ? "#e0f2fe"
                             : "transparent",
-
                           transition: ".3s",
                           fontWeight: 500,
-
                           border: isActive
                             ? "1px solid #bae6fd"
                             : "1px solid transparent",
@@ -382,7 +435,7 @@ export default function AdminLayout() {
                       >
                         <Icon size={18} />
 
-                        {item.name}
+                        <span>{item.name}</span>
                       </NavLink>
                     );
                   })}
@@ -415,22 +468,24 @@ export default function AdminLayout() {
               transition: ".3s",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#fee2e2";
+              e.currentTarget.style.background =
+                "#fee2e2";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#fef2f2";
+              e.currentTarget.style.background =
+                "#fef2f2";
             }}
           >
             <LogOut size={18} />
 
-            Logout
+            <span>Logout</span>
           </button>
         </div>
       </aside>
 
-      {/* =====================================================
+      {/* =================================================
           MAIN CONTENT
-      ====================================================== */}
+      ================================================== */}
 
       <main
         className="admin-main"
@@ -448,9 +503,9 @@ export default function AdminLayout() {
         <Outlet />
       </main>
 
-      {/* =====================================================
+      {/* =================================================
           RESPONSIVE CSS
-      ====================================================== */}
+      ================================================== */}
 
       <style>{`
         /* ================================================
@@ -475,12 +530,9 @@ export default function AdminLayout() {
 
         @media (max-width: 768px) {
 
-          /* ----------------------------------------------
-             MOBILE HEADER
-          ---------------------------------------------- */
-
           .mobile-admin-header {
             position: fixed;
+
             display: flex;
             align-items: center;
             gap: 14px;
@@ -507,10 +559,6 @@ export default function AdminLayout() {
 
             color: #0f172a;
           }
-
-          /* ----------------------------------------------
-             HAMBURGER BUTTON
-          ---------------------------------------------- */
 
           .mobile-menu-button {
             width: 42px;
@@ -539,10 +587,6 @@ export default function AdminLayout() {
             background: #f8fafc;
           }
 
-          /* ----------------------------------------------
-             SIDEBAR
-          ---------------------------------------------- */
-
           .admin-sidebar {
             width: 270px !important;
 
@@ -559,18 +603,12 @@ export default function AdminLayout() {
             z-index: 100 !important;
           }
 
-          /* Sidebar opened */
-
           .admin-sidebar.mobile-open {
             transform: translateX(0);
 
             box-shadow:
               8px 0 30px rgba(15, 23, 42, 0.15);
           }
-
-          /* ----------------------------------------------
-             CLOSE BUTTON
-          ---------------------------------------------- */
 
           .mobile-close-button {
             position: absolute;
@@ -601,10 +639,6 @@ export default function AdminLayout() {
             z-index: 5;
           }
 
-          /* ----------------------------------------------
-             MAIN CONTENT
-          ---------------------------------------------- */
-
           .admin-main {
             margin-left: 0 !important;
 
@@ -620,10 +654,6 @@ export default function AdminLayout() {
 
             box-sizing: border-box;
           }
-
-          /* ----------------------------------------------
-             OVERLAY
-          ---------------------------------------------- */
 
           .mobile-sidebar-overlay {
             display: block;
