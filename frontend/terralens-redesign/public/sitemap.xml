@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+
+  <url>
+    <loc>https://terralens-localhost.pages.dev/</loc>
+  </url>
+
+  <url>
+    <loc>https://terralens-localhost.pages.dev/about</loc>
+  </url>
+
+  <url>
+    <loc>https://terralens-localhost.pages.dev/services</loc>
+  </url>
+
+  <url>
+    <loc>https://terralens-localhost.pages.dev/products</loc>
+  </url>
+
+  <url>
+    <loc>https://terralens-localhost.pages.dev/showcase</loc>
+  </url>
+
+  <url>
+    <loc>https://terralens-localhost.pages.dev/careers</loc>
+  </url>
+
+  <url>
+    <loc>https://terralens-localhost.pages.dev/contact</loc>
+  </url>
+
+</urlset>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://terralens-localhost.pages.dev/sitemap.xml
