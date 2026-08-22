@@ -21,6 +21,7 @@ def get_stats(
 ):
     total_jobs = db.query(models.Job).count()
     total_contacts = db.query(models.Contact).count()
+    total_applications = db.query(models.Application).count()
 
     active_jobs = (
         db.query(models.Job)
@@ -31,7 +32,7 @@ def get_stats(
     return {
         "jobs": total_jobs,
         "contacts": total_contacts,
-        "applications": 0,
+        "applications": total_applications,
         "active_jobs": active_jobs,
     }
 
