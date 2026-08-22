@@ -117,6 +117,21 @@ def update_service(
             detail="Service not found",
         )
 
+    duplicate_slug = (
+        db.query(models.Service)
+        .filter(
+            models.Service.slug == service.slug,
+            models.Service.id != service_id
+        )
+        .first()
+    )
+
+    if duplicate_slug:
+        raise HTTPException(
+            status_code=400,
+            detail="Service slug already exists",
+        )
+
     existing.name = service.name
     existing.slug = service.slug
     existing.category = service.category
