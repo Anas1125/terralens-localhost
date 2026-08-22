@@ -18,6 +18,7 @@ export default function Services() {
     slug: "",
     category: "",
     description: "",
+    features: "",
     image: "",
     is_active: true,
   });
@@ -53,6 +54,7 @@ export default function Services() {
       slug: "",
       category: "",
       description: "",
+      features: "",
       image: "",
       is_active: true,
     });
@@ -66,11 +68,19 @@ export default function Services() {
     try {
       setLoading(true);
 
+      const serviceData = {
+        ...form,
+        features: form.features
+          .split("\n")
+          .map((feature) => feature.trim())
+          .filter(Boolean),
+      };
+
       if (editingId) {
-        await updateService(editingId, form);
+        await updateService(editingId, serviceData);
         alert("Service updated successfully!");
       } else {
-        await createService(form);
+        await createService(serviceData);
         alert("Service created successfully!");
       }
 
@@ -94,6 +104,9 @@ export default function Services() {
       slug: service.slug || "",
       category: service.category || "",
       description: service.description || "",
+      features: Array.isArray(service.features)
+        ? service.features.join("\n")
+        : service.features || "",
       image: service.image || "",
       is_active: service.is_active,
     });
@@ -291,6 +304,23 @@ export default function Services() {
               onChange={handleChange}
               placeholder="Describe this service..."
               rows={5}
+              style={textareaStyle}
+            />
+          </div>
+
+          {/* Features */}
+
+          <div style={fieldStyle}>
+            <label style={labelStyle}>
+              Features
+            </label>
+
+            <textarea
+              name="features"
+              value={form.features}
+              onChange={handleChange}
+              placeholder={"Enter one feature per line..."}
+              rows={6}
               style={textareaStyle}
             />
           </div>

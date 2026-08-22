@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -17,13 +19,24 @@ router = APIRouter()
 def get_services(
     db: Session = Depends(get_db),
 ):
-    return (
+    services = (
         db.query(models.Service)
         .order_by(
             models.Service.created_at.desc()
         )
         .all()
     )
+
+    for service in services:
+        if service.features:
+            try:
+                service.features = json.loads(service.features)
+            except (json.JSONDecodeError, TypeError):
+                service.features = []
+        else:
+            service.features = []
+
+    return services
 
 
 # =====================================================
@@ -48,6 +61,14 @@ def get_service_by_slug(
             status_code=404,
             detail="Service not found",
         )
+
+    if service.features:
+        try:
+            service.features = json.loads(service.features)
+        except (json.JSONDecodeError, TypeError):
+            service.features = []
+    else:
+        service.features = []
 
     return service
 
@@ -81,6 +102,7 @@ def create_service(
         slug=service.slug,
         category=service.category,
         description=service.description,
+        features=json.dumps(service.features or []),
         image=service.image,
         is_active=service.is_active,
     )
@@ -136,6 +158,7 @@ def update_service(
     existing.slug = service.slug
     existing.category = service.category
     existing.description = service.description
+    existing.features = json.dumps(service.features or [])
     existing.image = service.image
     existing.is_active = service.is_active
 

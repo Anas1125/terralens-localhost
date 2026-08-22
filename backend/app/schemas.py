@@ -153,6 +153,7 @@ class ServiceCreate(BaseModel):
     slug: str
     category: str
     description: str | None = None
+    features: list[str] | None = None
     image: str | None = None
     is_active: bool = True
 

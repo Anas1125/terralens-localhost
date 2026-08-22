@@ -47,7 +47,8 @@ export default function ServiceDetails() {
         console.error(err);
         setError("Service not found.");
 
-        document.title = "Service Not Found | TerraLens Pvt Ltd";
+        document.title =
+          "Service Not Found | TerraLens Pvt Ltd";
       } finally {
         setLoading(false);
       }
@@ -342,17 +343,56 @@ export default function ServiceDetails() {
               {service.name}
             </h2>
 
-            <p
-              className="
-                mt-7
-                max-w-xl
-                text-lg
-                leading-8
-                text-slate-600
-              "
-            >
-              {service.description}
-            </p>
+            {/* FEATURES */}
+
+            {(() => {
+              let features = [];
+
+              if (Array.isArray(service.features)) {
+                features = service.features;
+              } else if (typeof service.features === "string") {
+                try {
+                  features = JSON.parse(service.features);
+                } catch {
+                  features = [];
+                }
+              }
+
+              if (!features.length) {
+                return null;
+              }
+
+              return (
+                <ul className="mt-7 max-w-xl space-y-4">
+                  {features.map((feature, index) => (
+                    <li
+                      key={index}
+                      className="
+                        flex
+                        items-start
+                        gap-3
+                        text-lg
+                        leading-8
+                        text-slate-600
+                      "
+                    >
+                      <span
+                        className="
+                          mt-3
+                          h-2
+                          w-2
+                          shrink-0
+                          rounded-full
+                          bg-sky-500
+                        "
+                      />
+
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              );
+            })()}
 
             {/* Small Accent */}
 
@@ -475,7 +515,9 @@ export default function ServiceDetails() {
 
             <button
               onClick={() =>
-                navigate(`/contact?service=${service.slug}`)
+                navigate(
+                  `/contact?service=${service.slug}`
+                )
               }
               className="
                 mt-8
@@ -505,6 +547,7 @@ export default function ServiceDetails() {
 
           </div>
         </div>
+
       </div>
     </section>
   );

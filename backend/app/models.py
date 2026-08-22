@@ -78,6 +78,7 @@ class Service(Base):
 
     category = Column(String, nullable=False)
     description = Column(Text, nullable=True)
+    features = Column(Text, nullable=True)
 
     image = Column(String, nullable=True)
 
