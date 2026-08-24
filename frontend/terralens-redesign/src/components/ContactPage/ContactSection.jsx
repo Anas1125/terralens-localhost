@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Mail,
   Phone,
@@ -7,6 +7,7 @@ import {
   Send,
 } from "lucide-react";
 import { createContact } from "../../api/contact";
+import { getSettings } from "../../api/settings";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -17,54 +18,110 @@ export default function ContactSection() {
     message: "",
   });
 
+  const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // =========================
+  // LOAD WEBSITE SETTINGS
+  // =========================
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const data = await getSettings();
+        setSettings(data);
+      } catch (error) {
+        console.error(
+          "Failed to load website settings:",
+          error
+        );
+      }
+    };
+
+    loadSettings();
+  }, []);
+
+  // =========================
+  // CONTACT FORM SUBMIT
+  // =========================
+
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+
+    // =========================
+    // BASIC EMAIL VALIDATION
+    // =========================
+
+    const email = formData.email.trim();
+
+    if (!email.includes("@")) {
+      alert("Please add an '@' in your email address.");
+      return;
+    }
+
+    if (!email.includes(".")) {
+      alert(
+        "Please add a '.' in your email address (e.g. .com, .in)."
+      );
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await createContact(formData);
+
+      alert("Message sent successfully!");
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error(
+        "Contact form error:",
+        error.response?.data || error.message
+      );
+
+      alert(
+        "Failed to send message. Please check your details and try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // =========================
-  // BASIC EMAIL VALIDATION
+  // CONTACT INFORMATION
   // =========================
-  const email = formData.email.trim();
 
-  if (!email.includes("@")) {
-    alert("Please add an '@' in your email address.");
-    return;
-  }
-
-  if (!email.includes(".")) {
-    alert("Please add a '.' in your email address (e.g. .com, .in).");
-    return;
-  }
-
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailPattern.test(email)) {
-    alert("Please enter a valid email address.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    await createContact(formData);
-
-    alert("Message sent successfully!");
-
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-    });
-  } catch (error) {
-    console.error("Contact form error:", error.response?.data || error.message);
-    alert("Failed to send message. Please check your details and try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+  const contactItems = [
+    {
+      icon: Mail,
+      title: "Email",
+      value: settings.email || "",
+    },
+    {
+      icon: Phone,
+      title: "Phone",
+      value: settings.phone || "",
+    },
+    {
+      icon: MapPin,
+      title: "Office",
+      value: settings.address || "",
+    },
+  ];
 
   return (
     <section
@@ -91,7 +148,9 @@ export default function ContactSection() {
           boxSizing: "border-box",
         }}
       >
-        {/* Left Side (Info Cards) */}
+        {/* =====================================================
+            LEFT SIDE - CONTACT INFORMATION
+        ===================================================== */}
 
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -152,6 +211,8 @@ export default function ContactSection() {
             TerraLens, our team is here to help.
           </p>
 
+          {/* Contact Information Cards */}
+
           <div
             style={{
               display: "flex",
@@ -159,23 +220,7 @@ export default function ContactSection() {
               gap: "20px",
             }}
           >
-            {[
-              {
-                icon: Mail,
-                title: "Email",
-                value: "info@terralens.com",
-              },
-              {
-                icon: Phone,
-                title: "Phone",
-                value: "+91 98765 43210",
-              },
-              {
-                icon: MapPin,
-                title: "Office",
-                value: "Nagercoi, Tamil Nadu, India",
-              },
-            ].map((item) => {
+            {contactItems.map((item) => {
               const Icon = item.icon;
 
               return (
@@ -244,7 +289,9 @@ export default function ContactSection() {
           </div>
         </motion.div>
 
-        {/* Right Side (Contact Form) */}
+        {/* =====================================================
+            RIGHT SIDE - CONTACT FORM
+        ===================================================== */}
 
         <motion.form
           onSubmit={handleSubmit}
@@ -286,7 +333,9 @@ export default function ContactSection() {
             Fill out the form and our team will get back to you.
           </p>
 
-          {/* Name + Email */}
+          {/* =====================================================
+              NAME + EMAIL
+          ===================================================== */}
 
           <div
             style={{
@@ -346,7 +395,9 @@ export default function ContactSection() {
             />
           </div>
 
-          {/* Phone + Subject */}
+          {/* =====================================================
+              PHONE + SUBJECT
+          ===================================================== */}
 
           <div
             style={{
@@ -359,14 +410,24 @@ export default function ContactSection() {
           >
             <input
               type="tel"
+              inputMode="numeric"
+              pattern="[0-9]*"
               placeholder="Phone Number"
               value={formData.phone}
-              onChange={(e) =>
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (/\D/.test(value)) {
+                  alert(
+                    "Only numbers are allowed in the phone number."
+                  );
+                }
+
                 setFormData({
                   ...formData,
-                  phone: e.target.value,
-                })
-              }
+                  phone: value.replace(/\D/g, ""),
+                });
+              }}
               style={{
                 borderRadius: "12px",
                 border: "1px solid #cbd5e1",
@@ -406,7 +467,9 @@ export default function ContactSection() {
             />
           </div>
 
-          {/* Message */}
+          {/* =====================================================
+              MESSAGE
+          ===================================================== */}
 
           <textarea
             rows="5"
@@ -434,7 +497,9 @@ export default function ContactSection() {
             className="focus:border-sky-500 transition-colors"
           />
 
-          {/* Submit Button */}
+          {/* =====================================================
+              SUBMIT BUTTON
+          ===================================================== */}
 
           <button
             type="submit"

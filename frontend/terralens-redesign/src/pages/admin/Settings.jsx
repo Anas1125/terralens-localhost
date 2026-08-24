@@ -215,20 +215,6 @@ export default function Settings() {
 
           <div>
             <label style={labelStyle}>
-              Tagline
-            </label>
-
-            <input
-              name="tagline"
-              value={form.tagline || ""}
-              onChange={handleChange}
-              placeholder="Your company tagline"
-              style={inputStyle}
-            />
-          </div>
-
-          <div>
-            <label style={labelStyle}>
               Email
             </label>
 
@@ -256,19 +242,6 @@ export default function Settings() {
             />
           </div>
 
-          <div>
-            <label style={labelStyle}>
-              WhatsApp
-            </label>
-
-            <input
-              name="whatsapp"
-              value={form.whatsapp || ""}
-              onChange={handleChange}
-              placeholder="WhatsApp number"
-              style={inputStyle}
-            />
-          </div>
 
         </div>
 
@@ -468,95 +441,204 @@ export default function Settings() {
 
 
       {/* =====================================================
-          SOCIAL MEDIA
+          PAGE BACKGROUND VIDEOS
       ===================================================== */}
 
       <section style={sectionStyle}>
 
         <h2 style={sectionTitle}>
-          Social Media
+          Page Background Videos
         </h2>
 
         <p style={sectionDescription}>
-          Manage TerraLens social media links.
+          Upload and manage the background video for each website page.
         </p>
+
 
         <div style={gridStyle}>
 
-          <div>
+
+          {/* ABOUT */}
+
+          <div style={videoFieldStyle}>
+
             <label style={labelStyle}>
-              LinkedIn
+              About Page Videos
             </label>
 
-            <input
-              name="linkedin"
-              value={form.linkedin || ""}
-              onChange={handleChange}
-              placeholder="https://linkedin.com/company/..."
-              style={inputStyle}
+            <p
+              style={{
+                color: "#64748b",
+                fontSize: "13px",
+                marginTop: "6px",
+                marginBottom: "16px",
+              }}
+            >
+              Add multiple videos. They will smoothly fade from one
+              video to the next on the About page.
+            </p>
+
+
+            {/* SELECTED VIDEOS */}
+
+            {(form.about_videos || []).length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                  marginBottom: "18px",
+                }}
+              >
+
+                {form.about_videos.map((video, index) => (
+
+                  <div
+                    key={`${video}-${index}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "12px",
+                      padding: "12px 14px",
+                      background: "#ffffff",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "10px",
+                    }}
+                  >
+
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        minWidth: 0,
+                      }}
+                    >
+
+                      <span
+                        style={{
+                          width: "28px",
+                          height: "28px",
+                          borderRadius: "8px",
+                          background: "#eff6ff",
+                          color: "#0284c7",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "12px",
+                          fontWeight: "700",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {index + 1}
+                      </span>
+
+                      <span
+                        style={{
+                          color: "#334155",
+                          fontSize: "13px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {video}
+                      </span>
+
+                    </div>
+
+
+                    <button
+                      type="button"
+                      onClick={() => removeAboutVideo(index)}
+                      style={removeButtonStyle}
+                    >
+                      Remove
+                    </button>
+
+                  </div>
+
+                ))}
+
+              </div>
+            )}
+
+
+            {/* NO VIDEOS */}
+
+            {(form.about_videos || []).length === 0 && (
+              <p
+                style={{
+                  color: "#64748b",
+                  fontSize: "13px",
+                  marginBottom: "16px",
+                }}
+              >
+                No About videos selected.
+              </p>
+            )}
+
+
+            {/* ADD VIDEO */}
+
+            <FileUploader
+              folder="about"
+              label="Add About Video"
+              accept="video/*"
+              onUploaded={addAboutVideo}
             />
+
           </div>
 
-          <div>
-            <label style={labelStyle}>
-              Instagram
-            </label>
 
-            <input
-              name="instagram"
-              value={form.instagram || ""}
-              onChange={handleChange}
-              placeholder="https://instagram.com/..."
-              style={inputStyle}
-            />
-          </div>
+          {/* SERVICES */}
 
-          <div>
-            <label style={labelStyle}>
-              Facebook
-            </label>
+          {renderSingleVideoField(
+            "services_video",
+            "services",
+            "Services Page"
+          )}
 
-            <input
-              name="facebook"
-              value={form.facebook || ""}
-              onChange={handleChange}
-              placeholder="https://facebook.com/..."
-              style={inputStyle}
-            />
-          </div>
 
-          <div>
-            <label style={labelStyle}>
-              X / Twitter
-            </label>
+          {/* PRODUCTS */}
 
-            <input
-              name="twitter"
-              value={form.twitter || ""}
-              onChange={handleChange}
-              placeholder="https://x.com/..."
-              style={inputStyle}
-            />
-          </div>
+          {renderSingleVideoField(
+            "products_video",
+            "products",
+            "Products Page"
+          )}
 
-          <div>
-            <label style={labelStyle}>
-              YouTube
-            </label>
 
-            <input
-              name="youtube"
-              value={form.youtube || ""}
-              onChange={handleChange}
-              placeholder="https://youtube.com/..."
-              style={inputStyle}
-            />
-          </div>
+          {/* SHOWCASE */}
+
+          {renderSingleVideoField(
+            "showcase_video",
+            "showcase",
+            "Showcase Page"
+          )}
+
+
+          {/* CAREERS */}
+
+          {renderSingleVideoField(
+            "careers_video",
+            "careers",
+            "Careers Page"
+          )}
+
+
+          {/* CONTACT */}
+
+          {renderSingleVideoField(
+            "contact_video",
+            "contact",
+            "Contact Page"
+          )}
 
         </div>
 
       </section>
-
 
       {/* =====================================================
           HOMEPAGE
@@ -953,27 +1035,6 @@ export default function Settings() {
 
         </div>
 
-
-        {/* ABOUT DESCRIPTION */}
-
-        <div style={{ marginTop: "24px" }}>
-
-          <label style={labelStyle}>
-            About Description
-          </label>
-
-          <textarea
-            name="about_description"
-            value={form.about_description || ""}
-            onChange={handleChange}
-            placeholder="Enter your About page description..."
-            rows={6}
-            style={textareaStyle}
-          />
-
-        </div>
-
-
         {/* EXPERTISE DESCRIPTION */}
 
         <div style={{ marginTop: "24px" }}>
@@ -994,96 +1055,6 @@ export default function Settings() {
         </div>
 
       </section>
-
-        {/* =====================================================
-          CONTACT PAGE
-      ===================================================== */}
-
-      <section style={sectionStyle}>
-
-        <h2 style={sectionTitle}>
-          Contact Page
-        </h2>
-
-        <p style={sectionDescription}>
-          Manage the content and contact information displayed on the Contact page.
-        </p>
-
-        {/* CONTACT HERO */}
-
-        <div style={gridStyle}>
-
-          {/* CONTACT LABEL */}
-
-          <div>
-            <label style={labelStyle}>
-              Contact Label
-            </label>
-
-            <input
-              name="contact_label"
-              value={form.contact_label || ""}
-              onChange={handleChange}
-              placeholder="CONTACT"
-              style={inputStyle}
-            />
-          </div>
-
-          {/* CONTACT BUTTON */}
-
-          <div>
-            <label style={labelStyle}>
-              Contact Button Text
-            </label>
-
-            <input
-              name="contact_button_text"
-              value={form.contact_button_text || ""}
-              onChange={handleChange}
-              placeholder="Contact Us"
-              style={inputStyle}
-            />
-          </div>
-
-        </div>
-
-        {/* CONTACT TITLE */}
-
-        <div style={{ marginTop: "24px" }}>
-
-          <label style={labelStyle}>
-            Contact Title
-          </label>
-
-          <textarea
-            name="contact_title"
-            value={form.contact_title || ""}
-            onChange={handleChange}
-            placeholder="Let's Build Something Great"
-            rows={3}
-            style={textareaStyle}
-          />
-
-        </div>
-
-        {/* CONTACT DESCRIPTION */}
-
-        <div style={{ marginTop: "24px" }}>
-
-          <label style={labelStyle}>
-            Contact Description
-          </label>
-
-          <textarea
-            name="contact_subtitle"
-            value={form.contact_subtitle || ""}
-            onChange={handleChange}
-            placeholder="Whether you need GIS solutions, enterprise software, AI integration or consulting services, our team is ready to help turn your ideas into reality."
-            rows={5}
-            style={textareaStyle}
-          />
-
-        </div>
 
         {/* =====================================================
             SHOWCASE PAGE
@@ -1179,7 +1150,98 @@ export default function Settings() {
 
         </section>
 
-        {/* CONTACT INFORMATION */}
+
+      {/* =====================================================
+          CONTACT PAGE
+      ===================================================== */}
+
+      <section style={sectionStyle}>
+
+        <h2 style={sectionTitle}>
+          Contact Page
+        </h2>
+
+        <p style={sectionDescription}>
+          Manage the content and contact information displayed on the Contact page.
+        </p>
+
+        {/* CONTACT HERO */}
+
+        <div style={gridStyle}>
+
+          {/* CONTACT LABEL */}
+
+          <div>
+            <label style={labelStyle}>
+              Contact Label
+            </label>
+
+            <input
+              name="contact_label"
+              value={form.contact_label || ""}
+              onChange={handleChange}
+              placeholder="CONTACT"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* CONTACT BUTTON */}
+
+          <div>
+            <label style={labelStyle}>
+              Contact Button Text
+            </label>
+
+            <input
+              name="contact_button_text"
+              value={form.contact_button_text || ""}
+              onChange={handleChange}
+              placeholder="Contact Us"
+              style={inputStyle}
+            />
+          </div>
+
+        </div>
+
+        {/* CONTACT TITLE */}
+
+        <div style={{ marginTop: "24px" }}>
+
+          <label style={labelStyle}>
+            Contact Title
+          </label>
+
+          <textarea
+            name="contact_title"
+            value={form.contact_title || ""}
+            onChange={handleChange}
+            placeholder="Let's Build Something Great"
+            rows={3}
+            style={textareaStyle}
+          />
+
+        </div>
+
+        {/* CONTACT DESCRIPTION */}
+
+        <div style={{ marginTop: "24px" }}>
+
+          <label style={labelStyle}>
+            Contact Description
+          </label>
+
+          <textarea
+            name="contact_subtitle"
+            value={form.contact_subtitle || ""}
+            onChange={handleChange}
+            placeholder="Whether you need GIS solutions, enterprise software, AI integration or consulting services, our team is ready to help turn your ideas into reality."
+            rows={5}
+            style={textareaStyle}
+          />
+
+        </div>
+
+          {/* CONTACT INFORMATION */}
 
         <div
           style={{
@@ -1275,207 +1337,6 @@ export default function Settings() {
         </div>
 
       </section>
-
-      {/* =====================================================
-          PAGE BACKGROUND VIDEOS
-      ===================================================== */}
-
-      <section style={sectionStyle}>
-
-        <h2 style={sectionTitle}>
-          Page Background Videos
-        </h2>
-
-        <p style={sectionDescription}>
-          Upload and manage the background video for each website page.
-        </p>
-
-
-        <div style={gridStyle}>
-
-
-          {/* ABOUT */}
-
-          <div style={videoFieldStyle}>
-
-            <label style={labelStyle}>
-              About Page Videos
-            </label>
-
-            <p
-              style={{
-                color: "#64748b",
-                fontSize: "13px",
-                marginTop: "6px",
-                marginBottom: "16px",
-              }}
-            >
-              Add multiple videos. They will smoothly fade from one
-              video to the next on the About page.
-            </p>
-
-
-            {/* SELECTED VIDEOS */}
-
-            {(form.about_videos || []).length > 0 && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  marginBottom: "18px",
-                }}
-              >
-
-                {form.about_videos.map((video, index) => (
-
-                  <div
-                    key={`${video}-${index}`}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: "12px",
-                      padding: "12px 14px",
-                      background: "#ffffff",
-                      border: "1px solid #e2e8f0",
-                      borderRadius: "10px",
-                    }}
-                  >
-
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                        minWidth: 0,
-                      }}
-                    >
-
-                      <span
-                        style={{
-                          width: "28px",
-                          height: "28px",
-                          borderRadius: "8px",
-                          background: "#eff6ff",
-                          color: "#0284c7",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "12px",
-                          fontWeight: "700",
-                          flexShrink: 0,
-                        }}
-                      >
-                        {index + 1}
-                      </span>
-
-                      <span
-                        style={{
-                          color: "#334155",
-                          fontSize: "13px",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {video}
-                      </span>
-
-                    </div>
-
-
-                    <button
-                      type="button"
-                      onClick={() => removeAboutVideo(index)}
-                      style={removeButtonStyle}
-                    >
-                      Remove
-                    </button>
-
-                  </div>
-
-                ))}
-
-              </div>
-            )}
-
-
-            {/* NO VIDEOS */}
-
-            {(form.about_videos || []).length === 0 && (
-              <p
-                style={{
-                  color: "#64748b",
-                  fontSize: "13px",
-                  marginBottom: "16px",
-                }}
-              >
-                No About videos selected.
-              </p>
-            )}
-
-
-            {/* ADD VIDEO */}
-
-            <FileUploader
-              folder="about"
-              label="Add About Video"
-              accept="video/*"
-              onUploaded={addAboutVideo}
-            />
-
-          </div>
-
-
-          {/* SERVICES */}
-
-          {renderSingleVideoField(
-            "services_video",
-            "services",
-            "Services Page"
-          )}
-
-
-          {/* PRODUCTS */}
-
-          {renderSingleVideoField(
-            "products_video",
-            "products",
-            "Products Page"
-          )}
-
-
-          {/* SHOWCASE */}
-
-          {renderSingleVideoField(
-            "showcase_video",
-            "showcase",
-            "Showcase Page"
-          )}
-
-
-          {/* CAREERS */}
-
-          {renderSingleVideoField(
-            "careers_video",
-            "careers",
-            "Careers Page"
-          )}
-
-
-          {/* CONTACT */}
-
-          {renderSingleVideoField(
-            "contact_video",
-            "contact",
-            "Contact Page"
-          )}
-
-        </div>
-
-      </section>
-
 
       {/* =====================================================
           FOOTER
