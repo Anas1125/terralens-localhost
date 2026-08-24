@@ -7,6 +7,24 @@ export default function ProjectModal({
   onClose,
 }) {
   // =========================
+  // IMAGE URL
+  // =========================
+  const getImageUrl = (image) => {
+    if (!image) {
+      return null;
+    }
+
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+      return image;
+    }
+
+    return `${import.meta.env.VITE_API_URL}${image}`;
+  };
+
+  // =========================
   // PARSE JSON-STRING FIELDS
   // =========================
   // The backend may store these as JSON strings
@@ -69,7 +87,7 @@ export default function ProjectModal({
             {/* Image */}
 
             <img
-              src={project.image}
+              src={getImageUrl(project.image)}
               alt={project.title}
               className="h-[360px] w-full object-cover"
             />

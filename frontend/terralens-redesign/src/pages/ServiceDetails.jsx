@@ -104,6 +104,7 @@ export default function ServiceDetails() {
             py-3
             font-semibold
             text-white
+            cursor-pointer
             transition-all
             duration-300
             hover:bg-sky-400
@@ -530,6 +531,7 @@ export default function ServiceDetails() {
                 py-4
                 font-semibold
                 text-white
+                cursor-pointer
                 transition-all
                 duration-300
                 hover:-translate-y-1
