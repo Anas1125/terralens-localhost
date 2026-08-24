@@ -318,7 +318,7 @@ export default function CareerHero() {
             Explore Careers
 
             <ArrowDown
-              className="ml-3"
+              className="ml-3 animate-bounce"
               size={20}
             />
           </motion.button>

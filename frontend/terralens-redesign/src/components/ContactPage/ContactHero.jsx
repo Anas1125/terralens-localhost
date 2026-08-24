@@ -325,7 +325,7 @@ export default function ContactHero() {
             {settings?.contact_button_text || "Contact Us"}
 
             <ArrowDown
-              className="ml-3"
+              className="ml-3 animate-bounce"
               size={20}
             />
           </motion.button>

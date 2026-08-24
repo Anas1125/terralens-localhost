@@ -330,10 +330,7 @@ export default function ShowcaseHero() {
           <ArrowDown
             size={22}
             className="
-              ml-3
-              transition-transform
-              duration-300
-              group-hover:translate-y-1.5
+              ml-2 animate-bounce
             "
           />
         </motion.button>

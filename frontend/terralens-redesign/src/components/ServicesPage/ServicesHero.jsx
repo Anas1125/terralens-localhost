@@ -357,7 +357,7 @@ export default function ServicesHero() {
                   marginLeft: "12px",
                   transition: "transform 0.3s ease",
                 }}
-                className="ml-3 transition-transform group-hover:translate-y-1"
+                className="animate-bounce"
                 size={18}
               />
             </button>
