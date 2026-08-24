@@ -6,6 +6,24 @@ export default function BlogModal({
   isOpen,
   onClose,
 }) {
+  // =========================
+  // IMAGE URL
+  // =========================
+  const getImageUrl = (image) => {
+    if (!image) {
+      return null;
+    }
+
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+      return image;
+    }
+
+    return `${import.meta.env.VITE_API_URL}${image}`;
+  };
+
   return (
     <AnimatePresence>
       {isOpen && blog && (
@@ -49,7 +67,7 @@ export default function BlogModal({
             {/* Hero Image */}
 
             <img
-              src={blog.image}
+              src={getImageUrl(blog.image)}
               alt={blog.title}
               className="w-full h-[350px] object-cover"
             />
