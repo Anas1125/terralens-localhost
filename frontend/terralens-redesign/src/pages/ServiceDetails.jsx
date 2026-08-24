@@ -112,8 +112,8 @@ export default function ServiceDetails() {
             hover:shadow-[0_0_30px_rgba(56,189,248,.25)]
           "
         >
-          <ArrowLeft size={18} />
-          Back to Services
+          <ArrowLeft size={18} className="cursor-pointer" />
+          <span className="cursor-pointer">Back to Services</span>
         </button>
       </section>
     );

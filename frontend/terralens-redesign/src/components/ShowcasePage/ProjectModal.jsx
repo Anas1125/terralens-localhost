@@ -95,32 +95,33 @@ export default function ProjectModal({
             {/* Close */}
 
             <button
-                onClick={onClose}
-                className="
-                    absolute
-                    top-6
-                    right-6
-                    w-12
-                    h-12
-                    rounded-full
-                    border-white/20
-                    text-white
-                    backdrop-blur-md
-                    flex
-                    items-center
-                    justify-center
-                    border
-                    border-white/10
-                    text-slate-900
-                    transition-all
-                    duration-300
-                    hover:bg-sky-500
-                    hover:rotate-90
-                "
-                >
-                <X size={22} />
-                </button>
-
+              onClick={onClose}
+              className="
+                fixed
+                top-6
+                right-6
+                z-[60]
+                w-12
+                h-12
+                rounded-full
+                border
+                border-white/10
+                bg-white/90
+                text-slate-900
+                backdrop-blur-md
+                flex
+                items-center
+                justify-center
+                cursor-pointer
+                transition-all
+                duration-300
+                hover:bg-sky-500
+                hover:text-white
+                hover:rotate-90
+              "
+            >
+              <X size={22} />
+            </button>
             {/* Content */}
 
             <div className="p-10">
