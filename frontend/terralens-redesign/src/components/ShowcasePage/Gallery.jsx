@@ -21,7 +21,6 @@ export default function Gallery() {
     const loadGallery = async () => {
       try {
         const { data } = await api.get("/gallery/");
-
         setGallery(data);
       } catch (error) {
         console.error("Failed to load gallery:", error);
@@ -102,8 +101,7 @@ export default function Gallery() {
     e.stopPropagation();
 
     if (
-      currentIndex <
-      filteredGallery.length - 1
+      currentIndex < filteredGallery.length - 1
     ) {
       setSelectedImage(
         filteredGallery[currentIndex + 1]
@@ -115,7 +113,7 @@ export default function Gallery() {
     <section
       style={{
         backgroundColor: "#ffffff",
-        padding: "96px 0px",
+        padding: "96px 0",
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -133,7 +131,6 @@ export default function Gallery() {
           boxSizing: "border-box",
         }}
       >
-
         {/* =====================================================
             HEADER
         ===================================================== */}
@@ -286,7 +283,7 @@ export default function Gallery() {
               display: "grid",
               gridTemplateColumns:
                 "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "32px",
+              gap: "42px 32px",
               width: "100%",
               maxWidth: "75rem",
               justifyContent: "center",
@@ -296,9 +293,7 @@ export default function Gallery() {
             {filteredGallery.map((item, index) => (
               <motion.div
                 key={item.id}
-                onClick={() =>
-                  setSelectedImage(item)
-                }
+                onClick={() => setSelectedImage(item)}
                 initial={{
                   opacity: 0,
                   y: 30,
@@ -318,19 +313,11 @@ export default function Gallery() {
                   y: -6,
                 }}
                 style={{
-                  position: "relative",
-                  overflow: "hidden",
-                  borderRadius: "28px",
-                  border: "1px solid #e2e8f0",
-                  backgroundColor: "#ffffff",
+                  width: "100%",
                   cursor: "pointer",
                   boxSizing: "border-box",
-                  transition: "all 0.4s ease",
-                  boxShadow:
-                    "0 10px 35px rgba(15,23,42,0.06)",
                 }}
               >
-
                 {/* =================================================
                     IMAGE
                 ================================================= */}
@@ -340,7 +327,11 @@ export default function Gallery() {
                     height: "300px",
                     width: "100%",
                     overflow: "hidden",
+                    borderRadius: "28px",
+                    border: "1px solid #e2e8f0",
                     backgroundColor: "#f8fafc",
+                    boxShadow:
+                      "0 10px 35px rgba(15,23,42,0.06)",
                   }}
                 >
                   <img
@@ -350,6 +341,7 @@ export default function Gallery() {
                       height: "100%",
                       width: "100%",
                       objectFit: "cover",
+                      display: "block",
                       transition:
                         "transform 0.7s ease",
                     }}
@@ -357,29 +349,12 @@ export default function Gallery() {
                 </div>
 
                 {/* =================================================
-                    WHITE FADE
-                ================================================= */}
-
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                      "linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0.15), transparent)",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* =================================================
                     CARD CONTENT
                 ================================================= */}
 
                 <div
                   style={{
-                    position: "absolute",
-                    bottom: "24px",
-                    left: "24px",
-                    right: "24px",
+                    padding: "16px 12px 0",
                   }}
                 >
                   <span
@@ -391,7 +366,7 @@ export default function Gallery() {
                       fontSize: "0.75rem",
                       fontWeight: "600",
                       color: "#ffffff",
-                      marginBottom: "8px",
+                      marginBottom: "10px",
                     }}
                   >
                     {item.category}
@@ -403,17 +378,16 @@ export default function Gallery() {
                       fontWeight: "700",
                       color: "#0f172a",
                       margin: 0,
+                      lineHeight: "1.35",
                     }}
                   >
                     {item.title}
                   </h3>
                 </div>
-
               </motion.div>
             ))}
           </div>
         )}
-
       </div>
 
       {/* =========================================================
@@ -449,7 +423,6 @@ export default function Gallery() {
               boxSizing: "border-box",
             }}
           >
-
             <motion.div
               initial={{
                 scale: 0.9,
@@ -478,7 +451,6 @@ export default function Gallery() {
                 alignItems: "center",
               }}
             >
-
               {/* =================================================
                   CLOSE
               ================================================= */}
@@ -650,7 +622,6 @@ export default function Gallery() {
                   {selectedImage.title}
                 </h2>
               </div>
-
             </motion.div>
           </motion.div>
         )}
