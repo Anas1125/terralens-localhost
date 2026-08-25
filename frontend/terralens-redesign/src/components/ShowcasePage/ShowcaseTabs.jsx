@@ -60,6 +60,7 @@ export default function ShowcaseTabs({
               py-3
               font-semibold
               transition-all
+              cursor-pointer
               duration-300
               ${
                 isActive

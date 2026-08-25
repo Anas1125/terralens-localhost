@@ -77,22 +77,27 @@ export default function BlogModal({
             <button
               onClick={onClose}
               className="
-                absolute
+                fixed
                 top-6
                 right-6
+                z-[60]
                 w-12
                 h-12
                 rounded-full
-                bg-black/50
-                backdrop-blur-md
                 border
-                border-white/20
+                border-white/10
+                bg-white/90
+                text-slate-900
+                backdrop-blur-md
                 flex
                 items-center
                 justify-center
-                text-white
+                cursor-pointer
+                transition-all
+                duration-300
                 hover:bg-sky-500
-                transition
+                hover:text-white
+                hover:rotate-90
               "
             >
               <X size={22} />

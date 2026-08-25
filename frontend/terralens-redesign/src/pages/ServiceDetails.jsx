@@ -231,6 +231,7 @@ export default function ServiceDetails() {
                 text-slate-500
                 transition-colors
                 duration-300
+                cursor-pointer
                 hover:text-sky-500
               "
             >
