@@ -1035,6 +1035,26 @@ export default function Settings() {
 
         </div>
 
+
+        {/* ABOUT DESCRIPTION */}
+
+        <div style={{ marginTop: "24px" }}>
+
+          <label style={labelStyle}>
+            About Description
+          </label>
+
+          <textarea
+            name="about_description"
+            value={form.about_description || ""}
+            onChange={handleChange}
+            placeholder="Enter the description displayed below the About title."
+            rows={5}
+            style={textareaStyle}
+          />
+
+        </div>
+
         {/* EXPERTISE DESCRIPTION */}
 
         <div style={{ marginTop: "24px" }}>
