@@ -32,6 +32,8 @@ import Settings from "./pages/admin/Settings";
 import Media from "./pages/admin/Media";
 import Partners from "./pages/admin/Partners";
 import AdminManagement from "./pages/admin/AdminManagement";
+import NotFound from "./pages/NotFound";
+import FaviconManager from "./components/FaviconManager";
 
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
@@ -87,6 +89,11 @@ function PublicRoutes() {
         />
 
       </Route>
+
+      <Route
+          path="*"
+          element={<NotFound />}
+      />
 
     </Routes>
   );
@@ -186,6 +193,12 @@ function AdminRoutes() {
 
       </Route>
 
+      {/* 404 */}
+      <Route
+        path="*"
+        element={<NotFound />}
+      />
+
     </Routes>
   );
 }
@@ -222,6 +235,7 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
+      <FaviconManager />
       <AppContent />
     </BrowserRouter>
   );
