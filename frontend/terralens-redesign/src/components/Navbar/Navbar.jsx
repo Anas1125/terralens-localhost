@@ -143,7 +143,7 @@ function Navbar() {
           ))}
         </nav>
 
-        <div className="relative z-20 flex lg:hidden items-center justify-end shrink-0">
+        <div className="relative z-[100] flex lg:hidden items-center justify-end shrink-0 ml-auto">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 text-white bg-transparent border-none cursor-pointer flex items-center justify-center"
