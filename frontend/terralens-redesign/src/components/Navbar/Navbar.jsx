@@ -103,7 +103,7 @@ function Navbar() {
               />
             )}
             <h1
-              className="m-0 text-xl lg:text-lg xl:text-xl font-extrabold tracking-tight text-white whitespace-nowrap"
+              className="m-0 text-sm lg:text-lg xl:text-xl font-extrabold tracking-tight text-white whitespace-nowrap"
               style={{ textShadow: "0 2px 4px rgba(0,0,0,0.3)" }}
             >
               {companyName}
@@ -143,7 +143,7 @@ function Navbar() {
           ))}
         </nav>
 
-        <div className="relative z-[100] flex lg:hidden items-center justify-end shrink-0 ml-auto">
+        <div className="relative z-20 flex lg:hidden items-center justify-end shrink-0">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 text-white bg-transparent border-none cursor-pointer flex items-center justify-center"
