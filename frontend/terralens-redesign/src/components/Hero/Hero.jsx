@@ -408,36 +408,35 @@ function Hero() {
                 transformStyle: "preserve-3d",
               }}
             >
-              {(
-                settings?.company_name ||
-                "TerraLens Innovations"
-              )
-                .split("")
-                .map((letter, index) => (
-                  <motion.span
-                    key={`${letter}-${index}`}
-                    custom={
-                      0.05 + index * 0.035
-                    }
-                    variants={letterReveal}
-                    initial="hidden"
-                    animate="visible"
-                    className="
-                      inline-block
-                      will-change-transform
-                    "
-                    style={{
-                      transformStyle:
-                        "preserve-3d",
-                      whiteSpace:
-                        letter === " "
-                          ? "pre"
-                          : "normal",
-                    }}
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
+              {(settings?.company_name || "TerraLens Innovations")
+              .split(" ")
+              .map((word, wordIndex) => (
+                <span
+                  key={`${word}-${wordIndex}`}
+                  className="inline-block whitespace-nowrap mr-2"
+                >
+                  {word.split("").map((letter, letterIndex) => {
+                    const index =
+                      wordIndex * 20 + letterIndex;
+
+                    return (
+                      <motion.span
+                        key={`${letter}-${wordIndex}-${letterIndex}`}
+                        custom={0.05 + index * 0.035}
+                        variants={letterReveal}
+                        initial="hidden"
+                        animate="visible"
+                        className="inline-block will-change-transform"
+                        style={{
+                          transformStyle: "preserve-3d",
+                        }}
+                      >
+                        {letter}
+                      </motion.span>
+                    );
+                  })}
+                </span>
+              ))}
             </motion.p>
           </div>
 
@@ -524,36 +523,34 @@ function Hero() {
                   "preserve-3d",
               }}
             >
-              {(
-                settings?.hero_subtitle ||
-                "Hello From Terralens"
-              )
-                .split("")
-                .map((letter, index) => (
-                  <motion.span
-                    key={`${letter}-${index}`}
-                    custom={
-                      1.15 + index * 0.025
-                    }
-                    variants={letterReveal}
-                    initial="hidden"
-                    animate="visible"
-                    className="
-                      inline-block
-                      will-change-transform
-                    "
-                    style={{
-                      transformStyle:
-                        "preserve-3d",
-                      whiteSpace:
-                        letter === " "
-                          ? "pre"
-                          : "normal",
-                    }}
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
+              {(settings?.hero_subtitle || "Hello From Terralens")
+              .split(" ")
+              .map((word, wordIndex) => (
+                <span
+                  key={`${word}-${wordIndex}`}
+                  className="inline-block whitespace-nowrap mr-2"
+                >
+                  {word.split("").map((letter, letterIndex) => {
+                    const index = wordIndex * 15 + letterIndex;
+
+                    return (
+                      <motion.span
+                        key={`${letter}-${wordIndex}-${letterIndex}`}
+                        custom={0.25 + index * 0.012}
+                        variants={letterReveal}
+                        initial="hidden"
+                        animate="visible"
+                        className="inline-block will-change-transform"
+                        style={{
+                          transformStyle: "preserve-3d",
+                        }}
+                      >
+                        {letter}
+                      </motion.span>
+                    );
+                  })}
+                </span>
+              ))}
             </motion.p>
           </div>
 
