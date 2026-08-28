@@ -1,11 +1,22 @@
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
+
 
 export default function ProjectModal({
   project,
   isOpen,
   onClose,
 }) {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
   // =========================
   // IMAGE URL
   // =========================
@@ -65,25 +76,24 @@ export default function ProjectModal({
             exit={{ opacity: 0, scale: .95, y: 40 }}
             transition={{ duration: .3 }}
             className="
-                fixed
-                left-1/2
-                top-1/2
-                z-50
-                w-[92%]
-                max-w-5xl
-                max-h-[90vh]
-                -translate-x-1/2
-                -translate-y-1/2
-                overflow-y-auto
-                rounded-[32px]
-                border
-                border-white/10
-                bg-white
-                shadow-[0_30px_100px_rgba(0,0,0,.6)]
-                scrollbar-thin
-                scrollbar-thumb-sky-500/40
-                "
+              fixed
+              left-1/2
+              top-1/2
+              z-50
+              w-[92%]
+              max-w-5xl
+              max-h-[90vh]
+              -translate-x-1/2
+              -translate-y-1/2
+              overflow-hidden
+              rounded-[32px]
+              border
+              border-white/10
+              bg-white
+              shadow-[0_30px_100px_rgba(0,0,0,.6)]
+            "
           >
+            <div className="max-h-[90vh] overflow-y-auto project-modal-scrollbar overscroll-contain">
             {/* Image */}
 
             <img
@@ -267,7 +277,7 @@ export default function ProjectModal({
                 </div>
 
             </div>
-
+            </div>
           </motion.div>
         </>
       )}
