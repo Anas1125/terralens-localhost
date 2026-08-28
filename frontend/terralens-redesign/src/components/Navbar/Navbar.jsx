@@ -103,7 +103,7 @@ function Navbar() {
               />
             )}
             <h1
-              className="m-0 text-2xl font-extrabold tracking-tight text-white whitespace-nowrap"
+              className="m-0 text-xl font-extrabold tracking-tight text-white whitespace-nowrap"
               style={{ textShadow: "0 2px 4px rgba(0,0,0,0.3)" }}
             >
               {companyName}
