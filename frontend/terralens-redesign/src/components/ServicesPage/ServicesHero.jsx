@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/client";
+import LiquidGlassButton from "../../components/ui/LiquidGlassButton";
 
 export default function ServicesHero() {
   const navigate = useNavigate();
@@ -362,27 +363,12 @@ export default function ServicesHero() {
               />
             </button>
 
-            <button
-              type="button"
+            <LiquidGlassButton
+              tone="dark"
+              variant="secondary"
+              shape="pill"
               onClick={() => navigate("/contact")}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-                padding: "16px 34px",
-                borderRadius: "9999px",
-                background: theme.contactBg,
-                border: `1px solid ${theme.contactBorder}`,
-                backdropFilter: "blur(4px)",
-                WebkitBackdropFilter: "blur(4px)",
-                color: theme.contactText,
-                fontSize: "1rem",
-                fontWeight: "600",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              className={theme.contactHoverClass}
+              className="group"
             >
               Contact Us
 
@@ -394,7 +380,7 @@ export default function ServicesHero() {
                   group-hover:translate-x-1
                 "
               />
-            </button>
+            </LiquidGlassButton>
           </motion.div>
         </div>
 

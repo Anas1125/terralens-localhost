@@ -8,10 +8,6 @@ function Statement() {
 
   const [services, setServices] = useState([]);
   const [settings, setSettings] = useState(null);
-
-  // =========================
-  // LOAD SERVICES
-  // =========================
   useEffect(() => {
     const loadServices = async () => {
       try {
@@ -29,10 +25,6 @@ function Statement() {
 
     loadServices();
   }, []);
-
-  // =========================
-  // LOAD WEBSITE SETTINGS
-  // =========================
   useEffect(() => {
     const loadSettings = async () => {
       try {
@@ -45,10 +37,6 @@ function Statement() {
 
     loadSettings();
   }, []);
-
-  // =========================
-  // IMAGE URL
-  // =========================
   const getImageUrl = (path) => {
     if (!path) return null;
 

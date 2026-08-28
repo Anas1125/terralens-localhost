@@ -13,6 +13,7 @@ import {
 } from "react";
 
 import { getSettings } from "../../api/settings";
+import LiquidGlassButton from "../../components/ui/LiquidGlassButton";
 
 /* =========================================================
    SMOOTH BACKGROUND VIDEO
@@ -688,27 +689,12 @@ export default function AboutHero() {
 
             {/* CONTACT */}
 
-            <button
-              type="button"
+            <LiquidGlassButton
+              tone="dark"
+              variant="secondary"
+              shape="pill"
               onClick={() => navigate("/contact")}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-                padding: "16px 34px",
-                borderRadius: "9999px",
-                background: theme.contactBg,
-                border: `1px solid ${theme.contactBorder}`,
-                backdropFilter: "blur(4px)",
-                WebkitBackdropFilter: "blur(4px)",
-                color: theme.contactText,
-                fontSize: "1rem",
-                fontWeight: "600",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              className={theme.contactHoverClass}
+              className="group"
             >
               Contact Us
 
@@ -720,14 +706,9 @@ export default function AboutHero() {
                   group-hover:translate-x-1
                 "
               />
-            </button>
+            </LiquidGlassButton>
           </motion.div>
         </div>
-
-        {/* =================================================
-            RIGHT GLASS CARD
-            KEPT UNCHANGED
-        ================================================= */}
 
         <motion.div
           initial={{ opacity: 0, x: 30 }}

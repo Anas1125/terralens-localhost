@@ -115,11 +115,6 @@ export default function ShowcaseHero() {
         />
       )}
 
-      {/* =====================================================
-          WHITE GLOW
-          Only for the plain white section
-      ===================================================== */}
-
       {!hasVideo && (
         <div
           className="absolute inset-0 overflow-hidden pointer-events-none"

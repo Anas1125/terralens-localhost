@@ -49,10 +49,7 @@ const services = [
 export default function ServiceGrid() {
   return (
     <section  className="bg-white py-20 w-full flex justify-center" id="services-list">
-      {/* Expanded to max-w-[85rem] to match other 3-column & 4-column grids */}
       <div className="w-full max-w-[85rem] mx-auto px-6 lg:px-8 flex flex-col items-center">
-
-        {/* --- HEADER (Perfectly Centered) --- */}
         <div className="w-full flex flex-col items-center justify-center text-center max-w-3xl mx-auto">
           <p className="uppercase tracking-[6px] text-sky-400 text-sm font-semibold w-full text-center">
             OUR EXPERTISE
@@ -67,9 +64,6 @@ export default function ServiceGrid() {
             designed for governments, research institutions and businesses.
           </p>
         </div>
-
-        {/* --- CARDS GRID --- */}
-        {/* Pushed down to mt-28 and gaps increased for breathing room */}
         <div className="mt-28 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
 
           {services.map((service, index) => (
@@ -109,7 +103,6 @@ export default function ServiceGrid() {
                     duration-700
                   "
                 />
-                {/* Subtle gradient overlay to blend the image into the card */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#111113] via-[#111113]/20 to-transparent pointer-events-none" />
               </div>
 

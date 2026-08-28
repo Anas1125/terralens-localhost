@@ -29,8 +29,6 @@ export default function OfficeLocation() {
     loadSettings();
   }, []);
 
-  // Extract the actual URL if the CMS contains
-  // a complete Google Maps iframe HTML snippet.
   const getGoogleMapsUrl = (value) => {
     if (!value) return "";
 

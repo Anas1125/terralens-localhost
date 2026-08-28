@@ -30,7 +30,6 @@ export default function LifeAtTerralens() {
           boxSizing: "border-box",
         }}
       >
-        {/* Left Side (Image & Floating Card) */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}

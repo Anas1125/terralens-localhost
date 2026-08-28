@@ -497,8 +497,17 @@ export default function CurrentOpenings() {
                 type="tel"
                 name="phone"
                 value={form.phone}
-                onChange={handleChange}
+                onChange={(event) => {
+                  const value = event.target.value.replace(/\D/g, "");
+
+                  setForm((previous) => ({
+                    ...previous,
+                    phone: value,
+                  }));
+                }}
                 placeholder="Enter your phone number"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 style={inputStyle}
               />
 

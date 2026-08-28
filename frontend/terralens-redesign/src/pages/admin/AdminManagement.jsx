@@ -19,8 +19,6 @@ export default function AdminManagement() {
   const [editRole, setEditRole] = useState("employee");
   const [editIsActive, setEditIsActive] = useState(true);
   const [updating, setUpdating] = useState(false);
-
-  // Delete Admin
   const [deletingId, setDeletingId] = useState(null);
 
   // =====================================================
@@ -220,10 +218,6 @@ export default function AdminManagement() {
       setDeletingId(null);
     }
   };
-
-  // =====================================================
-  // RENDER
-  // =====================================================
 
   return (
     <div className="admin-management">

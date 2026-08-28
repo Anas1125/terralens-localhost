@@ -15,12 +15,6 @@ function Hero() {
   const [videos, setVideos] = useState([]);
   const [settings, setSettings] = useState(null);
   const [settingsLoading, setSettingsLoading] = useState(true);
-  /*
-  =====================================================
-  LOAD HERO VIDEOS
-  =====================================================
-  */
-
   useEffect(() => {
     const loadHeroVideos = async () => {
       try {
@@ -55,12 +49,6 @@ function Hero() {
     loadHeroVideos();
   }, []);
 
-  /*
-  =====================================================
-  LOAD SETTINGS
-  =====================================================
-  */
-
   useEffect(() => {
     const loadSettings = async () => {
       try {
@@ -79,12 +67,6 @@ function Hero() {
     loadSettings();
   }, []);
 
-  /*
-  =====================================================
-  VIDEO URL
-  =====================================================
-  */
-
   const getVideoUrl = (path) => {
     if (!path) {
       return null;
@@ -96,12 +78,6 @@ function Hero() {
 
     return `${import.meta.env.VITE_API_URL}${path}`;
   };
-
-  /*
-  =====================================================
-  LETTER-BY-LETTER 3D REVEAL
-  =====================================================
-  */
 
   const letterReveal = {
     hidden: {
@@ -131,12 +107,6 @@ function Hero() {
     }),
   };
 
-  /*
-  =====================================================
-  AUTOMATIC VIDEO CHANGE
-  =====================================================
-  */
-
   useEffect(() => {
     if (videos.length <= 1) {
       return;
@@ -153,12 +123,6 @@ function Hero() {
     };
   }, [videos.length]);
 
-  /*
-  =====================================================
-  RESET INDEX
-  =====================================================
-  */
-
   useEffect(() => {
     if (
       videos.length > 0 &&
@@ -167,12 +131,6 @@ function Hero() {
       setCurrentVideo(0);
     }
   }, [videos.length, currentVideo]);
-
-  /*
-  =====================================================
-  NEXT VIDEO
-  =====================================================
-  */
 
   const nextVideo = () => {
     if (videos.length === 0) {
@@ -183,12 +141,6 @@ function Hero() {
       (prev) => (prev + 1) % videos.length
     );
   };
-
-  /*
-  =====================================================
-  PREVIOUS VIDEO
-  =====================================================
-  */
 
   const prevVideo = () => {
     if (videos.length === 0) {
@@ -202,12 +154,6 @@ function Hero() {
     );
   };
 
-  /*
-  =====================================================
-  CURRENT VIDEO
-  =====================================================
-  */
-
   const currentVideoPath =
     videos.length > 0
       ? videos[currentVideo]?.path
@@ -216,12 +162,6 @@ function Hero() {
   const currentVideoUrl = getVideoUrl(currentVideoPath);
 
   const hasVideo = Boolean(currentVideoUrl);
-
-  /*
-  =====================================================
-  THEME
-  =====================================================
-  */
 
   const theme = {
     labelClass: hasVideo
@@ -240,12 +180,6 @@ function Hero() {
       ? "text-gray-100"
       : "text-slate-600",
   };
-
-  /*
-  =====================================================
-  HERO
-  =====================================================
-  */
 
   return (
     <section
@@ -622,16 +556,6 @@ function Hero() {
                 ))}
             </motion.p>
           </div>
-
-          {/* =================================================
-              BUTTONS
-              
-              Desktop:
-              Normal position and size.
-
-              Mobile:
-              Smaller and pushed down.
-          ================================================= */}
 
           <div
             className="

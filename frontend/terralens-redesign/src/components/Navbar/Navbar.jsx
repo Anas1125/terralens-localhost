@@ -111,11 +111,6 @@ function Navbar() {
           </Link>
         </div>
 
-        {/* =================================================
-            CENTER — NAVIGATION
-            Uses Tailwind 'absolute left-1/2 -translate-x-1/2' 
-            to mathematically lock it to the screen's center.
-            ================================================= */}
         <nav 
           className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 items-center gap-7 xl:gap-11 w-max ml-22" 
         >
@@ -148,9 +143,6 @@ function Navbar() {
           ))}
         </nav>
 
-        {/* =================================================
-            RIGHT — HAMBURGER (Mobile only)
-            ================================================= */}
         <div className="relative z-20 flex lg:hidden items-center justify-end shrink-0">
           <button
             onClick={() => setIsOpen(!isOpen)}

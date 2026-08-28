@@ -415,17 +415,11 @@ export default function ContactSection() {
               placeholder="Phone Number"
               value={formData.phone}
               onChange={(e) => {
-                const value = e.target.value;
-
-                if (/\D/.test(value)) {
-                  alert(
-                    "Only numbers are allowed in the phone number."
-                  );
-                }
+                const value = e.target.value.replace(/\D/g, "");
 
                 setFormData({
                   ...formData,
-                  phone: value.replace(/\D/g, ""),
+                  phone: value,
                 });
               }}
               style={{

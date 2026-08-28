@@ -35,13 +35,6 @@ export default function ProjectModal({
     return `${import.meta.env.VITE_API_URL}${image}`;
   };
 
-  // =========================
-  // PARSE JSON-STRING FIELDS
-  // =========================
-  // The backend may store these as JSON strings
-  // (same as handled in admin/Showcase.jsx), so we
-  // normalize them here before rendering.
-
   const parsedResults = project?.results
     ? typeof project.results === "string"
       ? JSON.parse(project.results)

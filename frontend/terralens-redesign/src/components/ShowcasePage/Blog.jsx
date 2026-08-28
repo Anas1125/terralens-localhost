@@ -320,10 +320,6 @@ export default function Blog() {
                         onClick={() =>
                           setSelectedBlog({
                             ...blog,
-
-                            // BlogModal currently expects
-                            // readTime, while backend uses
-                            // read_time.
                             readTime:
                               blog.read_time ||
                               blog.readTime ||

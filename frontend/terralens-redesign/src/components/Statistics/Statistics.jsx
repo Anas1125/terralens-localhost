@@ -32,13 +32,7 @@ const stats = [
 export default function Statistics() {
   return (
     <section className="bg-white py-20 w-full flex justify-center">
-      {/* 
-        Main Wrapper: Flex + justify-center on the section guarantees 
-        this entire block is perfectly centered on any screen size.
-      */}
       <div className="w-full max-w-7xl px-6 lg:px-8 flex flex-col items-center">
-
-        {/* Headers Wrapper */}
         <div className="w-full flex flex-col items-center justify-center text-center">
           <motion.p
             initial={{ opacity: 0 }}
@@ -72,10 +66,6 @@ export default function Statistics() {
             projects and global businesses.
           </motion.p>
         </div>
-
-        {/* 
-          Cards Container - Pushed further down with mt-28
-        */}
         <div className="mt-28 w-full flex flex-wrap justify-center items-center gap-6 lg:gap-8">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
@@ -103,23 +93,14 @@ export default function Statistics() {
                   flex flex-col items-center text-center
                 "
               >
-                {/* Glow - Centered at the top */}
                 <div className="absolute -top-16 left-1/2 -translate-x-1/2 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition duration-500" />
-
-                {/* Icon */}
                 <div className="w-16 h-16 rounded-2xl border border-sky-400/30 bg-sky-500/10 flex items-center justify-center mb-6">
                   <Icon className="text-sky-400" size={28} />
                 </div>
-
-                {/* Number */}
                 <h3 className="text-4xl lg:text-5xl font-bold text-slate-900">
                   {stat.number}
                 </h3>
-
-                {/* Centered Line */}
                 <div className="mt-5 mb-4 h-px w-12 bg-slate-200" />
-
-                {/* Label */}
                 <p className="text-slate-500 text-sm lg:text-base font-medium">
                   {stat.label}
                 </p>

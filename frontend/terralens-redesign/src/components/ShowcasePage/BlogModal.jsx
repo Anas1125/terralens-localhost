@@ -6,9 +6,6 @@ export default function BlogModal({
   isOpen,
   onClose,
 }) {
-  // =========================
-  // IMAGE URL
-  // =========================
   const getImageUrl = (image) => {
     if (!image) {
       return null;

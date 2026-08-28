@@ -7,12 +7,6 @@ export default function ProductsHero() {
   const [productsVideo, setProductsVideo] =
     useState("");
 
-  /*
-  =======================================================
-  LOAD PRODUCTS VIDEO
-  =======================================================
-  */
-
   useEffect(() => {
     const loadSettings = async () => {
       try {
@@ -43,12 +37,6 @@ export default function ProductsHero() {
 
   const hasVideo = Boolean(productsVideo);
 
-  /*
-  =======================================================
-  THEME
-  =======================================================
-  */
-
   const theme = {
     sectionBg: "#ffffff",
 
@@ -68,12 +56,6 @@ export default function ProductsHero() {
       ? "rgba(255,255,255,.2)"
       : "rgba(15,23,42,0.07)",
   };
-
-  /*
-  =======================================================
-  SCROLL TO PRODUCTS
-  =======================================================
-  */
 
   const scrollToProducts = () => {
     document

@@ -40,29 +40,16 @@ export default function CareerHero() {
   const theme = {
     sectionBg: "#ffffff",
     label: "#0ea5e9",
-
-    // Main heading: white with video, black without video
     heading: hasVideo ? "#ffffff" : "#0f172a",
-
-    // Main paragraph: white with video, dark without video
     body: hasVideo ? "#ffffff" : "#475569",
-
     gridLine: "rgba(15,23,42,0.07)",
-
-    // Transparent card — UNCHANGED
     cardBg: hasVideo
       ? "rgba(17,17,19,0.05)"
       : "rgba(255,255,255,0.05)",
-
     cardBorder: "1px solid rgba(15,23,42,0.10)",
     cardShadow: "0 20px 60px rgba(15,23,42,0.08)",
-
-    // Card heading always black
     cardHeading: "#0f172a",
-
-    // Card paragraph: white with video, dark without video
     cardBody: hasVideo ? "#ffffff" : "#475569",
-
     bottomFade:
       "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.25))",
   };
@@ -324,11 +311,6 @@ export default function CareerHero() {
           </motion.button>
         </div>
 
-        {/* =================================================
-            RIGHT COLUMN — GLASS CARD
-            KEPT UNCHANGED
-        ================================================= */}
-
         <motion.div
           initial={{
             opacity: 0,
@@ -348,17 +330,11 @@ export default function CareerHero() {
           "
           style={{
             borderRadius: "2.5rem",
-
-            /* GLASS — UNCHANGED */
             backgroundColor: theme.cardBg,
-
             backdropFilter: "blur(4px)",
             WebkitBackdropFilter: "blur(4px)",
-
             border: theme.cardBorder,
-
             boxShadow: theme.cardShadow,
-
             padding: "40px",
           }}
         >
