@@ -107,12 +107,6 @@ class SiteSettings(Base):
     address = Column(Text)
     google_maps = Column(Text)
 
-    linkedin = Column(String)
-    instagram = Column(String)
-    facebook = Column(String)
-    youtube = Column(String)
-    twitter = Column(String)
-
     # =====================================================
     # HERO
     # =====================================================

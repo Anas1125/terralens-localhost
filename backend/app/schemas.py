@@ -76,12 +76,6 @@ class SiteSettingsBase(BaseModel):
     address: str | None = None
     google_maps: str | None = None
 
-    linkedin: str | None = None
-    instagram: str | None = None
-    facebook: str | None = None
-    youtube: str | None = None
-    twitter: str | None = None
-
     hero_title: str | None = None
     hero_subtitle: str | None = None
 
