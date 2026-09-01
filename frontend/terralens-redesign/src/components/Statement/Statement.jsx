@@ -214,7 +214,7 @@ function Statement() {
           w-full
           max-w-7xl
           px-8
-          pb-16
+          pb-32
           pt-20
         "
       >
@@ -314,7 +314,7 @@ function Statement() {
                     border
                     border-slate-200
                     bg-white
-                    p-10
+                    p-6
                     text-center
                     shadow-[0_8px_30px_rgba(15,23,42,0.05)]
                     transition-all
@@ -323,14 +323,14 @@ function Statement() {
                     hover:border-sky-300
                     hover:bg-slate-50
                     hover:shadow-[0_15px_40px_rgba(15,23,42,0.10)]
-                    lg:p-12
+                    lg:p-7
                   "
                 >
                   {/* ICON */}
                   <div
                     className="
                       mx-auto
-                      mb-6
+                      mb-4
                       flex
                       h-10
                       w-10
@@ -343,16 +343,86 @@ function Statement() {
                       group-hover:text-sky-600
                     "
                   >
-                    {index === 0 && "◈"}
-                    {index === 1 && "⌖"}
-                    {index === 2 && "◎"}
-                    {index === 3 && "◇"}
+                    {index === 0 && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-10 w-10"
+                      >
+                        <path d="M5 31c6-1 9-7 14-15l7 15 7-10 10 10" />
+                        <path d="M5 36c8-1 13-5 19-5 7 0 11 4 19 2" />
+                        <path d="M17 12c4-5 10-6 15-7" />
+                        <path d="M29 9c5-2 9-1 13 1" />
+                      </svg>
+                    )}
+
+                    {index === 1 && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-10 w-10"
+                      >
+                        <path d="M24 40V23" />
+                        <path d="M24 27C15 27 9 21 9 12c9 0 15 5 15 15Z" />
+                        <path d="M24 22c0-9 6-15 15-15 0 9-6 15-15 15Z" />
+                        <path d="M16 40h16" />
+                      </svg>
+                    )}
+
+                    {index === 2 && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-10 w-10"
+                      >
+                        <path d="M10 5h20l8 8v30H10z" />
+                        <path d="M30 5v9h8" />
+                        <path d="M16 23h13" />
+                        <path d="M16 29h7" />
+                        <circle cx="32" cy="34" r="7" />
+                        <path d="m28.5 34 2.5 2.5 4.5-5" />
+                      </svg>
+                    )}
+
+                    {index === 3 && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-10 w-10"
+                      >
+                        <path d="M19 5h10" />
+                        <path d="M21 5v13L11 36a5 5 0 0 0 4 7h18a5 5 0 0 0 4-7L27 18V5" />
+                        <path d="M15 32h18" />
+                        <circle cx="24" cy="27" r="2" />
+                        <circle cx="29" cy="23" r="1.5" />
+                      </svg>
+                    )}
                   </div>
 
                   {/* SERVICE NAME */}
                   <h4
                     className="
-                      mb-3
+                      mb-2
                       w-full
                       text-center
                       text-2xl

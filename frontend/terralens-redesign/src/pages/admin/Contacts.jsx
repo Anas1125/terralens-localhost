@@ -238,12 +238,21 @@ export default function Contacts() {
 
                     {/* Email */}
 
-                    <span
+                    <a
+                      href={`mailto:${contact.email}`}
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: "7px",
                         color: "#475569",
+                        textDecoration: "none",
+                        transition: "color 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "#0ea5e9";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "#475569";
                       }}
                     >
                       <Mail
@@ -251,17 +260,26 @@ export default function Contacts() {
                         color="#0ea5e9"
                       />
                       {contact.email}
-                    </span>
-
+                    </a>
+                    
                     {/* Phone */}
 
                     {contact.phone && (
-                      <span
+                      <a
+                        href={`tel:${contact.phone}`}
                         style={{
                           display: "flex",
                           alignItems: "center",
                           gap: "7px",
                           color: "#475569",
+                          textDecoration: "none",
+                          transition: "color 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = "#0ea5e9";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = "#475569";
                         }}
                       >
                         <Phone
@@ -269,7 +287,7 @@ export default function Contacts() {
                           color="#0ea5e9"
                         />
                         {contact.phone}
-                      </span>
+                      </a>
                     )}
                   </div>
                 </div>

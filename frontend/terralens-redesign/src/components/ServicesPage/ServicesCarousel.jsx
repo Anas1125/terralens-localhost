@@ -51,7 +51,6 @@ export default function ServicesCarousel({
           overflow-x-auto
           px-6
           md:px-8
-          pb-8
           snap-x
           snap-mandatory
           scroll-smooth

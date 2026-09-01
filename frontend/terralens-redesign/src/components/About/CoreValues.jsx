@@ -35,9 +35,9 @@ const values = [
 
 export default function CoreValues() {
   return (
-    <section className="w-full bg-white pb-40 mb-8">
+    <section className="w-full bg-white pb-32">
 
-      <div className="relative w-full max-w-[85rem] mx-auto px-6 lg:px-8 flex flex-col items-center">
+      <div className="relative w-full pt-10 max-w-[85rem] mx-auto px-6 lg:px-8 flex flex-col items-center">
 
         {/* =========================
             HEADER
@@ -62,7 +62,7 @@ export default function CoreValues() {
         {/* =========================
             CARDS GRID
         ========================= */}
-        <div className="mt-28 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+        <div className="mt-12 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
 
           {values.map((value, index) => {
             const Icon = value.icon;
@@ -86,7 +86,7 @@ export default function CoreValues() {
                   border
                   border-slate-200
                   bg-white
-                  p-10
+                  p-6
                   shadow-[0_10px_35px_rgba(15,23,42,0.05)]
                   transition-all
                   duration-300
@@ -98,8 +98,8 @@ export default function CoreValues() {
                 {/* ICON */}
                 <div
                   className="
-                    w-14
-                    h-14
+                    w-12
+                    h-12
                     rounded-2xl
                     bg-sky-50
                     border

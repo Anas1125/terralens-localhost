@@ -331,15 +331,26 @@ export default function Footer() {
                     }}
                   />
 
-                  <span
+                  <a
+                    href="https://maps.app.goo.gl/Lut6YufXkhxiZgNfA"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
                       color: "#353D44",
                       fontWeight: "600",
                       fontSize: "0.85rem",
+                      textDecoration: "none",
+                      transition: "color 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "#01080c";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "#353D44";
                     }}
                   >
                     {settings?.address || "Nagercoil, Tamil Nadu, India"}
-                  </span>
+                  </a>
                 </div>
 
                 {/* Phone */}
@@ -359,15 +370,24 @@ export default function Footer() {
                     }}
                   />
 
-                  <span
+                  <a
+                    href={`tel:${settings?.phone || "+91XXXXXXXXXX"}`}
                     style={{
                       color: "#353D44",
                       fontWeight: "600",
                       fontSize: "0.85rem",
+                      textDecoration: "none",
+                      transition: "color 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "#01080c";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "#353D44";
                     }}
                   >
                     {settings?.phone || "+91 XXXXX XXXXX"}
-                  </span>
+                  </a>
                 </div>
 
                 {/* Email */}
@@ -387,15 +407,24 @@ export default function Footer() {
                     }}
                   />
 
-                  <span
+                  <a
+                    href={`mailto:${settings?.email || "info@terralens.in"}`}
                     style={{
                       color: "#353D44",
                       fontWeight: "600",
                       fontSize: "0.85rem",
+                      textDecoration: "none",
+                      transition: "color 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "#01080c";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "#353D44";
                     }}
                   >
                     {settings?.email || "info@terralens.in"}
-                  </span>
+                  </a>
                 </div>
               </div>
             </div>

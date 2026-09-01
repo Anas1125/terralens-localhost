@@ -101,7 +101,7 @@ export default function GlobalOffices() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="
-              mt-8
+              mt-5
               w-full
               text-center
               text-5xl
@@ -119,11 +119,11 @@ export default function GlobalOffices() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
             className="
-              mt-8
+              mt-5
               w-full
               text-center
               text-lg
-              leading-9
+              leading-8
               text-slate-500
             "
           >
@@ -138,7 +138,7 @@ export default function GlobalOffices() {
         ========================= */}
         <div
           className="
-            mt-28
+            mt-12
             grid
             w-full
             grid-cols-1
@@ -167,18 +167,18 @@ export default function GlobalOffices() {
                   w-full
                   flex-col
                   items-start
-                  rounded-[2.5rem]
+                  rounded-[1.5rem]
                   border
                   border-slate-200
                   bg-white
-                  p-10
+                  p-6
                   text-left
                   shadow-[0_10px_40px_rgba(15,23,42,0.05)]
                   transition-all
                   duration-500
                   hover:border-sky-300
                   hover:shadow-[0_20px_50px_rgba(14,165,233,0.12)]
-                  md:p-12
+                  md:p-10
                 "
               >
 
@@ -188,8 +188,8 @@ export default function GlobalOffices() {
                 <div
                   className="
                     flex
-                    h-20
-                    w-20
+                    h-14
+                    w-14
                     shrink-0
                     items-center
                     justify-center
@@ -203,7 +203,7 @@ export default function GlobalOffices() {
                   "
                 >
                   <Icon
-                    size={36}
+                    size={26}
                     className="
                       text-sky-500
                       transition-colors

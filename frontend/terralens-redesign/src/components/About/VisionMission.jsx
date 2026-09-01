@@ -3,7 +3,7 @@ import { Eye, Target } from "lucide-react";
 
 export default function VisionMission() {
   return (
-    <section className="w-full bg-white pb-40 mb-8">
+    <section className="w-full bg-white pb-12 mb-8">
 
       <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center">
 

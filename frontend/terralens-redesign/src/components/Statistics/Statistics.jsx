@@ -31,7 +31,7 @@ const stats = [
 
 export default function Statistics() {
   return (
-    <section className="bg-white py-20 w-full flex justify-center">
+    <section className="bg-white pt-32 pb-32 w-full flex justify-center">
       <div className="w-full max-w-7xl px-6 lg:px-8 flex flex-col items-center">
         <div className="w-full flex flex-col items-center justify-center text-center">
           <motion.p
@@ -47,7 +47,7 @@ export default function Statistics() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-6 text-4xl md:text-6xl font-bold text-slate-900 leading-tight"
+            className="mt-5 text-4xl md:text-5xl font-bold text-slate-900 leading-tight"
           >
             Trusted by organizations
             <br />
@@ -59,14 +59,14 @@ export default function Statistics() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.15 }}
-            className="mt-12 max-w-3xl text-slate-500 text-lg md:text-xl leading-relaxed"
+            className="mt-8 max-w-3xl text-slate-500 text-lg md:text-xl leading-relaxed"
           >
             TerraLens continues delivering enterprise-grade GIS, AI, software
             engineering and surveying solutions for governments, infrastructure
             projects and global businesses.
           </motion.p>
         </div>
-        <div className="mt-28 w-full flex flex-wrap justify-center items-center gap-6 lg:gap-8">
+        <div className="mt-20 w-full flex flex-wrap justify-center items-center gap-5 lg:gap-6">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
 
@@ -85,7 +85,7 @@ export default function Statistics() {
                   group relative overflow-hidden
                   rounded-[30px] border border-slate-200
                   bg-white
-                  px-6 py-10
+                  px-5 py-6
                   w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(25%-1.5rem)]
                   max-w-[280px]
                   transition-all duration-500
@@ -94,10 +94,10 @@ export default function Statistics() {
                 "
               >
                 <div className="absolute -top-16 left-1/2 -translate-x-1/2 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition duration-500" />
-                <div className="w-16 h-16 rounded-2xl border border-sky-400/30 bg-sky-500/10 flex items-center justify-center mb-6">
-                  <Icon className="text-sky-400" size={28} />
+                <div className="w-12 h-12 rounded-xl border border-sky-400/30 bg-sky-500/10 flex items-center justify-center mb-4">
+                  <Icon className="text-sky-400" size={22} />
                 </div>
-                <h3 className="text-4xl lg:text-5xl font-bold text-slate-900">
+                <h3 className="text-3xl lg:text-4xl font-bold text-slate-900">
                   {stat.number}
                 </h3>
                 <div className="mt-5 mb-4 h-px w-12 bg-slate-200" />

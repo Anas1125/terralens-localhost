@@ -251,15 +251,49 @@ export default function Applications() {
 
                     {/* Email */}
 
-                    <td style={cellStyle}>
-                      {application.email}
-                    </td>
+                      <td style={cellStyle}>
+                        <a
+                          href={`mailto:${application.email}`}
+                          style={{
+                            color: "#475569",
+                            textDecoration: "none",
+                            transition: "color 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = "#0ea5e9";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = "#475569";
+                          }}
+                        >
+                          {application.email}
+                        </a>
+                      </td>
 
                     {/* Phone */}
 
-                    <td style={cellStyle}>
-                      {application.phone || "—"}
-                    </td>
+                      <td style={cellStyle}>
+                        {application.phone ? (
+                          <a
+                            href={`tel:${application.phone}`}
+                            style={{
+                              color: "#475569",
+                              textDecoration: "none",
+                              transition: "color 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = "#0ea5e9";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = "#475569";
+                            }}
+                          >
+                            {application.phone}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
 
                     {/* Resume */}
 
