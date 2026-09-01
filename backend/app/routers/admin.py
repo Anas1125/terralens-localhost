@@ -192,6 +192,26 @@ def update_admin(
         admin.role = admin_data.role
 
     if admin_data.is_active is not None:
+        if (
+            not admin_data.is_active
+            and admin.is_active
+            and admin.role == "manager"
+        ):
+            active_managers = (
+                db.query(models.Admin)
+                .filter(
+                    models.Admin.role == "manager",
+                    models.Admin.is_active == True,
+                )
+                .count()
+            )
+
+            if active_managers <= 1:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Cannot disable the last active manager",
+                )
+
         admin.is_active = admin_data.is_active
 
     db.commit()
