@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 export default function ServicesCarousel({
   activeTab = "survey",
@@ -8,11 +9,48 @@ export default function ServicesCarousel({
 }) {
   const navigate = useNavigate();
 
+  const carouselRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+
   const cards = services.filter(
     (service) =>
       service.category === activeTab &&
       service.is_active !== false
   );
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+
+    if (!carousel || cards.length <= 1) return;
+
+    let animationFrame;
+    let lastTime = performance.now();
+
+    const speed = 0.04;
+
+    const scroll = (time) => {
+      const delta = time - lastTime;
+      lastTime = time;
+
+      if (!isHovered) {
+        carousel.scrollLeft += delta * speed;
+        const halfWidth = carousel.scrollWidth / 2;
+        if (carousel.scrollLeft >= halfWidth) {
+          carousel.scrollLeft -= halfWidth;
+        }
+      }
+
+      animationFrame = requestAnimationFrame(scroll);
+    };
+
+    animationFrame = requestAnimationFrame(scroll);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [isHovered, cards.length]);
+
+  const loopedCards = [...cards, ...cards];
 
   return (
     <section className="w-full bg-white py-16 md:py-20 overflow-hidden">
@@ -41,36 +79,37 @@ export default function ServicesCarousel({
           CAROUSEL
       ========================= */}
       <motion.div
+        ref={carouselRef}
         key={activeTab}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.35 }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className="
           flex
           gap-7
           overflow-x-auto
           px-6
           md:px-8
-          snap-x
-          snap-mandatory
-          scroll-smooth
+          pt-4
+          pb-4
           [&::-webkit-scrollbar]:hidden
           [-ms-overflow-style:none]
           [scrollbar-width:none]
         "
       >
 
-        {cards.map((card, index) => (
+        {loopedCards.map((card, index) => (
 
           <motion.div
-            key={card.id}
+            key={`${card.id}-${index}`}
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.08 }}
+            transition={{ delay: (index % cards.length) * 0.08 }}
 
             whileHover={{
               y: -8,
-              scale: 1.015,
             }}
 
             className="

@@ -11,7 +11,6 @@ export default function LifeAtTerralens() {
     <section
       style={{
         backgroundColor: "#ffffff",
-        padding: "96px 0px",
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -73,7 +72,18 @@ export default function LifeAtTerralens() {
             </div>
 
             {/* Floating Card */}
-            <div
+
+            <motion.div
+              whileHover={{
+                y: -8,
+                scale: 1.01,
+                borderColor: "#7dd3fc",
+                boxShadow:
+                  "0 20px 60px rgba(14,165,233,0.10)",
+              }}
+              transition={{
+                duration: 0.5,
+              }}
               style={{
                 position: "absolute",
                 bottom: 0,
@@ -83,7 +93,8 @@ export default function LifeAtTerralens() {
                 border: "1px solid #e2e8f0",
                 backgroundColor: "#ffffff",
                 padding: "28px",
-                boxShadow: "0 20px 60px rgba(15,23,42,0.12)",
+                boxShadow:
+                  "0 20px 60px rgba(15,23,42,0.12)",
                 boxSizing: "border-box",
                 display: "flex",
                 flexDirection: "column",
@@ -94,15 +105,20 @@ export default function LifeAtTerralens() {
                   width: "48px",
                   height: "48px",
                   borderRadius: "14px",
-                  backgroundColor: "rgba(56, 189, 248, 0.1)",
-                  border: "1px solid rgba(56, 189, 248, 0.2)",
+                  backgroundColor:
+                    "rgba(56, 189, 248, 0.1)",
+                  border:
+                    "1px solid rgba(56, 189, 248, 0.2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
-                <Rocket className="text-sky-400" size={22} />
+                <Rocket
+                  className="text-sky-400"
+                  size={22}
+                />
               </div>
 
               <h3
@@ -125,11 +141,12 @@ export default function LifeAtTerralens() {
               >
                 Building tomorrow's technology.
               </p>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
 
         {/* Right Side */}
+
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -232,6 +249,7 @@ export default function LifeAtTerralens() {
           </div>
 
           {/* Bottom Cards */}
+
           <div
             style={{
               display: "grid",
@@ -242,7 +260,18 @@ export default function LifeAtTerralens() {
             }}
           >
             {/* Teamwork */}
-            <div
+
+            <motion.div
+              whileHover={{
+                y: -8,
+                scale: 1.01,
+                borderColor: "#7dd3fc",
+                boxShadow:
+                  "0 20px 60px rgba(14,165,233,0.10)",
+              }}
+              transition={{
+                duration: 0.5,
+              }}
               style={{
                 borderRadius: "24px",
                 border: "1px solid #e2e8f0",
@@ -251,7 +280,8 @@ export default function LifeAtTerralens() {
                 boxSizing: "border-box",
                 display: "flex",
                 flexDirection: "column",
-                boxShadow: "0 10px 40px rgba(15,23,42,0.05)",
+                boxShadow:
+                  "0 10px 40px rgba(15,23,42,0.05)",
               }}
             >
               <div
@@ -259,15 +289,20 @@ export default function LifeAtTerralens() {
                   width: "48px",
                   height: "48px",
                   borderRadius: "14px",
-                  backgroundColor: "rgba(56, 189, 248, 0.1)",
-                  border: "1px solid rgba(56, 189, 248, 0.2)",
+                  backgroundColor:
+                    "rgba(56, 189, 248, 0.1)",
+                  border:
+                    "1px solid rgba(56, 189, 248, 0.2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
-                <Users className="text-sky-400" size={22} />
+                <Users
+                  className="text-sky-400"
+                  size={22}
+                />
               </div>
 
               <h3
@@ -290,10 +325,21 @@ export default function LifeAtTerralens() {
               >
                 Collaboration drives everything we build.
               </p>
-            </div>
+            </motion.div>
 
             {/* Innovation */}
-            <div
+
+            <motion.div
+              whileHover={{
+                y: -8,
+                scale: 1.01,
+                borderColor: "#7dd3fc",
+                boxShadow:
+                  "0 20px 60px rgba(14,165,233,0.10)",
+              }}
+              transition={{
+                duration: 0.5,
+              }}
               style={{
                 borderRadius: "24px",
                 border: "1px solid #e2e8f0",
@@ -302,7 +348,8 @@ export default function LifeAtTerralens() {
                 boxSizing: "border-box",
                 display: "flex",
                 flexDirection: "column",
-                boxShadow: "0 10px 40px rgba(15,23,42,0.05)",
+                boxShadow:
+                  "0 10px 40px rgba(15,23,42,0.05)",
               }}
             >
               <div
@@ -310,15 +357,20 @@ export default function LifeAtTerralens() {
                   width: "48px",
                   height: "48px",
                   borderRadius: "14px",
-                  backgroundColor: "rgba(56, 189, 248, 0.1)",
-                  border: "1px solid rgba(56, 189, 248, 0.2)",
+                  backgroundColor:
+                    "rgba(56, 189, 248, 0.1)",
+                  border:
+                    "1px solid rgba(56, 189, 248, 0.2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
-                <Sparkles className="text-sky-400" size={22} />
+                <Sparkles
+                  className="text-sky-400"
+                  size={22}
+                />
               </div>
 
               <h3
@@ -341,7 +393,7 @@ export default function LifeAtTerralens() {
               >
                 We constantly explore new technologies.
               </p>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

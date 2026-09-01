@@ -59,6 +59,7 @@ export default function WhyJoin() {
       >
 
         {/* Header */}
+
         <div
           style={{
             textAlign: "center",
@@ -106,10 +107,12 @@ export default function WhyJoin() {
         </div>
 
         {/* Cards Grid */}
+
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(260px, 1fr))",
             gap: "32px",
             width: "100%",
             maxWidth: "75rem",
@@ -123,14 +126,28 @@ export default function WhyJoin() {
             return (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                }}
                 transition={{
                   duration: 0.5,
                   delay: index * 0.05,
                 }}
-                whileHover={{ y: -6 }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.05,
+                  borderColor: "#7dd3fc",
+                  boxShadow:
+                    "0 20px 60px rgba(14,165,233,0.10)",
+                }}
                 style={{
                   backgroundColor: "#ffffff",
                   border: "1px solid #e2e8f0",
@@ -139,22 +156,22 @@ export default function WhyJoin() {
                   display: "flex",
                   flexDirection: "column",
                   boxSizing: "border-box",
-                  transition: "all 0.4s ease",
-                  boxShadow: "0 10px 40px rgba(15, 23, 42, 0.05)",
+                  transition:
+                    "border-color 0.5s ease, box-shadow 0.5s ease",
                 }}
-                className="
-                  group
-                  hover:border-sky-400
-                  hover:shadow-[0_0_40px_rgba(56,189,248,.15)]
-                "
               >
+
+                {/* Icon */}
+
                 <div
                   style={{
                     width: "60px",
                     height: "60px",
                     borderRadius: "20px",
-                    backgroundColor: "rgba(56, 189, 248, 0.1)",
-                    border: "1px solid rgba(56, 189, 248, 0.2)",
+                    backgroundColor:
+                      "rgba(56, 189, 248, 0.1)",
+                    border:
+                      "1px solid rgba(56, 189, 248, 0.2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -166,6 +183,8 @@ export default function WhyJoin() {
                     size={26}
                   />
                 </div>
+
+                {/* Title */}
 
                 <h3
                   style={{
@@ -179,6 +198,8 @@ export default function WhyJoin() {
                   {item.title}
                 </h3>
 
+                {/* Description */}
+
                 <p
                   style={{
                     marginTop: "16px",
@@ -190,6 +211,7 @@ export default function WhyJoin() {
                 >
                   {item.description}
                 </p>
+
               </motion.div>
             );
           })}

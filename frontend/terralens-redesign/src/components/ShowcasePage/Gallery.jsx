@@ -459,27 +459,29 @@ export default function Gallery() {
                 onClick={() =>
                   setSelectedImage(null)
                 }
-                style={{
-                  position: "absolute",
-                  top: "-20px",
-                  right: "-20px",
-                  zIndex: 30,
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "50%",
-                  backgroundColor: "#ffffff",
-                  border:
-                    "1px solid #e2e8f0",
-                  color: "#0f172a",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  transition:
-                    "all 0.3s ease",
-                  boxShadow:
-                    "0 10px 30px rgba(15,23,42,0.15)",
-                }}
+                className="
+                  absolute
+                  top-5
+                  right-5
+                  z-[60]
+                  w-12
+                  h-12
+                  rounded-full
+                  border
+                  border-white/10
+                  bg-white/90
+                  text-slate-900
+                  backdrop-blur-md
+                  flex
+                  items-center
+                  justify-center
+                  cursor-pointer
+                  transition-all
+                  duration-300
+                  hover:bg-sky-500
+                  hover:text-white
+                  hover:rotate-90
+                "
               >
                 <X size={20} />
               </button>

@@ -32,7 +32,7 @@ export default function FAQ() {
     <section
       style={{
         backgroundColor: "#ffffff",
-        padding: "96px 0px",
+        padding: "26px 0px",
         width: "100%",
         display: "flex",
         justifyContent: "center",
