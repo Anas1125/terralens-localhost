@@ -189,21 +189,6 @@ export default function ProductGrid() {
                   </div>
                 )}
 
-                {/* Soft image fade */}
-                <div
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-x-0
-                    bottom-0
-                    h-28
-                    bg-gradient-to-t
-                    from-white
-                    via-white/40
-                    to-transparent
-                  "
-                />
-
               </div>
 
 
