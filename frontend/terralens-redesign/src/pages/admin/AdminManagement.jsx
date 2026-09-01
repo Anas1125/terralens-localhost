@@ -155,14 +155,19 @@ export default function AdminManagement() {
     try {
       setUpdating(true);
 
+      const updateData = {
+        username: editUsername.trim(),
+        role: editRole,
+        is_active: editIsActive,
+      };
+
+      if (editPassword.trim()) {
+        updateData.password = editPassword;
+      }
+
       await api.put(
         `/admin/users/${editingAdmin.id}`,
-        {
-          username: editUsername.trim(),
-          password: editPassword,
-          role: editRole,
-          is_active: editIsActive,
-        }
+        updateData
       );
 
       alert("Admin updated successfully.");
