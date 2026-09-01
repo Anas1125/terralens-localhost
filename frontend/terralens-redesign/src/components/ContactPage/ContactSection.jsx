@@ -348,6 +348,9 @@ export default function ContactSection() {
           >
             <input
               type="text"
+              id="name"
+              name="name"
+              autoComplete="name"
               placeholder="Full Name"
               value={formData.name}
               onChange={(e) =>
@@ -372,6 +375,9 @@ export default function ContactSection() {
 
             <input
               type="email"
+              id="email"
+              name="email"
+              autoComplete="email"
               placeholder="Email Address"
               value={formData.email}
               onChange={(e) =>
@@ -410,6 +416,9 @@ export default function ContactSection() {
           >
             <input
               type="tel"
+              id="phone"
+              name="phone"
+              autoComplete="tel"
               inputMode="numeric"
               pattern="[0-9]*"
               placeholder="Phone Number"
@@ -438,6 +447,9 @@ export default function ContactSection() {
 
             <input
               type="text"
+              id="subject"
+              name="subject"
+              autoComplete="off"
               placeholder="Subject"
               value={formData.subject}
               onChange={(e) =>
@@ -467,6 +479,9 @@ export default function ContactSection() {
 
           <textarea
             rows="5"
+            id="message"
+            name="message"
+            autoComplete="off"
             placeholder="Tell us about your project..."
             value={formData.message}
             onChange={(e) =>

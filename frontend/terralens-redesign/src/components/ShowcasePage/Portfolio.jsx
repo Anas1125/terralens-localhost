@@ -191,6 +191,7 @@ export default function Portfolio() {
 
             <input
               type="text"
+              name="project-search"
               placeholder="Search Projects..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
