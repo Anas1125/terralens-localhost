@@ -398,18 +398,6 @@ export default function Portfolio() {
                         No Image
                       </div>
                     )}
-
-                    {/* IMAGE FADE */}
-
-                    <div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        background:
-                          "linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0.05) 65%, transparent)",
-                        pointerEvents: "none",
-                      }}
-                    />
                   </div>
 
                   {/* CONTENT */}
