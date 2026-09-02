@@ -145,6 +145,7 @@ function Navbar() {
 
         <div className="relative z-20 flex lg:hidden items-center justify-end shrink-0">
           <button
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 text-white bg-transparent border-none cursor-pointer flex items-center justify-center"
           >
