@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from ..database import get_db
@@ -11,7 +11,45 @@ from ..security import (
     pwd_context,
 )
 
+import time
+from collections import defaultdict
+
 router = APIRouter()
+
+# =====================================================
+# LOGIN RATE LIMITING
+# =====================================================
+
+LOGIN_WINDOW_SECONDS = 15 * 60
+LOGIN_MAX_ATTEMPTS = 5
+
+_login_attempts = defaultdict(list)
+
+
+def check_login_rate_limit(ip_address: str):
+    now = time.time()
+    window_start = now - LOGIN_WINDOW_SECONDS
+
+    # Remove old attempts
+    _login_attempts[ip_address] = [
+        timestamp
+        for timestamp in _login_attempts[ip_address]
+        if timestamp > window_start
+    ]
+
+    if len(_login_attempts[ip_address]) >= LOGIN_MAX_ATTEMPTS:
+        raise HTTPException(
+            status_code=429,
+            detail="Too many login attempts. Please try again later.",
+        )
+
+
+def record_login_failure(ip_address: str):
+    _login_attempts[ip_address].append(time.time())
+
+
+def clear_login_attempts(ip_address: str):
+    _login_attempts.pop(ip_address, None)
 
 
 @router.get("/stats")
@@ -39,9 +77,14 @@ def get_stats(
 
 @router.post("/login", response_model=schemas.Token)
 def login(
+    request: Request,
     admin: schemas.AdminLogin,
     db: Session = Depends(get_db),
 ):
+    client_ip = request.client.host if request.client else "unknown"
+
+    check_login_rate_limit(client_ip)
+
     user = (
         db.query(models.Admin)
         .filter(models.Admin.username == admin.username)
@@ -49,6 +92,8 @@ def login(
     )
 
     if not user or not user.is_active:
+        record_login_failure(client_ip)
+
         raise HTTPException(
             status_code=401,
             detail="Invalid username or password",
@@ -58,15 +103,19 @@ def login(
         admin.password,
         user.password,
     ):
+        record_login_failure(client_ip)
+
         raise HTTPException(
             status_code=401,
             detail="Invalid username or password",
         )
 
+    # Successful login clears failed attempts
+    clear_login_attempts(client_ip)
+
     token = create_access_token(
         {
             "sub": user.username,
-            "role": user.role,
             "role": user.role,
         }
     )
@@ -81,7 +130,11 @@ def get_admins(
     db: Session = Depends(get_db),
     current_admin: models.Admin = Depends(get_current_manager),
 ):
-    return db.query(models.Admin).all()
+    return (
+        db.query(models.Admin)
+        .limit(100)
+        .all()
+    )
 
 @router.post(
     "/users",

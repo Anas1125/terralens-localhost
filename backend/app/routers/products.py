@@ -20,6 +20,7 @@ def get_products(
     return (
         db.query(models.Product)
         .order_by(models.Product.id.desc())
+        .limit(100)
         .all()
     )
 

@@ -95,7 +95,6 @@ def get_current_admin(
         raise
 
     except Exception as e:
-        print("JWT ERROR:", repr(e))
         raise HTTPException(
             status_code=401,
             detail="Invalid or expired authentication token",

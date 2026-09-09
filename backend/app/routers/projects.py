@@ -14,6 +14,7 @@ def get_projects(db: Session = Depends(get_db)):
     return (
         db.query(models.Project)
         .order_by(models.Project.created_at.desc())
+        .limit(100)
         .all()
     )
 

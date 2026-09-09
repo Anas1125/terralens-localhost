@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
+from ..rate_limit import check_rate_limit
 from sqlalchemy.orm import Session
 
 from ..database import get_db
@@ -18,9 +19,18 @@ router = APIRouter()
     response_model=schemas.ContactResponse,
 )
 def create_contact(
+    request: Request,
     contact: schemas.ContactCreate,
     db: Session = Depends(get_db),
 ):
+    client_ip = request.client.host if request.client else "unknown"
+
+    check_rate_limit(
+        key=f"contact:{client_ip}",
+        max_attempts=5,
+        window_seconds=10 * 60,
+    )
+
     new_contact = models.Contact(
         name=contact.name,
         email=contact.email,
@@ -34,7 +44,6 @@ def create_contact(
     db.refresh(new_contact)
 
     return new_contact
-
 
 # =====================================================
 # ADMIN ONLY — GET ALL CONTACT MESSAGES
@@ -51,6 +60,7 @@ def get_contacts(
     return (
         db.query(models.Contact)
         .order_by(models.Contact.id.desc())
+        .limit(100)
         .all()
     )
 

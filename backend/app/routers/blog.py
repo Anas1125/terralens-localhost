@@ -22,6 +22,7 @@ def get_blogs(
         .order_by(
             models.Blog.created_at.desc()
         )
+        .limit(100)
         .all()
     )
 

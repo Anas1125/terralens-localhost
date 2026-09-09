@@ -65,17 +65,8 @@ def update_settings(
         exclude_unset=True
     )
 
-    print(
-        "SETTINGS RECEIVED:",
-        received,
-    )
-
     # Convert about_videos list → JSON string
     if "about_videos" in received:
-        print(
-            "ABOUT VIDEOS RECEIVED:",
-            received["about_videos"],
-        )
 
         received["about_videos"] = json.dumps(
             received["about_videos"]
@@ -123,10 +114,5 @@ def update_settings(
             response_data["about_videos"] = []
     else:
         response_data["about_videos"] = []
-
-    print(
-        "ABOUT VIDEOS SAVED:",
-        response_data["about_videos"],
-    )
 
     return response_data

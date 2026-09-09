@@ -22,6 +22,7 @@ def get_gallery(
         .order_by(
             models.Gallery.created_at.desc()
         )
+        .limit(100)
         .all()
     )
 

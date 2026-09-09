@@ -24,9 +24,9 @@ def get_services(
         .order_by(
             models.Service.created_at.desc()
         )
+        .limit(100)
         .all()
     )
-
     for service in services:
         if service.features:
             try:

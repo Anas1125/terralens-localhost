@@ -1,12 +1,12 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 
 class ContactCreate(BaseModel):
-    name: str
+    name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
-    phone: str | None = None
-    subject: str | None = None
-    message: str
+    phone: str | None = Field(default=None, max_length=30)
+    subject: str | None = Field(default=None, max_length=200)
+    message: str = Field(..., min_length=1, max_length=5000)
 
 
 class ContactResponse(ContactCreate):
@@ -32,24 +32,39 @@ class JobResponse(JobCreate):
         from_attributes = True
 
 class AdminLogin(BaseModel):
-    username: str
-    password: str
+    username: str = Field(..., min_length=1, max_length=100)
+    password: str = Field(..., min_length=1, max_length=200)
 
 
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class AdminCreate(BaseModel):
-    username: str
-    password: str
-    role: str = "employee"
+    username: str = Field(..., min_length=1, max_length=100)
+    password: str = Field(..., min_length=8, max_length=200)
+    role: str = Field(default="employee", pattern="^(manager|employee)$")
 
 
 class AdminUpdate(BaseModel):
-    username: str | None = None
-    password: str | None = None
-    role: str | None = None
+    username: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=100,
+    )
+
+    password: str | None = Field(
+        default=None,
+        min_length=8,
+        max_length=200,
+    )
+
+    role: str | None = Field(
+        default=None,
+        pattern="^(manager|employee)$",
+    )
+
     is_active: bool | None = None
 
 
@@ -143,12 +158,25 @@ class SiteSettingsResponse(SiteSettingsBase):
         from_attributes = True
 
 class ServiceCreate(BaseModel):
-    name: str
-    slug: str
-    category: str
-    description: str | None = None
-    features: list[str] | None = None
-    image: str | None = None
+    name: str = Field(..., min_length=1, max_length=150)
+    slug: str = Field(..., min_length=1, max_length=100)
+    category: str = Field(..., min_length=1, max_length=100)
+
+    description: str | None = Field(
+        default=None,
+        max_length=10000,
+    )
+
+    features: list[str] | None = Field(
+        default=None,
+        max_length=30,
+    )
+
+    image: str | None = Field(
+        default=None,
+        max_length=500,
+    )
+
     is_active: bool = True
 
 
@@ -159,24 +187,24 @@ class ServiceResponse(ServiceCreate):
         from_attributes = True
 
 class ProjectCreate(BaseModel):
-    category: str
-    title: str
-    subtitle: str | None = None
+    category: str = Field(..., min_length=1, max_length=100)
+    title: str = Field(..., min_length=1, max_length=200)
+    subtitle: str | None = Field(default=None, max_length=300)
 
-    client: str | None = None
-    location: str | None = None
-    year: str | None = None
-    duration: str | None = None
-    team: str | None = None
+    client: str | None = Field(default=None, max_length=150)
+    location: str | None = Field(default=None, max_length=150)
+    year: str | None = Field(default=None, max_length=20)
+    duration: str | None = Field(default=None, max_length=100)
+    team: str | None = Field(default=None, max_length=200)
 
-    description: str | None = None
-    challenge: str | None = None
-    solution: str | None = None
+    description: str | None = Field(default=None, max_length=10000)
+    challenge: str | None = Field(default=None, max_length=10000)
+    solution: str | None = Field(default=None, max_length=10000)
 
-    results: str | None = None
-    technologies: str | None = None
+    results: str | None = Field(default=None, max_length=10000)
+    technologies: str | None = Field(default=None, max_length=1000)
 
-    image: str | None = None
+    image: str | None = Field(default=None, max_length=500)
     is_active: bool = True
 
 
@@ -188,11 +216,14 @@ class ProjectResponse(ProjectCreate):
 
 class ApplicationCreate(BaseModel):
     job_id: int
-    full_name: str
-    email: str
-    phone: str | None = None
-    resume: str | None = None
-    cover_letter: str | None = None
+    full_name: str = Field(..., min_length=1, max_length=150)
+    email: EmailStr
+    phone: str | None = Field(default=None, max_length=30)
+    resume: str | None = Field(default=None, max_length=500)
+    cover_letter: str | None = Field(
+        default=None,
+        max_length=10000,
+    )
 
 
 class ApplicationResponse(ApplicationCreate):
@@ -204,9 +235,9 @@ class ApplicationResponse(ApplicationCreate):
         from_attributes = True
 
 class PartnerCreate(BaseModel):
-    name: str
-    logo: str | None = None
-    type: str
+    name: str = Field(..., min_length=1, max_length=150)
+    logo: str | None = Field(default=None, max_length=500)
+    type: str = Field(..., min_length=1, max_length=100)
     is_active: bool = True
 
 
@@ -217,16 +248,16 @@ class PartnerResponse(PartnerCreate):
         from_attributes = True
 
 class BlogCreate(BaseModel):
-    category: str
-    date: str
-    author: str
-    read_time: str
+    category: str = Field(..., min_length=1, max_length=100)
+    date: str = Field(..., min_length=1, max_length=30)
+    author: str = Field(..., min_length=1, max_length=150)
+    read_time: str = Field(..., min_length=1, max_length=50)
 
-    title: str
-    excerpt: str | None = None
-    content: str | None = None
+    title: str = Field(..., min_length=1, max_length=200)
+    excerpt: str | None = Field(default=None, max_length=1000)
+    content: str | None = Field(default=None, max_length=30000)
 
-    image: str | None = None
+    image: str | None = Field(default=None, max_length=500)
     is_active: bool = True
 
 
@@ -238,11 +269,10 @@ class BlogResponse(BlogCreate):
         from_attributes = True
 
 class GalleryCreate(BaseModel):
-    title: str
-    category: str
-    image: str
+    title: str = Field(..., min_length=1, max_length=200)
+    category: str = Field(..., min_length=1, max_length=100)
+    image: str = Field(..., min_length=1, max_length=500)
     is_active: bool = True
-
 
 class GalleryResponse(GalleryCreate):
     id: int

@@ -5,11 +5,17 @@ from fastapi import (
     UploadFile,
     File,
     Form,
+    Request,
 )
+from ..rate_limit import check_rate_limit
 from sqlalchemy.orm import Session
 from pathlib import Path
 import shutil
 import uuid
+import os
+import tempfile
+
+from PIL import Image
 
 from ..database import get_db
 from .. import models, schemas
@@ -28,6 +34,14 @@ ALLOWED_EXTENSIONS = {
     ".jpeg",
 }
 
+MAX_RESUME_SIZE = 10 * 1024 * 1024  # 10 MB
+
+ALLOWED_IMAGE_FORMATS = {
+    ".png": "PNG",
+    ".jpg": "JPEG",
+    ".jpeg": "JPEG",
+}
+
 
 # =========================================================
 # PUBLIC — SUBMIT JOB APPLICATION
@@ -38,6 +52,7 @@ ALLOWED_EXTENSIONS = {
     response_model=schemas.ApplicationResponse,
 )
 async def create_application(
+    request: Request,
     job_id: int = Form(...),
     full_name: str = Form(...),
     email: str = Form(...),
@@ -46,6 +61,13 @@ async def create_application(
     resume: UploadFile | None = File(None),
     db: Session = Depends(get_db),
 ):
+    client_ip = request.client.host if request.client else "unknown"
+
+    check_rate_limit(
+        key=f"application:{client_ip}",
+        max_attempts=3,
+        window_seconds=30 * 60,
+    )
     # Check that the job exists
     job = (
         db.query(models.Job)
@@ -67,7 +89,7 @@ async def create_application(
 
     if resume:
         extension = Path(
-            resume.filename
+            resume.filename or ""
         ).suffix.lower()
 
         if extension not in ALLOWED_EXTENSIONS:
@@ -81,22 +103,94 @@ async def create_application(
             exist_ok=True,
         )
 
-        # Generate unique filename
-        filename = (
-            f"{uuid.uuid4().hex}{extension}"
-        )
+        # =====================================================
+        # SAVE TO TEMPORARY FILE WITH SIZE LIMIT
+        # =====================================================
 
-        destination = UPLOAD_DIR / filename
+        temp_path = None
+        total_size = 0
 
-        with destination.open("wb") as buffer:
-            shutil.copyfileobj(
-                resume.file,
-                buffer,
+        try:
+            with tempfile.NamedTemporaryFile(
+                delete=False,
+                dir=UPLOAD_DIR,
+                suffix=extension,
+            ) as temp_file:
+                temp_path = Path(temp_file.name)
+
+                while True:
+                    chunk = await resume.read(1024 * 1024)
+
+                    if not chunk:
+                        break
+
+                    total_size += len(chunk)
+
+                    if total_size > MAX_RESUME_SIZE:
+                        raise HTTPException(
+                            status_code=400,
+                            detail="Resume file must be 10 MB or smaller.",
+                        )
+
+                    temp_file.write(chunk)
+
+            # =================================================
+            # VALIDATE ACTUAL FILE CONTENT
+            # =================================================
+
+            if extension == ".pdf":
+                with temp_path.open("rb") as file:
+                    header = file.read(5)
+
+                if header != b"%PDF-":
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Invalid or corrupted PDF file.",
+                    )
+
+            else:
+                try:
+                    with Image.open(temp_path) as image:
+                        image.verify()
+
+                        expected_format = ALLOWED_IMAGE_FORMATS[
+                            extension
+                        ]
+
+                        if image.format != expected_format:
+                            raise HTTPException(
+                                status_code=400,
+                                detail="Invalid image file format.",
+                            )
+
+                except HTTPException:
+                    raise
+
+                except Exception:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Invalid or corrupted image file.",
+                    )
+
+            # =================================================
+            # MOVE VALIDATED FILE TO FINAL LOCATION
+            # =================================================
+
+            filename = f"{uuid.uuid4().hex}{extension}"
+            destination = UPLOAD_DIR / filename
+
+            os.replace(temp_path, destination)
+            temp_path = None
+
+            resume_path = (
+                f"/uploads/applications/{filename}"
             )
 
-        resume_path = (
-            f"/uploads/applications/{filename}"
-        )
+        finally:
+            if temp_path and temp_path.exists():
+                temp_path.unlink(missing_ok=True)
+
+            await resume.close()
 
     # =====================================================
     # CREATE APPLICATION
@@ -135,6 +229,7 @@ def get_applications(
         .order_by(
             models.Application.created_at.desc()
         )
+        .limit(100)
         .all()
     )
 

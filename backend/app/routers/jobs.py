@@ -61,7 +61,11 @@ def create_job(
 def get_jobs(
     db: Session = Depends(get_db),
 ):
-    return db.query(models.Job).all()
+    return (
+        db.query(models.Job)
+        .limit(100)
+        .all()
+    )
 
 
 # =====================================================

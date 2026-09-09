@@ -47,7 +47,11 @@ def create_partner(
 def get_partners(
     db: Session = Depends(get_db),
 ):
-    return db.query(models.Partner).all()
+    return (
+        db.query(models.Partner)
+        .limit(100)
+        .all()
+    )
 
 
 # =====================================================
