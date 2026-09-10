@@ -658,7 +658,7 @@ export default function Showcase() {
         project.is_active ?? true,
     });
 
-    window.scrollTo({
+    document.querySelector(".admin-main")?.scrollTo({
       top: 0,
       behavior: "smooth",
     });
@@ -688,7 +688,7 @@ export default function Showcase() {
         item.is_active ?? true,
     });
 
-    window.scrollTo({
+    document.querySelector(".admin-main")?.scrollTo({
       top: 0,
       behavior: "smooth",
     });
@@ -719,7 +719,7 @@ export default function Showcase() {
         blog.is_active ?? true,
     });
 
-    window.scrollTo({
+    document.querySelector(".admin-main")?.scrollTo({
       top: 0,
       behavior: "smooth",
     });

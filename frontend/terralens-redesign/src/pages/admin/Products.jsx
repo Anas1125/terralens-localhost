@@ -112,7 +112,7 @@ export default function Products() {
       is_active: product.is_active ?? true,
     });
 
-    window.scrollTo({
+    document.querySelector(".admin-main")?.scrollTo({
       top: 0,
       behavior: "smooth",
     });

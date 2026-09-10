@@ -113,7 +113,7 @@ export default function Services() {
 
     setEditingId(service.id);
 
-    window.scrollTo({
+    document.querySelector(".admin-main")?.scrollTo({
       top: 0,
       behavior: "smooth",
     });

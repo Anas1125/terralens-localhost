@@ -1453,33 +1453,28 @@ export default function Settings() {
           SAVE SETTINGS
       ===================================================== */}
 
-      <div
+     <div
+      style={{
+        position: "fixed",
+        top: "20px",
+        right: "28px",
+        zIndex: 100,
+      }}
+    >
+      <button
+        type="button"
+        onClick={handleSave}
+        disabled={saving}
         style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "24px",
-          marginBottom: "40px",
+          ...buttonStyle,
+          opacity: saving ? 0.6 : 1,
+          cursor: saving ? "not-allowed" : "pointer",
+          boxShadow: "0 8px 24px rgba(15, 23, 42, 0.15)",
         }}
       >
-
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving}
-          style={{
-            ...buttonStyle,
-            opacity: saving ? 0.6 : 1,
-            cursor: saving
-              ? "not-allowed"
-              : "pointer",
-          }}
-        >
-          {saving
-            ? "Saving..."
-            : "Save Settings"}
-        </button>
-
-      </div>
+        {saving ? "Saving..." : "Save Settings"}
+      </button>
+    </div>
 
     </div>
   );

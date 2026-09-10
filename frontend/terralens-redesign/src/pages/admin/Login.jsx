@@ -30,9 +30,13 @@ export default function Login() {
       scheduleTokenLogout();
 
       navigate("/admin/dashboard");
-    } catch (err) {
+   } catch (err) {
+    if (err.response?.status === 429) {
+      alert("Too many login attempts. Please wait a few minutes and try again.");
+    } else {
       alert("Invalid username or password");
     }
+  }
   };
 
   return (
@@ -214,6 +218,7 @@ export default function Login() {
             hover:bg-sky-400
             hover:shadow-[0_0_35px_rgba(14,165,233,.35)]
             hover:-translate-y-0.5
+            cursor-pointer
           "
         >
           Login
