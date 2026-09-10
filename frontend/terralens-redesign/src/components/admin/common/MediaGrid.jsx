@@ -1,7 +1,9 @@
 import { Trash2, Copy, Eye } from "lucide-react";
 import { deleteMedia } from "../../../api/media";
+import { useToast } from "../../admin/ToastProvider";
 
 export default function MediaGrid({ files, onRefresh }) {
+  const { showToast } = useToast();
   const getMediaUrl = (file) => {
     if (!file?.path) return "";
 
@@ -29,6 +31,7 @@ export default function MediaGrid({ files, onRefresh }) {
       onRefresh();
     } catch (err) {
       console.error("Failed to delete media:", err);
+      showToast("Failed to delete media.", "error");
     }
   };
 
@@ -37,7 +40,7 @@ export default function MediaGrid({ files, onRefresh }) {
 
     navigator.clipboard.writeText(mediaUrl);
 
-    alert("Copied URL!");
+    showToast("Copied URL!", "success");
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useToast } from "../../components/admin/ToastProvider";
 
 import {
   getProducts,
@@ -10,6 +11,7 @@ import {
 import { uploadFile } from "../../api/media";
 
 export default function Products() {
+  const { showToast } = useToast();
   const [products, setProducts] = useState([]);
 
   const [form, setForm] = useState({
@@ -75,21 +77,21 @@ export default function Products() {
           features: JSON.stringify(form.features),
         });
 
-        alert("Product updated successfully!");
+        showToast("Product updated successfully!", "success");
       } else {
         await createProduct({
           ...form,
           features: JSON.stringify(form.features),
         });
 
-        alert("Product created successfully!");
+        showToast("Product created successfully!", "success");
       }
 
       resetForm();
       await loadProducts();
     } catch (error) {
       console.error("Failed to save product:", error);
-      alert("Failed to save product.");
+      showToast("Failed to save product.", "error");
     } finally {
       setLoading(false);
     }
@@ -128,12 +130,12 @@ export default function Products() {
     try {
       await deleteProduct(id);
 
-      alert("Product deleted successfully!");
+      showToast("Product deleted successfully!", "success");
 
       await loadProducts();
     } catch (error) {
       console.error("Failed to delete product:", error);
-      alert("Failed to delete product.");
+      showToast("Failed to delete product.", "error");
     }
   };
 
@@ -472,7 +474,7 @@ export default function Products() {
                       error
                     );
 
-                    alert("Image upload failed.");
+                    showToast("Image upload failed.", "error");
                   } finally {
                     setUploadingImage(false);
                     e.target.value = "";

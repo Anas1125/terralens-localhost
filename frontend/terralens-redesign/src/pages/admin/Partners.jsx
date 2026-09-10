@@ -13,8 +13,10 @@ import {
   updatePartner,
   deletePartner,
 } from "../../api/partners";
+import { useToast } from "../../components/admin/ToastProvider";
 
 export default function Partners() {
+  const { showToast } = useToast();
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -76,7 +78,7 @@ export default function Partners() {
       resetForm();
     } catch (error) {
       console.error("Failed to save partner:", error);
-      alert("Failed to save.");
+      showToast("Failed to save.", "error");
     }
   };
 
@@ -335,7 +337,7 @@ export default function Partners() {
                   error
                 );
 
-                alert("Failed to upload logo.");
+                showToast("Failed to upload logo.", "error");
               } finally {
                 setUploading(false);
               }

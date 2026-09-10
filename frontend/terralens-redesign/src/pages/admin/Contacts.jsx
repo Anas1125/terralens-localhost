@@ -10,8 +10,10 @@ import {
   getContacts,
   deleteContact,
 } from "../../api/contact";
+import { useToast } from "../../components/admin/ToastProvider";
 
 export default function Contacts() {
+  const { showToast } = useToast();
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
@@ -59,7 +61,7 @@ export default function Contacts() {
         error
       );
 
-      alert("Failed to delete message.");
+      showToast("Failed to delete message.", "error");
     } finally {
       setDeleting(null);
     }

@@ -7,8 +7,11 @@ import {
   updateService,
   deleteService,
 } from "../../api/services";
+import { useToast } from "../../components/admin/ToastProvider";
+import { Shovel } from "lucide-react";
 
 export default function Services() {
+  const { showToast } = useToast();
   const [uploadingImage, setUploadingImage] = useState(false);
   const [services, setServices] = useState([]);
   const [search, setSearch] = useState("");
@@ -78,10 +81,10 @@ export default function Services() {
 
       if (editingId) {
         await updateService(editingId, serviceData);
-        alert("Service updated successfully!");
+        showToast("Service updated successfully!", "success");
       } else {
         await createService(serviceData);
-        alert("Service created successfully!");
+        showToast("Service created successfully!", "success");
       }
 
       resetForm();
@@ -89,9 +92,9 @@ export default function Services() {
     } catch (error) {
       console.error(error);
 
-      alert(
-        error.response?.data?.detail ||
-          "Something went wrong."
+      showToast(
+        error.response?.data?.detail || "Something went wrong.",
+        "error"
       );
     } finally {
       setLoading(false);
@@ -129,12 +132,12 @@ export default function Services() {
     try {
       await deleteService(id);
 
-      alert("Service deleted successfully!");
+      showToast("Service deleted successfully!", "success");
 
       await loadServices();
     } catch (error) {
       console.error(error);
-      alert("Failed to delete service.");
+      showToast("Failed to delete service.", "error");
     }
   };
 
@@ -391,9 +394,8 @@ export default function Services() {
                         error
                       );
 
-                      alert(
-                        "Image upload failed."
-                      );
+                      showToast("Image upload failed.", "error");
+
                     } finally {
                       setUploadingImage(false);
 

@@ -38,9 +38,18 @@ def check_login_rate_limit(ip_address: str):
     ]
 
     if len(_login_attempts[ip_address]) >= LOGIN_MAX_ATTEMPTS:
+        oldest_attempt = min(_login_attempts[ip_address])
+
+        retry_after = int(
+            LOGIN_WINDOW_SECONDS - (now - oldest_attempt)
+        ) + 1
+
         raise HTTPException(
             status_code=429,
             detail="Too many login attempts. Please try again later.",
+            headers={
+                "Retry-After": str(retry_after),
+            },
         )
 
 

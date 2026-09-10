@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { createJob } from "../../../api/jobs";
+import { useToast } from "../../admin/ToastProvider";
 
 export default function AddJobModal({
   open,
   onClose,
   onSuccess,
 }) {
+  const { showToast } = useToast();
   const [form, setForm] = useState({
     title: "",
     department: "",
@@ -31,6 +33,8 @@ export default function AddJobModal({
     try {
       await createJob(form);
 
+      showToast("Job created successfully!", "success");
+      
       onSuccess();
       onClose();
 
@@ -45,7 +49,7 @@ export default function AddJobModal({
       });
     } catch (err) {
       console.error(err);
-      alert("Failed to create job.");
+      showToast("Failed to create job.", "error");
     }
   };
 

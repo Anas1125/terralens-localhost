@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../../api/client";
+import { useToast } from "../../components/admin/ToastProvider";
 
 export default function AdminManagement() {
+  const { showToast } = useToast();
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -71,12 +73,12 @@ export default function AdminManagement() {
 
   const createAdmin = async () => {
     if (!newUsername.trim()) {
-      alert("Username is required.");
+      showToast("Username is required.", "warning");
       return;
     }
 
     if (!newPassword.trim()) {
-      alert("Password is required.");
+      showToast("Password is required.", "warning");
       return;
     }
 
@@ -89,7 +91,7 @@ export default function AdminManagement() {
         role: newRole,
       });
 
-      alert("Admin created successfully.");
+      showToast("Admin created successfully.", "success");
 
       closeAddForm();
 
@@ -101,7 +103,7 @@ export default function AdminManagement() {
         error.response?.data?.detail ||
         "Failed to create admin.";
 
-      alert(message);
+      showToast(message, "error");
     } finally {
       setCreating(false);
     }
@@ -121,7 +123,7 @@ export default function AdminManagement() {
     setEditRole(admin.role || "employee");
     setEditIsActive(admin.is_active);
 
-    window.scrollTo({
+    document.querySelector(".admin-main")?.scrollTo({
       top: 0,
       behavior: "smooth",
     });
@@ -148,7 +150,7 @@ export default function AdminManagement() {
     if (!editingAdmin) return;
 
     if (!editUsername.trim()) {
-      alert("Username is required.");
+      showToast("Username is required.", "warning");
       return;
     }
 
@@ -170,7 +172,7 @@ export default function AdminManagement() {
         updateData
       );
 
-      alert("Admin updated successfully.");
+      showToast("Admin updated successfully.", "success");
 
       closeEditForm();
 
@@ -182,7 +184,7 @@ export default function AdminManagement() {
         error.response?.data?.detail ||
         "Failed to update admin.";
 
-      alert(message);
+      showToast(message, "error");
     } finally {
       setUpdating(false);
     }
@@ -208,7 +210,7 @@ export default function AdminManagement() {
 
       await api.delete(`/admin/users/${admin.id}`);
 
-      alert("Admin deleted successfully.");
+      showToast("Admin deleted successfully.", "success");
 
       await loadAdmins();
     } catch (error) {
@@ -218,7 +220,7 @@ export default function AdminManagement() {
         error.response?.data?.detail ||
         "Failed to delete admin.";
 
-      alert(message);
+      showToast(message, "error");
     } finally {
       setDeletingId(null);
     }

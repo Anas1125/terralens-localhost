@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { updateJob } from "../../../api/jobs";
+import { useToast } from "../../admin/ToastProvider";
 
 export default function EditJobModal({
   open,
@@ -7,6 +8,7 @@ export default function EditJobModal({
   job,
   onSuccess,
 }) {
+  const { showToast } = useToast();
   const [form, setForm] = useState({});
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function EditJobModal({
       onClose();
     } catch (err) {
       console.error(err);
-      alert("Failed to update job.");
+      showToast("Failed to update job.", "error");
     }
   };
 

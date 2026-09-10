@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import PageHeader from "../../components/admin/common/PageHeader";
 import FileUploader from "../../components/admin/common/FileUploader";
+import { useToast } from "../../components/admin/ToastProvider";
 
 import {
   getSettings,
@@ -9,6 +10,7 @@ import {
 } from "../../api/settings";
 
 export default function Settings() {
+  const { showToast } = useToast();
   const [form, setForm] = useState({});
   const [saving, setSaving] = useState(false);
 
@@ -52,10 +54,10 @@ export default function Settings() {
 
       setForm(updated);
 
-      alert("Settings saved successfully!");
+      showToast("Settings saved successfully!", "success");
     } catch (error) {
       console.error("Failed to save settings:", error);
-      alert("Failed to save settings.");
+      showToast("Failed to save settings.", "error");
     } finally {
       setSaving(false);
     }

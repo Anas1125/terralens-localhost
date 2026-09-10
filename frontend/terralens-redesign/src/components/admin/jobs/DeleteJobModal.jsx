@@ -1,4 +1,5 @@
 import { deleteJob } from "../../../api/jobs";
+import { useToast } from "../../admin/ToastProvider";
 
 export default function DeleteJobModal({
   open,
@@ -8,6 +9,7 @@ export default function DeleteJobModal({
 }) {
   if (!open || !job) return null;
 
+  const { showToast } = useToast();
   const handleDelete = async () => {
     try {
       await deleteJob(job.id);
@@ -16,7 +18,7 @@ export default function DeleteJobModal({
       onClose();
     } catch (err) {
       console.error(err);
-      alert("Failed to delete job.");
+      showToast("Failed to delete job.", "error");
     }
   };
 

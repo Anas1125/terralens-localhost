@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { uploadFile } from "../../api/media";
 import MediaPicker from "../../components/admin/common/MediaPicker";
+import { useToast } from "../../components/admin/ToastProvider";
 
 import {
   getProjects,
@@ -26,6 +27,8 @@ import {
 
 
 export default function Showcase() {
+
+  const { showToast } = useToast();
   // =====================================================
   // SHOWCASE SECTION
   // =====================================================
@@ -292,9 +295,7 @@ export default function Showcase() {
         error
       );
 
-      alert(
-        "Failed to upload project image."
-      );
+      showToast("Failed to upload project image.", "error");
     } finally {
       setUploadingImage(false);
       e.target.value = "";
@@ -329,9 +330,7 @@ export default function Showcase() {
         error
       );
 
-      alert(
-        "Failed to upload gallery image."
-      );
+      showToast("Failed to upload gallery image.", "error");
     } finally {
       setGalleryUploadingImage(false);
       e.target.value = "";
@@ -365,9 +364,7 @@ export default function Showcase() {
         error
       );
 
-      alert(
-        "Failed to upload blog image."
-      );
+      showToast("Failed to upload blog image.", "error");
     } finally {
       setBlogUploadingImage(false);
       e.target.value = "";
@@ -476,9 +473,7 @@ export default function Showcase() {
         error
       );
 
-      alert(
-        "Failed to save project."
-      );
+      showToast("Failed to save project.", "error");
     } finally {
       setLoading(false);
     }
@@ -493,9 +488,7 @@ export default function Showcase() {
     e.preventDefault();
 
     if (!galleryForm.image) {
-      alert(
-        "Please select a gallery image."
-      );
+      showToast("Please select a gallery image.", "warning");
 
       return;
     }
@@ -529,9 +522,7 @@ export default function Showcase() {
         error
       );
 
-      alert(
-        "Failed to save gallery item."
-      );
+      showToast("Failed to save gallery item.", "error");
     } finally {
       setLoading(false);
     }
@@ -545,7 +536,7 @@ export default function Showcase() {
     e.preventDefault();
 
     if (!blogForm.image) {
-      alert("Please select a blog image.");
+      showToast("Please select a blog image.", "warning");
       return;
     }
 
@@ -581,7 +572,7 @@ export default function Showcase() {
         error
       );
 
-      alert("Failed to save blog.");
+      showToast("Failed to save blog.", "error");
     } finally {
       setLoading(false);
     }
@@ -749,9 +740,7 @@ export default function Showcase() {
         error
       );
 
-      alert(
-        "Failed to delete project."
-      );
+      showToast("Failed to delete project.", "error");
     }
   };
 
@@ -779,9 +768,7 @@ export default function Showcase() {
         error
       );
 
-      alert(
-        "Failed to delete gallery item."
-      );
+      showToast("Failed to delete gallery item.", "error");
     }
   };
 
@@ -807,7 +794,7 @@ export default function Showcase() {
         error
       );
 
-      alert("Failed to delete blog.");
+      showToast("Failed to delete blog.", "error");
     }
   };
 

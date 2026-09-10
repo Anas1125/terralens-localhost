@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 
 import { getJobs } from "../../api/jobs";
 import { createApplication } from "../../api/applications";
+import { useToast } from "../admin/ToastProvider";
 
 export default function CurrentOpenings() {
+  const { showToast } = useToast();
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
 
@@ -80,7 +82,7 @@ export default function CurrentOpenings() {
 
       await createApplication(formData);
 
-      alert("Application submitted successfully!");
+      showToast("Application submitted successfully!", "success");
 
       setSelectedJob(null);
 
@@ -97,9 +99,10 @@ export default function CurrentOpenings() {
         error
       );
 
-      alert(
+      showToast(
         error?.response?.data?.detail ||
-          "Failed to submit application."
+          "Failed to submit application.",
+        "error"
       );
     } finally {
       setSubmitting(false);

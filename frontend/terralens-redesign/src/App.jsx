@@ -37,6 +37,8 @@ import FaviconManager from "./components/FaviconManager";
 
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
+import { ToastProvider } from "./components/admin/ToastProvider";
+
 
 // =====================================================
 // PUBLIC ROUTES
@@ -235,8 +237,10 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <FaviconManager />
-      <AppContent />
+      <ToastProvider>
+        <FaviconManager />
+        <AppContent />
+      </ToastProvider>
     </BrowserRouter>
   );
 }

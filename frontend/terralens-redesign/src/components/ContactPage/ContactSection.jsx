@@ -8,8 +8,10 @@ import {
 } from "lucide-react";
 import { createContact } from "../../api/contact";
 import { getSettings } from "../../api/settings";
+import { useToast } from "../../components/admin/ToastProvider";
 
 export default function ContactSection() {
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -55,13 +57,14 @@ export default function ContactSection() {
     const email = formData.email.trim();
 
     if (!email.includes("@")) {
-      alert("Please add an '@' in your email address.");
+      showToast("Please add an '@' in your email address.", "warning");
       return;
     }
 
     if (!email.includes(".")) {
-      alert(
-        "Please add a '.' in your email address (e.g. .com, .in)."
+      showToast(
+        "Please add a '.' in your email address (e.g. .com, .in).",
+        "warning"
       );
       return;
     }
@@ -69,7 +72,7 @@ export default function ContactSection() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailPattern.test(email)) {
-      alert("Please enter a valid email address.");
+      showToast("Please enter a valid email address.", "warning");
       return;
     }
 
@@ -78,7 +81,7 @@ export default function ContactSection() {
 
       await createContact(formData);
 
-      alert("Message sent successfully!");
+      showToast("Message sent successfully!", "success");
 
       setFormData({
         name: "",
@@ -93,8 +96,9 @@ export default function ContactSection() {
         error.response?.data || error.message
       );
 
-      alert(
-        "Failed to send message. Please check your details and try again."
+      showToast(
+        "Failed to send message. Please check your details and try again.",
+        "error"
       );
     } finally {
       setLoading(false);

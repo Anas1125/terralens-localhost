@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, User, Eye, EyeOff } from "lucide-react";
 import { login } from "../../api/admin";
@@ -10,9 +10,40 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [lockoutSeconds, setLockoutSeconds] = useState(0);
+
+    useEffect(() => {
+    if (lockoutSeconds <= 0) return;
+
+    const timer = setInterval(() => {
+      setLockoutSeconds((seconds) => {
+        if (seconds <= 1) {
+          clearInterval(timer);
+          setError("");
+          return 0;
+        }
+
+        return seconds - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [lockoutSeconds]);
+
+  const formatLockoutTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    setError("");
+    setLoggingIn(true);
 
     try {
       const data = await login(username, password);
@@ -30,13 +61,26 @@ export default function Login() {
       scheduleTokenLogout();
 
       navigate("/admin/dashboard");
-   } catch (err) {
-    if (err.response?.status === 429) {
-      alert("Too many login attempts. Please wait a few minutes and try again.");
-    } else {
-      alert("Invalid username or password");
+    } catch (err) {
+      if (err.response?.status === 429) {
+        const retryAfter = Number(
+          err.response?.headers?.["retry-after"]
+        );
+
+        if (retryAfter > 0) {
+          setLockoutSeconds(retryAfter);
+          setError("Too many login attempts.");
+        } else {
+          setError(
+            "Too many login attempts. Please try again later."
+          );
+        }
+      } else {
+        setError("Invalid username or password");
+      }
+    } finally {
+      setLoggingIn(false);
     }
-  }
   };
 
   return (
@@ -118,9 +162,13 @@ export default function Login() {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) =>
-              setUsername(e.target.value)
-            }
+            onChange={(e) => {
+              setUsername(e.target.value);
+
+              if (lockoutSeconds <= 0) {
+                setError("");
+              }
+            }}
             className="
               w-full
               rounded-xl
@@ -159,7 +207,13 @@ export default function Login() {
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+
+              if (lockoutSeconds <= 0) {
+                setError("");
+              }
+            }}
             className="
               w-full
               rounded-xl
@@ -201,10 +255,40 @@ export default function Login() {
           </button>
         </div>
 
+        {error && (
+          <div
+            className="
+              mt-4
+              rounded-xl
+              border
+              border-red-200
+              bg-red-50
+              px-4
+              py-3
+              text-sm
+              font-medium
+              text-red-600
+            "
+            role="alert"
+          >
+            <div>{error}</div>
+
+            {lockoutSeconds > 0 && (
+              <div className="mt-1">
+                Please try again in{" "}
+                <span className="font-bold">
+                  {formatLockoutTime(lockoutSeconds)}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Login Button */}
 
         <button
           type="submit"
+          disabled={loggingIn || lockoutSeconds > 0}
           className="
             mt-8
             w-full
@@ -219,9 +303,15 @@ export default function Login() {
             hover:shadow-[0_0_35px_rgba(14,165,233,.35)]
             hover:-translate-y-0.5
             cursor-pointer
+            disabled:cursor-not-allowed
+            disabled:opacity-60
           "
         >
-          Login
+          {loggingIn
+            ? "Logging in..."
+            : lockoutSeconds > 0
+            ? `Try again in ${formatLockoutTime(lockoutSeconds)}`
+            : "Login"}
         </button>
       </form>
     </div>

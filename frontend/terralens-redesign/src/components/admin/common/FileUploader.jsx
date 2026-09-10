@@ -1,6 +1,7 @@
 import { Upload } from "lucide-react";
 import { useState } from "react";
 import { uploadFile } from "../../../api/media";
+import { useToast } from "../../admin/ToastProvider";
 
 export default function FileUploader({
   folder,
@@ -8,6 +9,7 @@ export default function FileUploader({
   accept = "*/*",
   onUploaded,
 }) {
+  const { showToast } = useToast();
   const [uploading, setUploading] = useState(false);
 
   const handleUpload = async (e) => {
@@ -24,10 +26,10 @@ export default function FileUploader({
         onUploaded(result);
       }
 
-      alert("File uploaded successfully!");
+      showToast("File uploaded successfully!", "success");
     } catch (err) {
       console.error("Upload failed:", err);
-      alert("Upload failed.");
+      showToast("Upload failed.", "error");
     } finally {
       setUploading(false);
 

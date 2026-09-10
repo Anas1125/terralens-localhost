@@ -4,8 +4,10 @@ import {
   getApplications,
   deleteApplication,
 } from "../../api/applications";
+import { useToast } from "../../components/admin/ToastProvider";
 
 export default function Applications() {
+  const { showToast } = useToast();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCoverLetter, setSelectedCoverLetter] = useState(null);
@@ -44,7 +46,7 @@ export default function Applications() {
       );
     } catch (error) {
       console.error("Failed to delete application:", error);
-      alert("Failed to delete application.");
+      showToast("Failed to delete application.", "error");
     }
   };
 
