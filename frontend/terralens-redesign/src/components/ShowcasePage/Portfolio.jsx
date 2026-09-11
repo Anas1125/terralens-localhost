@@ -263,6 +263,7 @@ export default function Portfolio() {
         {/* STATISTICS */}
 
         <div
+          className="portfolio-stats"
           style={{
             display: "grid",
             gridTemplateColumns:
@@ -327,6 +328,7 @@ export default function Portfolio() {
 
         {!loading && filteredProjects.length > 0 && (
           <div
+            className="portfolio-projects-grid"
             style={{
               display: "grid",
               gridTemplateColumns:

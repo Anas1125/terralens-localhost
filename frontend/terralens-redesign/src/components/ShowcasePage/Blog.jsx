@@ -134,6 +134,7 @@ export default function Blog() {
 
         {!loading && blogs.length > 0 && (
           <div
+            className="blog-grid"
             style={{
               display: "grid",
               gridTemplateColumns:

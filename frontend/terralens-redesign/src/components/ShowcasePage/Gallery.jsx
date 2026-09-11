@@ -279,6 +279,7 @@ export default function Gallery() {
 
         {!loading && filteredGallery.length > 0 && (
           <div
+            className="gallery-grid"
             style={{
               display: "grid",
               gridTemplateColumns:

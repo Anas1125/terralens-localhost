@@ -36,7 +36,9 @@ export default function Showcase() {
 
   return (
     <div>
-      <ShowcaseHero />
+      <ShowcaseHero
+        onExploreProjects={() => setActiveTab("portfolio")}
+      />
 
       <ShowcaseTabs
         activeTab={activeTab}

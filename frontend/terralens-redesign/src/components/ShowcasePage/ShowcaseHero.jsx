@@ -3,7 +3,9 @@ import { ArrowDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import api from "../../api/client";
 
-export default function ShowcaseHero() {
+export default function ShowcaseHero({
+  onExploreProjects,
+}) {
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {
@@ -47,11 +49,26 @@ export default function ShowcaseHero() {
   };
 
   const scrollToPortfolio = () => {
-    document
-      .getElementById("portfolio-section")
-      ?.scrollIntoView({
-        behavior: "smooth",
+    onExploreProjects?.();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const portfolio =
+          document.getElementById("portfolio-section");
+
+        if (!portfolio) return;
+
+        const y =
+          portfolio.getBoundingClientRect().top +
+          window.pageYOffset -
+          80;
+
+        window.scrollTo({
+          top: y,
+          behavior: "smooth",
+        });
       });
+    });
   };
 
   return (

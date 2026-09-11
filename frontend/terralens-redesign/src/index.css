@@ -90,3 +90,168 @@ h6 {
     transform: translateY(0) translateX(0);
   }
 }
+@media (max-width: 768px) {
+  .portfolio-projects-grid {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    width: calc(100% + 48px) !important;
+    max-width: none !important;
+
+    padding-left: 16px;
+    padding-right: 16px;
+
+    gap: 20px !important;
+
+    padding-left: 24px;
+    padding-right: 24px;
+
+    box-sizing: border-box;
+
+    justify-content: flex-start !important;
+    align-items: stretch;
+
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .portfolio-projects-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .portfolio-projects-grid > div {
+    flex: 0 0 calc(100vw - 48px);
+
+    width: calc(100vw - 48px);
+    max-width: calc(100vw - 48px);
+
+    scroll-snap-align: start;
+
+    box-sizing: border-box;
+  }
+}
+
+/* =========================================
+   GALLERY - MOBILE HORIZONTAL CAROUSEL
+   ========================================= */
+
+@media (max-width: 768px) {
+  .gallery-grid {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    gap: 20px !important;
+
+    padding-left: 16px;
+    padding-right: 16px;
+
+    box-sizing: border-box;
+
+    justify-content: flex-start !important;
+    align-items: flex-start;
+
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gallery-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-grid > div {
+    flex: 0 0 calc(100vw - 64px);
+
+    width: calc(100vw - 64px);
+    max-width: calc(100vw - 64px);
+
+    scroll-snap-align: start;
+
+    box-sizing: border-box;
+  }
+}
+
+/* =========================================
+   BLOG - MOBILE HORIZONTAL CAROUSEL
+   ========================================= */
+
+@media (max-width: 768px) {
+  .blog-grid {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    gap: 20px !important;
+
+    padding-left: 16px;
+    padding-right: 16px;
+
+    box-sizing: border-box;
+
+    justify-content: flex-start !important;
+    align-items: stretch;
+
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .blog-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .blog-grid > div {
+    flex: 0 0 calc(100vw - 64px);
+
+    width: calc(100vw - 64px);
+    max-width: calc(100vw - 64px);
+
+    scroll-snap-align: start;
+
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    margin-bottom: 48px !important;
+  }
+
+  .portfolio-stats > div {
+    padding: 18px 10px !important;
+  }
+
+  .portfolio-stats h3 {
+    font-size: 1.75rem !important;
+  }
+
+  .portfolio-stats p {
+    font-size: 0.7rem !important;
+  }
+}
