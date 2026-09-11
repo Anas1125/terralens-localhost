@@ -33,10 +33,10 @@ function CompanyIntro() {
             </h3>
 
             <p className="mt-8 text-lg text-gray-600 leading-8">
-              From land surveying to enterprise GIS solutions,
-              TerraLens combines cutting-edge technology with
-              engineering expertise to solve complex spatial
-              challenges.
+             From Land Surveying To Enterprise Gis Solutions, 
+             Terra Lens Combines Cutting Edge Technology 
+             With Engineering Expertise To Solve Complex 
+             Spatial Challenges.
             </p>
 
             <button

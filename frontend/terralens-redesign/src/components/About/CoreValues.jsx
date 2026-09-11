@@ -11,25 +11,25 @@ const values = [
     icon: Lightbulb,
     title: "Innovation",
     description:
-      "We embrace emerging technologies to create smarter geospatial and software solutions.",
+      "We Embrace Emerging Technologies To Create Smarter Geospatial and Software Solutions.",
   },
   {
     icon: ShieldCheck,
     title: "Integrity",
     description:
-      "Transparency, trust, and ethical practices guide every project we deliver.",
+      "Transparency, Trust, and Ethical Practices Guide Every Project We Deliver.",
   },
   {
     icon: Users,
     title: "Collaboration",
     description:
-      "Working closely with clients and partners to achieve meaningful results together.",
+      "Working Closely With Clients And Partners To Achieve Meaningful Results Together.",
   },
   {
     icon: Award,
     title: "Excellence",
     description:
-      "Delivering quality, precision, and continuous improvement in everything we build.",
+      "Delivering Auality, Precision, and Continuous Improvement in Everything We Build.",
   },
 ];
 
@@ -53,8 +53,8 @@ export default function CoreValues() {
           </h2>
 
           <p className="mt-8 w-full text-center text-lg text-slate-500 leading-9">
-            These principles define how TerraLens approaches innovation,
-            technology, partnerships and every client engagement.
+            These principles Define How TerraLens Approaches Innovation,
+            Technology, Partnerships And Every Client Engagement.
           </p>
 
         </div>

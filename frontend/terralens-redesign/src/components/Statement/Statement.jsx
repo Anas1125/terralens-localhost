@@ -121,9 +121,9 @@ function Statement() {
             md:text-xl
           "
         >
-          We combine geospatial intelligence with software engineering to
-          deliver scalable solutions for governments, infrastructure, and
-          enterprise projects.
+          We Combine Geospatial Intelligence With Software Engineering
+          To Deliver Scalable Solutions For Governments, Infrastructure,
+          And Enterprise Projects.
         </motion.p>
       </div>
 
@@ -472,10 +472,10 @@ function Statement() {
                 md:text-2xl
               "
             >
-              TerraLens delivers intelligent geospatial solutions for
-              construction, infrastructure, government, and enterprise
-              projects through precision engineering, LiDAR, drone mapping,
-              GIS analysis, and modern software development.
+              Terra Lens Delivers Intelligent Geospatial Solutions 
+              For Construction, Infrastructure, Government, And 
+              Enterprise Projects Through Precision Engineering, 
+              LiDar, Drone Mapping, Gis Analysis, And Modern Software Development.
             </p>
 
             <button

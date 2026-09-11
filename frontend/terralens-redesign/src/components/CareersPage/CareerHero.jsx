@@ -64,7 +64,7 @@ export default function CareerHero() {
     {
       Icon: Code2,
       title: "Software Engineers",
-      blurb: "Build scalable applications",
+      blurb: "Build Scalable Applications",
     },
     {
       Icon: MapPinned,
@@ -79,7 +79,7 @@ export default function CareerHero() {
     {
       Icon: Users,
       title: "Collaborative Culture",
-      blurb: "Learn, innovate and grow together",
+      blurb: "Learn, Innovate And Grow Together", 
     },
   ];
 
@@ -267,9 +267,9 @@ export default function CareerHero() {
             "
             style={{ color: theme.body }}
           >
-            Join a passionate team building innovative GIS,
-            AI, cloud and enterprise software solutions that
-            create real-world impact.
+            Join A Passionate Team Building Innovative Gis,
+            Ai, Cloud And Enterprise Software Solutions 
+            That Create Real World Impact.
           </motion.p>
 
           <motion.button

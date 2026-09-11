@@ -7,21 +7,21 @@ const offices = [
     title: "Corporate Headquarters",
     city: "Nagercoil",
     description:
-      "Our headquarters driving innovation in GIS, AI and enterprise software solutions from the heart of South India.",
+      "our Headquarters Driving Innovation in Gis, AI And Enterprise Software Solutions From The Heart Of South India.",
   },
   {
     icon: MapPin,
     title: "Main Office",
     city: "Mumbai",
     description:
-      "Strategic operations hub connecting us with government agencies, enterprises and research institutions.",
+      "strategic Operations Hub Connecting Us With Government Agencies, Enterprises And Research Institutions.",
   },
   {
     icon: Plane,
     title: "International Unit",
     city: "Singapore",
     description:
-      "Supporting international clients across Southeast Asia with cutting-edge geospatial and IT services.",
+      "supporting International Clients Across Southeast Asia With Cutting Edge Geospatial And IT Services.",
   },
 ];
 
@@ -127,9 +127,9 @@ export default function GlobalOffices() {
               text-slate-500
             "
           >
-            Expanding innovation beyond borders with offices that connect
-            technology, geospatial intelligence and enterprise solutions
-            across multiple regions.
+            Expanding Innovation Beyond Borders With Offices 
+            That Connect Technology, Geospatial Intelligence 
+            And Enterprise Solutions Across Multiple Regions.
           </motion.p>
         </div>
 

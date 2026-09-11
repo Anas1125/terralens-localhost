@@ -108,9 +108,9 @@ export default function OfficeLocation() {
               lineHeight: "1.6",
             }}
           >
-            We'd be delighted to welcome you to our office.
-            Schedule a meeting with our team and let's discuss
-            your next GIS or technology project.
+            We'd Be Delighted To Welcome You To Our Office. 
+            Schedule A Meeting With Our Team And 
+            Let's Discuss Your Next Gis Or Technology Project.
           </p>
         </div>
 

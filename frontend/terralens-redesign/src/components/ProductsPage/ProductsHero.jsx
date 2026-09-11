@@ -264,9 +264,9 @@ export default function ProductsHero() {
             color: theme.body,
           }}
         >
-          Purpose-built software solutions by TerraLens
-          Innovations — designed for GIS professionals,
-          field surveyors, and municipal authorities.
+          Purpose Built Software Solutions By Terra Lens 
+          Innovations — Designed For Gis Professionals, 
+          Field Surveyors, And Municipal Authorities.
         </motion.p>
 
         {/* BUTTON */}

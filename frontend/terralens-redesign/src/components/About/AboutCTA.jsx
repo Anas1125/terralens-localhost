@@ -130,9 +130,9 @@ export default function AboutCTA() {
               boxSizing: "border-box",
             }}
           >
-            Whether it's GIS, AI, enterprise software or digital
-            transformation, TerraLens is ready to help bring your
-            next innovation to life.
+            Whether it's GIS, AI, Enterprise Software or Digital
+            Transformation, TerraLens is ready to help bring your
+            Next Innovation to Life.
           </p>
 
           {/* =========================

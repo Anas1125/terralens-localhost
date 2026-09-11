@@ -523,9 +523,9 @@ export default function ProductGrid() {
                 md:leading-8
               "
             >
-              We also build custom GIS and IT software products
-              tailored to your specific requirements. Let's discuss
-              your vision.
+             We Also Build Custom Gis And It Software Products 
+             Tailored To Your Specific Requirements. 
+             Let's Discuss Your Vision.
             </p>
 
 

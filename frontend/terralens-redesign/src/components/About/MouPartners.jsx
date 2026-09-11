@@ -59,8 +59,8 @@ export default function MouPartners() {
           </h2>
 
           <p className="mt-8 text-lg text-slate-500 leading-9 w-full text-center">
-            Collaborating with universities, research organizations
-            and global technology companies to drive innovation.
+            Collaborating With Universities, Research Organizations And 
+            Global Technology Companies To Drive Innovation.
           </p>
 
         </div>

@@ -201,10 +201,10 @@ export default function LifeAtTerralens() {
               marginBottom: "36px",
             }}
           >
-            At TerraLens, we foster a collaborative culture where
-            engineers, GIS specialists, AI researchers and innovators
-            work together to create impactful solutions for governments,
-            enterprises and communities.
+            At Terra Lens, We Foster A Collaborative Culture 
+            Where Engineers, Gis Specialists, Ai Researchers 
+            And Innovators Work Together To Create Impactful 
+            Solutions For Governments, Enterprises And Communities.
           </p>
 
           <div
@@ -323,7 +323,7 @@ export default function LifeAtTerralens() {
                   lineHeight: "1.6",
                 }}
               >
-                Collaboration drives everything we build.
+                Collaboration Drives Everything We Build.
               </p>
             </motion.div>
 
@@ -391,7 +391,7 @@ export default function LifeAtTerralens() {
                   lineHeight: "1.6",
                 }}
               >
-                We constantly explore new technologies.
+                We Constantly Explore New Technologies.
               </p>
             </motion.div>
           </div>

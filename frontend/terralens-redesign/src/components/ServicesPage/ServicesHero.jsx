@@ -311,10 +311,10 @@ export default function ServicesHero() {
               color: theme.body,
             }}
           >
-            We deliver end-to-end GIS, remote sensing,
-            enterprise software, artificial intelligence,
-            cloud platforms and consulting services
-            for governments and enterprises.
+            We Deliver End To End Gis, Remote Sensing, 
+            Enterprise Software, Artificial Intelligence, 
+            Cloud Platforms And Consulting Services 
+            For Governments And Enterprises.
           </motion.p>
 
           {/* Buttons */}

@@ -22,9 +22,9 @@ export default function Technologies({ activeTab = "Survey" }) {
           </h2>
 
           <p className="mt-5 text-base md:text-lg text-slate-500 leading-7 md:leading-8">
-            We utilize advanced systems, industry-leading software,
-            and international standards to deliver highly accurate,
-            scalable solutions.
+            We Utilize Advanced Systems, Industry Leading Software, 
+            And International Standards To Deliver Highly Accurate, 
+            Scalable Solutions.
           </p>
 
         </div>

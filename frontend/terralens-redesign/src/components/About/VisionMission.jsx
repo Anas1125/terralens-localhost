@@ -21,8 +21,8 @@ export default function VisionMission() {
           </h2>
 
           <p className="mt-8 text-lg text-slate-500 leading-9">
-            Our vision and mission guide every solution we build and every
-            partnership we create.
+            Our Vision And Mission Guide Every Solution We Build 
+            And Every Partnership We Create.
           </p>
 
         </div>
@@ -96,9 +96,10 @@ export default function VisionMission() {
 
             {/* DESCRIPTION */}
             <p className="mt-6 text-slate-500 leading-relaxed text-lg">
-              To become a leading global integrator of geospatial intelligence
-              and digital technologies, enabling sustainable development and
-              smarter decision-making across industries.
+              To Become A Leading Global Integrator Of Geospatial 
+              Intelligence And Digital Technologies, Enabling 
+              Sustainable Development And Smarter Decision 
+              Making Across Industries.
             </p>
 
           </motion.div>
@@ -170,9 +171,10 @@ export default function VisionMission() {
 
             {/* DESCRIPTION */}
             <p className="mt-6 text-slate-500 leading-relaxed text-lg">
-              Deliver innovative GIS, AI, remote sensing, cloud, and enterprise
-              software solutions through cutting-edge technologies, precision,
-              and collaborative partnerships.
+              Deliver Innovative Gis, Ai, Remote Sensing, Cloud, 
+              And Enterprise Software Solutions Through Cutting 
+              Edge Technologies, Precision, 
+              And Collaborative Partnerships.
             </p>
 
           </motion.div>

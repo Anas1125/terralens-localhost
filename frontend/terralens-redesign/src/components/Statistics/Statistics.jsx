@@ -61,9 +61,9 @@ export default function Statistics() {
             transition={{ delay: 0.15 }}
             className="mt-8 max-w-3xl text-slate-500 text-lg md:text-xl leading-relaxed"
           >
-            TerraLens continues delivering enterprise-grade GIS, AI, software
-            engineering and surveying solutions for governments, infrastructure
-            projects and global businesses.
+            TerraLens Continues Delivering Enterprise-Grade GIS, AI, Software 
+            Engineering And Surveying Solutions For Governments, Infrastructure 
+            Projects And Global Businesses.
           </motion.p>
         </div>
         <div className="mt-20 w-full flex flex-wrap justify-center items-center gap-5 lg:gap-6">

@@ -98,8 +98,9 @@ export default function Blog() {
               lineHeight: "1.6",
             }}
           >
-            Insights, tutorials and perspectives from the
-            TerraLens team on GIS, IT and emerging technologies.
+            Insights, Tutorials And Perspectives From 
+            The Terra Lens Team On Gis, It And 
+            Emerging Technologies.
           </p>
         </div>
 

@@ -7,7 +7,7 @@ const ctaContent = {
     eyebrow: "GEOSPATIAL SURVEY",
     title: "Geospatial Survey Solutions",
     description:
-      "End-to-end geospatial survey solutions including LiDAR, hydrographic, geophysical, pipeline, highway, railway, airport, and mining surveys with cutting-edge technology and experienced professionals.",
+      "End To End Geospatial Survey Solutions Including Li Dar, Hydrographic, Geophysical, Pipeline, Highway, Railway, Airport, And Mining Surveys With Cutting Edge Technology And Experienced Professionals.",
     primary: "Get a Survey Quote",
   },
 
@@ -15,7 +15,7 @@ const ctaContent = {
     eyebrow: "GIS SERVICES",
     title: "Geospatial Intelligence",
     description:
-      "From spatial analysis to WebGIS development and property tax mapping, Terralens delivers comprehensive geospatial solutions powered by cutting-edge technologies and domain expertise.",
+      "From Spatial Analysis To Web Gis Development And Property Tax Mapping, Terralens Delivers Comprehensive Geospatial Solutions Powered By Cutting Edge Technologies And Domain Expertise.",
     primary: "Discuss Your Project",
   },
 
@@ -23,7 +23,7 @@ const ctaContent = {
     eyebrow: "IT SERVICES",
     title: "Enterprise Software Solutions",
     description:
-      "Build scalable web applications, cloud platforms, AI-powered software, mobile applications and enterprise systems tailored to your business needs.",
+      "build Scalable Web Applications, Cloud Platforms, Ai Powered Software, Mobile Applications And Enterprise Systems Tailored To Your Business Needs.",
     primary: "Start Your Project",
   },
 
@@ -31,7 +31,7 @@ const ctaContent = {
     eyebrow: "CONSULTANCY",
     title: "Strategic Technology Consulting",
     description:
-      "We help governments and enterprises plan, design and implement digital transformation initiatives through GIS consulting, enterprise architecture and technology advisory services.",
+      "We Help Governments And Enterprises Plan, Design And Implement Digital Transformation Initiatives Through Gis Consulting, Enterprise Architecture And Technology Advisory Services.",
     primary: "Book a Consultation",
   },
 };

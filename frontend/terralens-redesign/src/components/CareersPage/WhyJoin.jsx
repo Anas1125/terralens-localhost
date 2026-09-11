@@ -11,25 +11,25 @@ const features = [
     icon: Lightbulb,
     title: "Innovation First",
     description:
-      "Work with modern GIS, AI, cloud and enterprise technologies to solve real-world problems.",
+      "Work With Modern Gis, Ai, Cloud And Enterprise Technologies To Solve Real World Problems.",
   },
   {
     icon: TrendingUp,
     title: "Career Growth",
     description:
-      "Grow your skills through challenging projects, mentorship and continuous learning.",
+     "grow Your Skills Through Challenging Projects, Mentorship And Continuous Learning.",
   },
   {
     icon: Users,
     title: "Collaborative Culture",
     description:
-      "Work alongside talented engineers, GIS specialists and researchers in a supportive environment.",
+      "work Alongside Talented Engineers, Gis Specialists And Researchers In A Supportive Environment.",
   },
   {
     icon: Globe2,
     title: "Real Impact",
     description:
-      "Build products and solutions used by governments, enterprises and organizations worldwide.",
+      "build Products And Solutions Used By Governments, Enterprises And Organizations Worldwide.",
   },
 ];
 

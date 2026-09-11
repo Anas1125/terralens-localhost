@@ -5,42 +5,42 @@ const services = [
   {
     title: "LiDAR Survey",
     description:
-      "High-accuracy airborne and terrestrial LiDAR mapping for engineering and infrastructure projects.",
+      "High Accuracy Airborne And Terrestrial Li Dar Mapping For Engineering And Infrastructure Projects.",
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
   },
   {
     title: "Drone Survey",
     description:
-      "Fast aerial mapping, orthomosaics, DSM, DTM and inspection using UAV technology.",
+      "Fast Aerial Mapping, Orthomosaics, Dsm, Dtm And Inspection Using Uav Technology.",
     image:
       "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=1200&auto=format&fit=crop",
   },
   {
     title: "Pipeline Survey",
     description:
-      "Corridor mapping and alignment surveys for oil, gas and utility infrastructure.",
+      "Corridor Mapping And Alignment Surveys For Oil, Gas And Utility Infrastructure.",
     image:
       "https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=1200&auto=format&fit=crop",
   },
   {
     title: "Web GIS",
     description:
-      "Interactive GIS dashboards and cloud-based spatial information systems.",
+      "Interactive Gis Dashboards And Cloud Based Spatial Information Systems.",
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
   },
   {
     title: "AI Analytics",
     description:
-      "Artificial intelligence for satellite imagery, object detection and predictive analysis.",
+      "Artificial Intelligence For Satellite Imagery, Object Detection And Predictive Analysis.",
     image:
       "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1200&auto=format&fit=crop",
   },
   {
     title: "Enterprise Software",
     description:
-      "Modern enterprise software, cloud infrastructure and scalable business platforms.",
+      "Modern Enterprise Software, Cloud Infrastructure And Scalable Business Platforms.",
     image:
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
   },
@@ -60,8 +60,8 @@ export default function ServiceGrid() {
           </h2>
 
           <p className="mt-8 text-lg text-gray-400 leading-9 w-full text-center">
-            Comprehensive GIS, Survey, AI and Enterprise software solutions
-            designed for governments, research institutions and businesses.
+           Comprehensive Gis, Survey, Ai And Enterprise Software Solutions 
+           Designed For Governments, Research Institutions And Businesses.
           </p>
         </div>
         <div className="mt-28 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">

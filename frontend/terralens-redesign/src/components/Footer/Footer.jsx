@@ -136,7 +136,7 @@ export default function Footer() {
                 }}
               >
                 {settings?.footer_text ||
-                    "Building enterprise GIS, AI, drone surveying and software engineering solutions for governments, enterprises and research institutions across India."}
+                    "building Enterprise Gis, Ai, Drone Surveying And Software Engineering Solutions For Governments, Enterprises And Research Institutions Across India."}
               </p>
             </div>
 

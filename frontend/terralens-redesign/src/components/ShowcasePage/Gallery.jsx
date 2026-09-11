@@ -176,8 +176,8 @@ export default function Gallery() {
               margin: 0,
             }}
           >
-            A glimpse into our workspace, fieldwork,
-            events and the projects that drive us.
+           A Glimpse Into Our Workspace, Fieldwork, 
+           Events And The Projects That Drive Us.
           </p>
         </div>
 

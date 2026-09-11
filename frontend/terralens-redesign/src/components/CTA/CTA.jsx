@@ -103,9 +103,9 @@ export default function CTA() {
               marginBottom: "40px",
             }}
           >
-            From GIS mapping and AI solutions to enterprise software,
-            cloud infrastructure, and surveying, TerraLens transforms
-            complex ideas into production-ready solutions.
+            From Gis Mapping And Ai Solutions To Enterprise Software,
+             Cloud Infrastructure, And Surveying, Terra Lens 
+             Transforms Complex Ideas Into Production Ready Solutions.
           </motion.p>
 
           {/* =========================

@@ -69,8 +69,8 @@ export default function ServicesCarousel({
         </h2>
 
         <p className="mt-5 mx-auto max-w-2xl text-base md:text-lg text-slate-500 leading-relaxed">
-          Discover our specialized geospatial, surveying, GIS and
-          technology solutions designed for complex real-world projects.
+          Discover Our Specialized Geospatial, Surveying, Gis 
+          And Technology Solutions Designed For Complex Real World Projects.
         </p>
 
       </div>

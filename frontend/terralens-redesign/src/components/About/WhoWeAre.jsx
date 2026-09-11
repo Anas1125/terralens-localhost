@@ -115,12 +115,13 @@ export default function WhoWeAre() {
               md:text-[1.1rem]
             "
           >
-            Terralens Innovations Private Limited is a multidisciplinary
-            technology company specializing in geospatial intelligence,
-            artificial intelligence, and enterprise software solutions.
-            We help governments, research institutions, and private
-            organizations transform complex spatial data into meaningful
-            business insights.
+            Terralens Innovations Private Limited Is A 
+            Multidisciplinary Technology Company Specializing 
+            In Geospatial Intelligence, Artificial Intelligence, 
+            And Enterprise Software Solutions. We Help Governments, 
+            Research Institutions, And Private Organizations 
+            Transform Complex Spatial Data Into Meaningful 
+            Business Insights.
           </p>
 
           {/* SECOND PARAGRAPH */}
@@ -134,10 +135,11 @@ export default function WhoWeAre() {
               md:text-[1.1rem]
             "
           >
-            Combining expertise in GIS, remote sensing, cloud computing,
-            and software engineering, we deliver complete end-to-end
-            digital solutions—from satellite data processing to scalable
-            enterprise applications that empower smarter decisions.
+            Combining Expertise In Gis, Remote Sensing, Cloud 
+            Computing, And Software Engineering, We Deliver 
+            Complete End To End Digital Solutions—from Satellite 
+            Data Processing To Scalable Enterprise 
+            Applications That Empower Smarter Decisions.
           </p>
 
         </motion.div>

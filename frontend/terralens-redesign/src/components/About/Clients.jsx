@@ -58,9 +58,9 @@ export default function Clients() {
           </h2>
 
           <p className="mt-8 text-lg text-slate-500 leading-9 w-full text-center">
-            Governments, research institutions and enterprises trust
-            TerraLens to deliver innovative GIS, AI and enterprise
-            software solutions across multiple industries.
+            Governments, Research Institutions and Enterprises Trust
+            TerraLens to Deliver Innovative GIS, AI and Enterprise
+            Software Solutions Across Multiple Industries.
           </p>
 
         </div>

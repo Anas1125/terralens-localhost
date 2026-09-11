@@ -44,10 +44,10 @@ export default function WhyChooseDark() {
             transition={{ delay: 0.1 }}
             className="mt-6 text-slate-500 leading-7 max-w-lg"
           >
-            With deep expertise spanning geospatial science and software
-            engineering, Terralens Innovations delivers integrated solutions
-            that create lasting impact for governments, enterprises, and
-            research institutions.
+            With Deep Expertise Spanning Geospatial Science And Software 
+            Engineering, Terralens Innovations Delivers Integrated Solutions 
+            That Create Lasting Impact For Governments, Enterprises, 
+            And Research Institutions.
           </motion.p>
         </div>
 

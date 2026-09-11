@@ -140,9 +140,9 @@ export default function Technology() {
       transition={{ delay: 0.1 }}
       className="mt-8 max-w-3xl text-lg md:text-xl text-slate-500 leading-relaxed"
     >
-      TerraLens combines enterprise GIS, cloud infrastructure,
-      artificial intelligence, surveying technologies and modern
-      software engineering into one integrated ecosystem.
+      TerraLens Combines Enterprise GIS, Cloud Infrastructure, 
+      Artificial Intelligence, Surveying Technologies And 
+      Modern Software Engineering Into One Integrated Ecosystem.
     </motion.p>
 
   </div>

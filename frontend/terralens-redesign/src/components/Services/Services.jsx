@@ -5,21 +5,21 @@ const services = [
   {
     title: "GIS Solutions",
     description:
-      "Spatial analysis, remote sensing, WebGIS development, drone mapping and enterprise geospatial intelligence.",
+      "Spatial Analysis, Remote Sensing, Web Gis Development, Drone Mapping And Enterprise Geospatial Intelligence.",
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1800&auto=format&fit=crop",
   },
   {
     title: "IT & Software",
     description:
-      "Modern web applications, enterprise software, AI integration, cloud platforms and cybersecurity.",
+      "Modern Web Applications, Enterprise Software, Ai Integration, Cloud Platforms And Cybersecurity.",
     image:
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1800&auto=format&fit=crop",
   },
   {
     title: "AI & Data Intelligence",
     description:
-      "Machine learning, computer vision and intelligent analytics for next-generation engineering solutions.",
+      "Machine Learning, Computer Vision And Intelligent Analytics For Next Generation Engineering Solutions.",
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1800&auto=format&fit=crop",
   },
