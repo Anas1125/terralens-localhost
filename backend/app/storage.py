@@ -12,4 +12,4 @@ else:
     STORAGE_DIR = BASE_DIR
 
 
-UPLOADS_DIR = STORAGE_DIR / "uploads"
+UPLOADS_DIR = Path("/app/uploads") if os.getenv("DATA_DIR") else STORAGE_DIR / "uploads"
