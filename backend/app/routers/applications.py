@@ -7,13 +7,11 @@ from fastapi import (
     Form,
     Request,
 )
-from ..rate_limit import check_rate_limit
+from ..rate_limit import check_rate_limit, client_ip_from
 from sqlalchemy.orm import Session
 from pathlib import Path
-import shutil
+import io
 import uuid
-import os
-import tempfile
 
 from PIL import Image
 
@@ -23,9 +21,8 @@ from ..security import get_current_admin
 
 router = APIRouter()
 
-from ..storage import UPLOADS_DIR
+from .. import storage
 
-UPLOAD_DIR = UPLOADS_DIR / "applications"
 
 ALLOWED_EXTENSIONS = {
     ".pdf",
@@ -61,7 +58,7 @@ async def create_application(
     resume: UploadFile | None = File(None),
     db: Session = Depends(get_db),
 ):
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip = client_ip_from(request)
 
     check_rate_limit(
         key=f"application:{client_ip}",
@@ -98,99 +95,88 @@ async def create_application(
                 detail="Resume must be PDF, PNG, JPG, or JPEG.",
             )
 
-        UPLOAD_DIR.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-
         # =====================================================
-        # SAVE TO TEMPORARY FILE WITH SIZE LIMIT
+        # READ INTO MEMORY WITH SIZE LIMIT
         # =====================================================
 
-        temp_path = None
+        buffer = io.BytesIO()
         total_size = 0
 
         try:
-            with tempfile.NamedTemporaryFile(
-                delete=False,
-                dir=UPLOAD_DIR,
-                suffix=extension,
-            ) as temp_file:
-                temp_path = Path(temp_file.name)
+            while True:
+                chunk = await resume.read(1024 * 1024)
 
-                while True:
-                    chunk = await resume.read(1024 * 1024)
+                if not chunk:
+                    break
 
-                    if not chunk:
-                        break
+                total_size += len(chunk)
 
-                    total_size += len(chunk)
+                if total_size > MAX_RESUME_SIZE:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Resume file must be 10 MB or smaller.",
+                    )
 
-                    if total_size > MAX_RESUME_SIZE:
+                buffer.write(chunk)
+        finally:
+            await resume.close()
+
+        data = buffer.getvalue()
+
+        # =================================================
+        # VALIDATE ACTUAL FILE CONTENT
+        # =================================================
+
+        if extension == ".pdf":
+            if data[:5] != b"%PDF-":
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid or corrupted PDF file.",
+                )
+
+        else:
+            try:
+                with Image.open(io.BytesIO(data)) as image:
+                    image.verify()
+
+                    expected_format = ALLOWED_IMAGE_FORMATS[
+                        extension
+                    ]
+
+                    if image.format != expected_format:
                         raise HTTPException(
                             status_code=400,
-                            detail="Resume file must be 10 MB or smaller.",
+                            detail="Invalid image file format.",
                         )
 
-                    temp_file.write(chunk)
+            except HTTPException:
+                raise
 
-            # =================================================
-            # VALIDATE ACTUAL FILE CONTENT
-            # =================================================
+            except Exception:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid or corrupted image file.",
+                )
 
-            if extension == ".pdf":
-                with temp_path.open("rb") as file:
-                    header = file.read(5)
+        # =================================================
+        # STORE VALIDATED FILE
+        # =================================================
 
-                if header != b"%PDF-":
-                    raise HTTPException(
-                        status_code=400,
-                        detail="Invalid or corrupted PDF file.",
-                    )
+        filename = f"{uuid.uuid4().hex}{extension}"
+        content_type = (
+            "application/pdf" if extension == ".pdf"
+            else f"image/{ALLOWED_IMAGE_FORMATS[extension].lower()}"
+        )
 
-            else:
-                try:
-                    with Image.open(temp_path) as image:
-                        image.verify()
-
-                        expected_format = ALLOWED_IMAGE_FORMATS[
-                            extension
-                        ]
-
-                        if image.format != expected_format:
-                            raise HTTPException(
-                                status_code=400,
-                                detail="Invalid image file format.",
-                            )
-
-                except HTTPException:
-                    raise
-
-                except Exception:
-                    raise HTTPException(
-                        status_code=400,
-                        detail="Invalid or corrupted image file.",
-                    )
-
-            # =================================================
-            # MOVE VALIDATED FILE TO FINAL LOCATION
-            # =================================================
-
-            filename = f"{uuid.uuid4().hex}{extension}"
-            destination = UPLOAD_DIR / filename
-
-            os.replace(temp_path, destination)
-            temp_path = None
-
-            resume_path = (
-                f"/uploads/applications/{filename}"
+        try:
+            resume_path = storage.save_file(
+                "applications", filename, data, content_type
             )
-
-        finally:
-            if temp_path and temp_path.exists():
-                temp_path.unlink(missing_ok=True)
-
-            await resume.close()
+        except storage.StorageError:
+            raise HTTPException(
+                status_code=502,
+                detail="Could not store the resume. Please try again.",
+            )
 
     # =====================================================
     # CREATE APPLICATION
@@ -295,11 +281,10 @@ def delete_application(
     # =====================================================
 
     if application.resume:
-        relative_path = application.resume.removeprefix("/uploads/")
-        file_path = UPLOADS_DIR / relative_path
-
-        if file_path.exists():
-            file_path.unlink()
+        try:
+            storage.delete_stored_path(application.resume)
+        except storage.StorageError:
+            pass
 
     # =====================================================
     # DELETE DATABASE RECORD

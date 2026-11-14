@@ -7,16 +7,16 @@ from fastapi import (
 )
 from pathlib import Path
 from PIL import Image
+from pydantic import BaseModel
+import io
 import shutil
 import subprocess
 import tempfile
 
 from ..security import get_current_admin
-from ..storage import UPLOADS_DIR
+from .. import storage
 
 router = APIRouter()
-
-UPLOAD_DIR = UPLOADS_DIR
 
 
 # =====================================================
@@ -44,6 +44,16 @@ ALLOWED_VIDEO_EXTENSIONS = {
     ".mov",
 }
 
+CONTENT_TYPES = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".webp": "image/webp",
+    ".mp4": "video/mp4",
+    ".webm": "video/webm",
+    ".mov": "video/quicktime",
+}
+
 
 # =====================================================
 # HELPERS
@@ -66,11 +76,11 @@ def is_safe_name(name: str) -> bool:
     return True
 
 
-def validate_image(file_path: Path) -> bool:
+def validate_image(data: bytes) -> bool:
     """Validate the actual image contents using Pillow."""
 
     try:
-        with Image.open(file_path) as image:
+        with Image.open(io.BytesIO(data)) as image:
             image.verify()
 
             if image.format not in ALLOWED_IMAGE_FORMATS:
@@ -82,9 +92,28 @@ def validate_image(file_path: Path) -> bool:
         return False
 
 
-def validate_video(file_path: Path) -> bool:
-    """Validate the actual video using ffprobe."""
+def looks_like_video(data: bytes) -> bool:
+    """Magic-byte check used when ffprobe is unavailable (e.g. on Vercel)."""
 
+    if len(data) >= 12 and data[4:8] == b"ftyp":
+        return True  # MP4 / MOV
+
+    return data[:4] == b"\x1a\x45\xdf\xa3"  # WebM / Matroska
+
+
+def validate_video(data: bytes, extension: str) -> bool:
+    """Validate the actual video using ffprobe, or magic bytes as fallback."""
+
+    if not shutil.which("ffprobe"):
+        return looks_like_video(data)
+
+    with tempfile.NamedTemporaryFile(suffix=extension) as temp_file:
+        temp_file.write(data)
+        temp_file.flush()
+        return _ffprobe_is_video(Path(temp_file.name))
+
+
+def _ffprobe_is_video(file_path: Path) -> bool:
     try:
         result = subprocess.run(
             [
@@ -124,30 +153,10 @@ def validate_video(file_path: Path) -> bool:
 
 @router.get("/")
 def list_media():
-    files = []
-    MAX_MEDIA_ITEMS = 1000
-
-    if not UPLOAD_DIR.exists():
-        return files
-
-    for folder in UPLOAD_DIR.iterdir():
-        if not folder.is_dir():
-            continue
-
-        for file in folder.iterdir():
-            if not file.is_file():
-                continue
-
-            files.append({
-                "folder": folder.name,
-                "filename": file.name,
-                "path": f"/uploads/{folder.name}/{file.name}",
-            })
-
-            if len(files) >= MAX_MEDIA_ITEMS:
-                return files
-
-    return files
+    try:
+        return storage.list_files(limit=1000)
+    except storage.StorageError as error:
+        raise HTTPException(status_code=502, detail=str(error))
 
 
 # =====================================================
@@ -166,34 +175,24 @@ def delete_media(
             detail="Invalid path.",
         )
 
-    file_path = UPLOAD_DIR / folder / filename
+    try:
+        deleted = storage.delete_file(folder, filename)
+    except storage.StorageError as error:
+        raise HTTPException(status_code=502, detail=str(error))
 
-    if not file_path.exists():
+    if not deleted:
         raise HTTPException(
             status_code=404,
             detail="File not found",
         )
-
-    file_path.unlink()
 
     return {
         "message": "Deleted successfully",
     }
 
 
-# =====================================================
-# ADMIN ONLY — UPLOAD MEDIA
-# =====================================================
-
-@router.post("/upload/{folder}")
-async def upload_file(
-    folder: str,
-    file: UploadFile = File(...),
-    admin: str = Depends(get_current_admin),
-):
-    # -------------------------------------------------
-    # Validate folder
-    # -------------------------------------------------
+def _check_upload_target(folder: str, raw_filename: str) -> tuple[str, str, str]:
+    """Validate folder + filename. Returns (filename, extension, media_type)."""
 
     if not is_safe_name(folder):
         raise HTTPException(
@@ -201,11 +200,7 @@ async def upload_file(
             detail="Invalid upload folder.",
         )
 
-    # -------------------------------------------------
-    # Validate filename
-    # -------------------------------------------------
-
-    filename = Path(file.filename or "").name
+    filename = Path(raw_filename or "").name
 
     if not is_safe_name(filename):
         raise HTTPException(
@@ -215,16 +210,10 @@ async def upload_file(
 
     extension = Path(filename).suffix.lower()
 
-    # -------------------------------------------------
-    # Determine media type from allowed extension
-    # -------------------------------------------------
-
     if extension in ALLOWED_IMAGE_EXTENSIONS:
         media_type = "image"
-
     elif extension in ALLOWED_VIDEO_EXTENSIONS:
         media_type = "video"
-
     else:
         raise HTTPException(
             status_code=400,
@@ -235,90 +224,110 @@ async def upload_file(
             ),
         )
 
-    # -------------------------------------------------
-    # Create upload directory
-    # -------------------------------------------------
+    return filename, extension, media_type
 
-    folder_path = UPLOAD_DIR / folder
 
-    folder_path.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+# =====================================================
+# ADMIN ONLY — DIRECT UPLOAD TOKEN (Vercel Blob)
+# =====================================================
 
-    destination = folder_path / filename
+class UploadTokenRequest(BaseModel):
+    filename: str
+    size: int = 0
 
-    temp_path = None
 
-    try:
-        # -------------------------------------------------
-        # Save upload to temporary file
-        # -------------------------------------------------
+@router.post("/upload-token/{folder}")
+def create_upload_token(
+    folder: str,
+    body: UploadTokenRequest,
+    admin: str = Depends(get_current_admin),
+):
+    """
+    On Vercel, request bodies are capped at 4.5 MB, so the admin panel
+    uploads files straight to Blob storage using a one-file token from
+    here. Locally (no Blob token) the frontend falls back to /upload.
+    """
 
-        with tempfile.NamedTemporaryFile(
-            delete=False,
-            dir=folder_path,
-            suffix=extension,
-        ) as temp_file:
+    if not storage.USE_BLOB:
+        return {"mode": "server"}
 
-            temp_path = Path(temp_file.name)
+    filename, extension, _ = _check_upload_target(folder, body.filename)
 
-            total_size = 0
-
-            while True:
-                chunk = await file.read(1024 * 1024)
-
-                if not chunk:
-                    break
-
-                total_size += len(chunk)
-
-                if total_size > MAX_FILE_SIZE:
-                    raise HTTPException(
-                        status_code=413,
-                        detail="File is too large. Maximum size is 100 MB.",
-                    )
-
-                temp_file.write(chunk)
-
-        # -------------------------------------------------
-        # Validate actual file contents
-        # -------------------------------------------------
-
-        if media_type == "image":
-            valid = validate_image(temp_path)
-        else:
-            valid = validate_video(temp_path)
-
-        if not valid:
-            raise HTTPException(
-                status_code=400,
-                detail="The uploaded file is invalid or corrupted.",
-            )
-
-        # -------------------------------------------------
-        # Move validated file to final destination
-        # -------------------------------------------------
-
-        shutil.move(
-            str(temp_path),
-            str(destination),
+    if body.size > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail="File is too large. Maximum size is 100 MB.",
         )
 
-        temp_path = None
+    pathname = f"{folder}/{filename}"
+    content_type = CONTENT_TYPES[extension]
 
-    finally:
-        # -------------------------------------------------
-        # Clean up temporary file if anything failed
-        # -------------------------------------------------
+    return {
+        "mode": "direct",
+        "pathname": pathname,
+        "contentType": content_type,
+        "token": storage.create_client_token(
+            pathname=pathname,
+            allowed_content_types=[content_type],
+            maximum_size_in_bytes=MAX_FILE_SIZE,
+        ),
+    }
 
-        if temp_path and temp_path.exists():
-            try:
-                temp_path.unlink()
-            except OSError:
-                pass
+
+# =====================================================
+# ADMIN ONLY — UPLOAD MEDIA (through the API)
+# =====================================================
+
+@router.post("/upload/{folder}")
+async def upload_file(
+    folder: str,
+    file: UploadFile = File(...),
+    admin: str = Depends(get_current_admin),
+):
+    filename, extension, media_type = _check_upload_target(
+        folder, file.filename or ""
+    )
+
+    buffer = io.BytesIO()
+    total_size = 0
+
+    while True:
+        chunk = await file.read(1024 * 1024)
+
+        if not chunk:
+            break
+
+        total_size += len(chunk)
+
+        if total_size > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=413,
+                detail="File is too large. Maximum size is 100 MB.",
+            )
+
+        buffer.write(chunk)
+
+    data = buffer.getvalue()
+
+    if media_type == "image":
+        valid = validate_image(data)
+    else:
+        valid = validate_video(data, extension)
+
+    if not valid:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file is invalid or corrupted.",
+        )
+
+    try:
+        path = storage.save_file(
+            folder, filename, data, CONTENT_TYPES[extension]
+        )
+    except storage.StorageError as error:
+        raise HTTPException(status_code=502, detail=str(error))
 
     return {
         "filename": filename,
-        "path": f"/uploads/{folder}/{filename}",
+        "path": path,
     }

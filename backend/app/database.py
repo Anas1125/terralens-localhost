@@ -10,27 +10,39 @@ load_dotenv()
 
 DATA_DIR = os.getenv("DATA_DIR")
 
-if DATA_DIR:
-    DATABASE_URL = f"sqlite:///{os.path.join(DATA_DIR, 'terralens.db')}"
-else:
-    DATABASE_URL = os.getenv(
-        "DATABASE_URL",
-        "sqlite:///./terralens.db",
+# Hosted Postgres (Neon via Vercel) exposes DATABASE_URL / POSTGRES_URL.
+DATABASE_URL = (
+    os.getenv("DATABASE_URL")
+    or os.getenv("POSTGRES_URL")
+    or (
+        f"sqlite:///{os.path.join(DATA_DIR, 'terralens.db')}"
+        if DATA_DIR
+        else "sqlite:///./terralens.db"
     )
-
-
-if DATABASE_URL.startswith("postgresql://"):
-    connect_args = {}
-else:
-    connect_args = {
-        "check_same_thread": False,
-    }
-
-
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
 )
+
+# SQLAlchemy only accepts the "postgresql://" scheme.
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = "postgresql://" + DATABASE_URL[len("postgres://"):]
+
+IS_POSTGRES = DATABASE_URL.startswith("postgresql")
+
+
+if IS_POSTGRES:
+    # Serverless functions are short-lived: keep the pool tiny and check
+    # connections before use (Neon closes idle ones).
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+        pool_size=1,
+        max_overflow=4,
+        pool_recycle=300,
+    )
+else:
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False},
+    )
 
 
 if DATABASE_URL.startswith("sqlite"):

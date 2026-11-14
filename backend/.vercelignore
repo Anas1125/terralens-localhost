@@ -1,0 +1,10 @@
+venv/
+.venv/
+__pycache__/
+uploads/
+*.db
+*.db-*
+.env
+.env.*
+Dockerfile
+.DS_Store

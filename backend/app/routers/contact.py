@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from ..rate_limit import check_rate_limit
+from ..rate_limit import check_rate_limit, client_ip_from
 from sqlalchemy.orm import Session
 
 from ..database import get_db
@@ -23,7 +23,7 @@ def create_contact(
     contact: schemas.ContactCreate,
     db: Session = Depends(get_db),
 ):
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip = client_ip_from(request)
 
     check_rate_limit(
         key=f"contact:{client_ip}",

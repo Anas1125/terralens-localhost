@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../../api/client";
+import { uploadFile } from "../../api/media";
 import {
   Plus,
   Trash2,
@@ -319,17 +319,14 @@ export default function Partners() {
               try {
                 setUploading(true);
 
-                const formData = new FormData();
-                formData.append("file", file);
-
-                const response = await api.post(
-                  "/media/upload/partners",
-                  formData
+                const uploaded = await uploadFile(
+                  "partners",
+                  file
                 );
 
                 setForm((previous) => ({
                   ...previous,
-                  logo: response.data.path,
+                  logo: uploaded.path,
                 }));
               } catch (error) {
                 console.error(

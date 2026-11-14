@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from ..database import get_db
+from ..rate_limit import client_ip_from
 from .. import models, schemas
 from ..security import (
     verify_password,
@@ -90,7 +91,7 @@ def login(
     admin: schemas.AdminLogin,
     db: Session = Depends(get_db),
 ):
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip = client_ip_from(request)
 
     check_login_rate_limit(client_ip)
 

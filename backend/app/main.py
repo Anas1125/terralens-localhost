@@ -1,10 +1,12 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.database import engine
 from app import models
-from app.storage import UPLOADS_DIR
+from app.storage import UPLOADS_DIR, USE_BLOB
 
 from app.routers import (
     contact,
@@ -32,24 +34,37 @@ app = FastAPI(
 )
 
 
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://terralens-localhost.pages.dev",
+]
+
+# Extra origins (comma separated), e.g. a custom domain.
+ALLOWED_ORIGINS += [
+    origin.strip().rstrip("/")
+    for origin in os.getenv("CORS_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "https://terralens-localhost.pages.dev",
-    ],
+    allow_origins=ALLOWED_ORIGINS,
+    # Cloudflare Pages preview deployments (<hash>.terralens-localhost.pages.dev)
+    allow_origin_regex=r"https://[a-z0-9-]+\.terralens-localhost\.pages\.dev",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["Retry-After"],
 )
 
-app.mount(
-    "/uploads",
-    StaticFiles(directory=str(UPLOADS_DIR)),
-    name="uploads",
-)
+# Local development only. In production files are served from Vercel Blob.
+if not USE_BLOB and UPLOADS_DIR.exists():
+    app.mount(
+        "/uploads",
+        StaticFiles(directory=str(UPLOADS_DIR)),
+        name="uploads",
+    )
 
 
 app.include_router(
