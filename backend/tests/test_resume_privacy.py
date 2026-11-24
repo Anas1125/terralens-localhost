@@ -195,3 +195,91 @@ def test_employee_cannot_manage_admins(client):
     assert client.get("/admin/stats",headers=headers).status_code == 200
     assert client.get("/admin/users",headers=headers).status_code == 403
     assert client.post("/admin/users",headers=headers,json={"username":"new-manager","password":"test-password","role":"manager"}).status_code == 403
+
+
+# Password migration regression tests (isolated SQLite only).
+from passlib.hash import bcrypt
+from app.security import verify_and_upgrade_password
+
+
+def test_new_hash_is_argon2id():
+    encoded = pwd_context.hash("correct-password")
+    assert encoded.startswith("$argon2id$")
+    assert "m=19456,t=2,p=1" in encoded
+    assert verify_and_upgrade_password("correct-password", encoded) == (True, None)
+    assert verify_and_upgrade_password("wrong-password", encoded) == (False, None)
+
+
+def test_argon2_preserves_full_long_password():
+    original = "a" * 72 + "first-suffix"
+    encoded = pwd_context.hash(original)
+    assert verify_and_upgrade_password(original, encoded)[0]
+    assert not verify_and_upgrade_password("a" * 72 + "other-suffix", encoded)[0]
+
+
+def test_bcrypt_overlength_not_silently_truncated():
+    prefix = "a" * 72
+    encoded = bcrypt.hash(prefix)
+    assert verify_and_upgrade_password(prefix + "suffix", encoded) == (False, None)
+    assert verify_and_upgrade_password(prefix, encoded)[0]
+
+
+def test_bcrypt_utf8_limit_counts_bytes():
+    prefix = "é" * 36
+    encoded = bcrypt.hash(prefix)
+    assert verify_and_upgrade_password(prefix + "a", encoded) == (False, None)
+    assert verify_and_upgrade_password(prefix, encoded)[0]
+
+
+@pytest.mark.parametrize("encoded", ["not-a-hash", "$2b$broken", "$argon2id$broken", None])
+def test_invalid_stored_hash_fails_closed(encoded):
+    assert verify_and_upgrade_password("test-password", encoded) == (False, None)
+
+
+def test_legacy_login_migrates_and_revokes_old_token(client):
+    with SessionLocal.begin() as db:
+        user = db.query(models.Admin).filter_by(username="test-manager").one()
+        user.password = bcrypt.hash("test-password")
+        original = user.password
+        old_token = create_access_token(user)
+    response = client.post("/admin/login", json={"username":"test-manager","password":"test-password"})
+    assert response.status_code == 200, response.text
+    with SessionLocal() as db:
+        current = db.query(models.Admin).filter_by(username="test-manager").one().password
+        assert current != original
+        assert current.startswith("$argon2id$")
+    new_token = response.json()["access_token"]
+    assert client.get("/admin/stats",headers={"Authorization":"Bearer "+new_token}).status_code == 200
+    assert client.get("/admin/stats",headers={"Authorization":"Bearer "+old_token}).status_code == 401
+    again = client.post("/admin/login", json={"username":"test-manager","password":"test-password"})
+    assert again.status_code == 200
+    with SessionLocal() as db:
+        assert db.query(models.Admin).filter_by(username="test-manager").one().password == current
+
+
+def test_wrong_legacy_password_does_not_migrate(client):
+    with SessionLocal.begin() as db:
+        user = db.query(models.Admin).filter_by(username="test-manager").one()
+        user.password = bcrypt.hash("test-password")
+        original = user.password
+    assert client.post("/admin/login",json={"username":"test-manager","password":"incorrect"}).status_code == 401
+    with SessionLocal() as db:
+        assert db.query(models.Admin).filter_by(username="test-manager").one().password == original
+
+
+def test_manager_creates_and_resets_argon2_password(client, headers):
+    response = client.post("/admin/users",headers=headers,json={"username":"new-employee","password":"new-password","role":"employee"})
+    assert response.status_code == 200, response.text
+    identifier = response.json()["id"]
+    assert "password" not in response.json()
+    with SessionLocal() as db:
+        encoded = db.get(models.Admin,identifier).password
+        assert encoded.startswith("$argon2id$")
+    response = client.put(f"/admin/users/{identifier}",headers=headers,json={"password":"changed-password"})
+    assert response.status_code == 200, response.text
+    with SessionLocal() as db:
+        changed = db.get(models.Admin,identifier).password
+        assert changed.startswith("$argon2id$")
+        assert changed != encoded
+        assert verify_and_upgrade_password("changed-password",changed)[0]
+        assert not verify_and_upgrade_password("new-password",changed)[0]
