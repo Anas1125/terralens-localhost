@@ -1,0 +1,7 @@
+# Argon2id migration
+
+New admin passwords and password resets use Argon2id (19 MiB memory, 2 iterations, parallelism 1). Existing bcrypt credentials continue to verify; successful authentication upgrades the hash automatically and commits it before issuing the JWT. Failed verification never updates credentials. A conditional update avoids overwriting a concurrent account change. Because JWTs are bound to the stored hash, upgrades invalidate earlier tokens. Existing Argon2id hashes need no update if their parameters match.
+
+The API already enforces a maximum 200 characters. Bcrypt hashes cannot distinguish bytes beyond 72 bytes, so overlength legacy passwords are rejected rather than silently truncated; affected accounts require a manager-authorized password reset. This exception does not affect typical existing passwords. CLI entry is hidden and whitespace is preserved, with the same 8–200 character creation/reset bounds as the API.
+
+Install updated requirements, run isolated tests, deploy when Vercel quota permits, and verify both roles can sign in. No schema or secret changes. **Rollback caveat:** once an account has an Argon2id hash, rolling back to bcrypt-only code would prevent that account logging in. Keep dual-format verification in any rollback release. Do not restore old hashes simply to downgrade code. Persistent rate limiting and server-side session revocation remain separate work.

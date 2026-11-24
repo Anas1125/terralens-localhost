@@ -31,11 +31,38 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 ISSUER = "terralens-api"
 AUDIENCE = "terralens-admin"
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Argon2id for new credentials; bcrypt remains verify-only during migration.
+pwd_context = CryptContext(
+    schemes=["argon2", "bcrypt"],
+    deprecated=["bcrypt"],
+    argon2__type="ID",
+    argon2__memory_cost=19456,
+    argon2__time_cost=2,
+    argon2__parallelism=1,
+    bcrypt__truncate_error=True,
+)
+
+
+def verify_and_upgrade_password(plain_password: str, hashed_password: str):
+    """Return (valid, replacement_hash). Never upgrade a failed verification."""
+    if not plain_password or len(plain_password) > 200:
+        return False, None
+    try:
+        scheme = pwd_context.identify(hashed_password)
+        if scheme == "bcrypt" and len(plain_password.encode("utf-8")) > 72:
+            # Old bcrypt hashes cannot authenticate bytes beyond this boundary.
+            # Affected accounts need an authorized password reset, not truncation.
+            return False, None
+        if scheme is None:
+            return False, None
+        return pwd_context.verify_and_update(plain_password, hashed_password)
+    except (ValueError, TypeError):
+        # Malformed hashes or unsupported password input must not produce a 500.
+        return False, None
 
 
 def verify_password(plain_password: str, hashed_password: str):
-    return pwd_context.verify(plain_password, hashed_password)
+    return verify_and_upgrade_password(plain_password, hashed_password)[0]
 
 
 def credential_binding(admin: models.Admin) -> str:

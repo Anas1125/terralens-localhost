@@ -1,3 +1,5 @@
+from getpass import getpass
+
 from app.database import SessionLocal
 from app import models
 from app.security import pwd_context
@@ -5,10 +7,10 @@ from app.security import pwd_context
 
 def create_admin():
     username = input("New username: ").strip()
-    password = input("New password: ").strip()
+    password = getpass("New password: ")
 
-    if not username or not password:
-        print("Username and password cannot be empty.")
+    if not username or not 8 <= len(password) <= 200:
+        print("Username is required and password must be 8–200 characters.")
         return
 
     db = SessionLocal()
@@ -75,10 +77,10 @@ def delete_admin():
 
 def change_password():
     username = input("Username: ").strip()
-    new_password = input("New password: ").strip()
+    new_password = getpass("New password: ")
 
-    if not new_password:
-        print("Password cannot be empty.")
+    if not 8 <= len(new_password) <= 200:
+        print("Password must be 8–200 characters.")
         return
 
     db = SessionLocal()

@@ -5,7 +5,7 @@ from ..database import get_db
 from ..rate_limit import client_ip_from
 from .. import models, schemas
 from ..security import (
-    verify_password,
+    verify_and_upgrade_password,
     create_access_token,
     get_current_admin,
     get_current_manager,
@@ -109,16 +109,34 @@ def login(
             detail="Invalid username or password",
         )
 
-    if not verify_password(
-        admin.password,
-        user.password,
-    ):
+    old_hash = user.password
+    valid, replacement = verify_and_upgrade_password(admin.password, old_hash)
+    if not valid:
         record_login_failure(client_ip)
 
         raise HTTPException(
             status_code=401,
             detail="Invalid username or password",
         )
+
+    if replacement is not None:
+        # Do not overwrite a concurrent manager password reset or account change.
+        identity = (user.id, user.username, user.role)
+        updated = db.query(models.Admin).filter(
+            models.Admin.id == identity[0],
+            models.Admin.username == identity[1],
+            models.Admin.role == identity[2],
+            models.Admin.is_active == True,
+            models.Admin.password == old_hash,
+        ).update({models.Admin.password: replacement}, synchronize_session=False)
+        if updated != 1:
+            db.rollback()
+            raise HTTPException(401, "Account changed. Please sign in again.")
+        db.commit()
+        db.refresh(user)
+        if (not user.is_active or (user.id, user.username, user.role) != identity
+                or user.password != replacement):
+            raise HTTPException(401, "Account changed. Please sign in again.")
 
     # Successful login clears failed attempts
     clear_login_attempts(client_ip)
