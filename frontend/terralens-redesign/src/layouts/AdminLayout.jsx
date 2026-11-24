@@ -117,7 +117,7 @@ const getAdminRole = () => {
 
   try {
     const payload = JSON.parse(
-      atob(token.split(".")[1])
+      new TextDecoder().decode(Uint8Array.from(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0)))
     );
 
     return payload.role || null;

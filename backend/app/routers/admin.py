@@ -123,16 +123,12 @@ def login(
     # Successful login clears failed attempts
     clear_login_attempts(client_ip)
 
-    token = create_access_token(
-        {
-            "sub": user.username,
-            "role": user.role,
-        }
-    )
+    token = create_access_token(user)
 
     return {
         "access_token": token,
         "token_type": "bearer",
+        "role": user.role,
     }
 
 @router.get("/users", response_model=list[schemas.AdminResponse])
