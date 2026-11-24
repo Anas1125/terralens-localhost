@@ -36,7 +36,9 @@ def client():
 
 @pytest.fixture
 def headers(client):
-    return {"Authorization":"Bearer " + create_access_token({"sub":"test-manager","role":"manager"})}
+    with SessionLocal() as db:
+        manager = db.query(models.Admin).filter_by(username="test-manager").one()
+        return {"Authorization":"Bearer " + create_access_token(manager)}
 
 def submit(client, job_id=1, content=None):
     if content is None:
@@ -112,3 +114,84 @@ def test_fake_image_rejected(client):
 
 def test_oversized_resume_rejected(client):
     assert submit(client,content=b"x"*(4*1024*1024+1)).status_code == 400
+
+
+# JWT regression tests share the isolated database fixture above.
+from datetime import timedelta
+from jose import jwt
+from app.security import SECRET_KEY, require_secret
+
+
+@pytest.mark.parametrize("secret", [None, "", "short", "x"*64, " "*64])
+def test_reject_weak_secret(secret):
+    with pytest.raises(RuntimeError):
+        require_secret(secret)
+
+
+def test_accept_random_secret():
+    value = secrets.token_hex(32)
+    assert require_secret(value) == value
+
+
+def test_login_issues_one_hour_token(client):
+    response = client.post("/admin/login", json={"username":"test-manager","password":"test-password"})
+    assert response.status_code == 200, response.text
+    assert response.json()["role"] == "manager"
+    token = response.json()["access_token"]
+    payload = jwt.get_unverified_claims(token)
+    assert payload["exp"] - payload["iat"] == 3600
+    assert payload["aud"] == "terralens-admin"
+    assert client.get("/admin/stats",headers={"Authorization":"Bearer "+token}).status_code == 200
+
+
+@pytest.mark.parametrize("claim", ["sub","aid","role","binding","iss","aud","iat","exp"])
+def test_missing_claim_rejected(client, headers, claim):
+    payload = jwt.get_unverified_claims(headers["Authorization"].split()[1])
+    del payload[claim]
+    token = jwt.encode(payload,SECRET_KEY,algorithm="HS256")
+    assert client.get("/admin/stats",headers={"Authorization":"Bearer "+token}).status_code == 401
+
+
+def test_expired_token_rejected(client):
+    with SessionLocal() as db:
+        user = db.query(models.Admin).filter_by(username="test-manager").one()
+        token = create_access_token(user, timedelta(seconds=-1))
+    assert client.get("/admin/stats",headers={"Authorization":"Bearer "+token}).status_code == 401
+
+
+def test_wrong_signature_rejected(client, headers):
+    payload = jwt.get_unverified_claims(headers["Authorization"].split()[1])
+    token = jwt.encode(payload,secrets.token_hex(32),algorithm="HS256")
+    assert client.get("/admin/stats",headers={"Authorization":"Bearer "+token}).status_code == 401
+
+
+@pytest.mark.parametrize("change", ["password","role","username","inactive","recreated"])
+def test_changed_account_invalidates_token(client,headers,change):
+    with SessionLocal.begin() as db:
+        admin = db.query(models.Admin).filter_by(username="test-manager").one()
+        if change == "password":
+            admin.password = pwd_context.hash("changed-password")
+        elif change == "role":
+            admin.role = "employee"
+        elif change == "username":
+            admin.username = "renamed"
+        elif change == "inactive":
+            admin.is_active = False
+        else:
+            identifier = admin.id
+            db.delete(admin)
+            db.flush()
+            db.add(models.Admin(id=identifier, username="test-manager",password=pwd_context.hash("test-password"),role="manager",is_active=True))
+    assert client.get("/admin/stats",headers=headers).status_code == 401
+
+
+def test_employee_cannot_manage_admins(client):
+    with SessionLocal.begin() as db:
+        user = models.Admin(username="employee-test", password=pwd_context.hash("test-password"), role="employee",is_active=True)
+        db.add(user)
+        db.flush()
+        token = create_access_token(user)
+    headers = {"Authorization":"Bearer "+token}
+    assert client.get("/admin/stats",headers=headers).status_code == 200
+    assert client.get("/admin/users",headers=headers).status_code == 403
+    assert client.post("/admin/users",headers=headers,json={"username":"new-manager","password":"test-password","role":"manager"}).status_code == 403
