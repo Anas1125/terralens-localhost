@@ -568,7 +568,7 @@ export default function CurrentOpenings() {
                     marginTop: "5px",
                   }}
                 >
-                  PDF, PNG, JPG or JPEG
+                  PDF, PNG, JPG or JPEG · Max 4 MB
                 </span>
               </label>
 
@@ -577,6 +577,12 @@ export default function CurrentOpenings() {
                 type="file"
                 accept=".pdf,.png,.jpg,.jpeg"
                 onChange={(event) => {
+                  if (event.target.files?.[0]?.size > 4 * 1024 * 1024) {
+                    event.target.value = "";
+                    setForm(previous => ({...previous, resume: null}));
+                    showToast("Resume must be 4 MB or smaller.", "error");
+                    return;
+                  }
                   setForm((previous) => ({
                     ...previous,
                     resume:

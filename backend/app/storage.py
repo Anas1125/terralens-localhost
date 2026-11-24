@@ -184,6 +184,8 @@ def create_client_token(
 def save_file(folder: str, filename: str, data: bytes, content_type: str | None = None) -> str:
     """Store a file and return the path/URL to save in the database."""
 
+    if folder.casefold() == "applications":
+        raise StorageError("Applicant documents must use private storage")
     if USE_BLOB:
         return _blob_put(f"{folder}/{filename}", data, content_type)
 
@@ -204,6 +206,8 @@ def list_files(limit: int = 1000) -> list[dict]:
                 continue
 
             folder, filename = pathname.split("/", 1)
+            if folder.casefold() == "applications":
+                continue
             files.append({
                 "folder": folder,
                 "filename": filename,
@@ -216,11 +220,11 @@ def list_files(limit: int = 1000) -> list[dict]:
         return files
 
     for folder in UPLOADS_DIR.iterdir():
-        if not folder.is_dir():
+        if not folder.is_dir() or folder.is_symlink() or folder.name.casefold() == "applications":
             continue
 
         for file in folder.iterdir():
-            if not file.is_file() or file.name.startswith("."):
+            if not file.is_file() or file.is_symlink() or file.name.startswith("."):
                 continue
 
             files.append({

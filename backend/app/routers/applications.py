@@ -6,12 +6,12 @@ from fastapi import (
     File,
     Form,
     Request,
+    Response,
 )
 from ..rate_limit import check_rate_limit, client_ip_from
 from sqlalchemy.orm import Session
 from pathlib import Path
 import io
-import uuid
 
 from PIL import Image
 
@@ -31,7 +31,7 @@ ALLOWED_EXTENSIONS = {
     ".jpeg",
 }
 
-MAX_RESUME_SIZE = 10 * 1024 * 1024  # 10 MB
+MAX_RESUME_SIZE = 4 * 1024 * 1024  # Leave room for multipart overhead on Vercel
 
 ALLOWED_IMAGE_FORMATS = {
     ".png": "PNG",
@@ -68,7 +68,7 @@ async def create_application(
     # Check that the job exists
     job = (
         db.query(models.Job)
-        .filter(models.Job.id == job_id)
+        .filter(models.Job.id == job_id, models.Job.is_active == True)
         .first()
     )
 
@@ -79,6 +79,8 @@ async def create_application(
         )
 
     resume_path = None
+    resume_data = None
+    resume_extension = None
 
     # =====================================================
     # HANDLE RESUME UPLOAD
@@ -114,7 +116,7 @@ async def create_application(
                 if total_size > MAX_RESUME_SIZE:
                     raise HTTPException(
                         status_code=400,
-                        detail="Resume file must be 10 MB or smaller.",
+                        detail="Resume file must be 4 MB or smaller.",
                     )
 
                 buffer.write(chunk)
@@ -162,21 +164,9 @@ async def create_application(
         # STORE VALIDATED FILE
         # =================================================
 
-        filename = f"{uuid.uuid4().hex}{extension}"
-        content_type = (
-            "application/pdf" if extension == ".pdf"
-            else f"image/{ALLOWED_IMAGE_FORMATS[extension].lower()}"
-        )
-
-        try:
-            resume_path = storage.save_file(
-                "applications", filename, data, content_type
-            )
-        except storage.StorageError:
-            raise HTTPException(
-                status_code=502,
-                detail="Could not store the resume. Please try again.",
-            )
+        # New resumes never enter the public media store.
+        resume_data = data
+        resume_extension = extension
 
     # =====================================================
     # CREATE APPLICATION
@@ -192,6 +182,11 @@ async def create_application(
     )
 
     db.add(new_application)
+    db.flush()
+    if resume_data is not None:
+        new_application.resume = f"/applications/{new_application.id}/resume"
+        db.add(models.PrivateResume(application_id=new_application.id,
+                                    extension=resume_extension, data=resume_data))
     db.commit()
     db.refresh(new_application)
 
@@ -250,6 +245,37 @@ def get_application(
     return application
 
 
+# Resume downloads require authentication; never render applicant PDFs inline.
+@router.get("/{application_id}/resume")
+def download_resume(application_id: int, db: Session = Depends(get_db),
+                    admin: models.Admin = Depends(get_current_admin)):
+    application = db.get(models.Application, application_id)
+    if not application or not application.resume:
+        raise HTTPException(404, "Resume not found")
+    stored = db.get(models.PrivateResume, application_id)
+    if stored:
+        data, extension = bytes(stored.data), stored.extension
+    elif application.resume.startswith("/uploads/applications/"):
+        root = (storage.UPLOADS_DIR / "applications").resolve()
+        file = (root / Path(application.resume).name).resolve()
+        if file.parent != root or not file.is_file():
+            raise HTTPException(404, "Resume not found")
+        extension = file.suffix.lower()
+        if file.stat().st_size > MAX_RESUME_SIZE:
+            raise HTTPException(413, "Legacy resume exceeds download limit")
+        data = file.read_bytes()
+    else:
+        raise HTTPException(404, "Legacy resume requires migration")
+    if extension not in ALLOWED_EXTENSIONS:
+        raise HTTPException(404, "Resume not found")
+    return Response(data, media_type="application/octet-stream", headers={
+        "Content-Disposition": f'attachment; filename="resume-{application_id}{extension}"',
+        "Cache-Control": "private, no-store",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "default-src 'none'; sandbox",
+    })
+
+
 # =========================================================
 # ADMIN ONLY — DELETE APPLICATION
 # =========================================================
@@ -280,7 +306,11 @@ def delete_application(
     # DELETE UPLOADED RESUME
     # =====================================================
 
-    if application.resume:
+    private_resume = db.get(models.PrivateResume, application_id)
+    if private_resume:
+        db.delete(private_resume)
+        db.flush()
+    elif application.resume:
         try:
             storage.delete_stored_path(application.resume)
         except storage.StorageError:

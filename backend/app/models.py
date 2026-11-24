@@ -9,6 +9,7 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
+    LargeBinary,
 )
 from .database import Base
 
@@ -293,3 +294,9 @@ class Blog(Base):
         DateTime,
         default=datetime.utcnow
     )
+
+class PrivateResume(Base):
+    __tablename__ = "private_resumes"
+    application_id = Column(Integer, ForeignKey("applications.id", ondelete="CASCADE"), primary_key=True)
+    extension = Column(String(8), nullable=False)
+    data = Column(LargeBinary, nullable=False)
