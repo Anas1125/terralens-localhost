@@ -309,6 +309,7 @@ def delete_application(
     private_resume = db.get(models.PrivateResume, application_id)
     if private_resume:
         db.delete(private_resume)
+        db.flush()
     elif application.resume:
         try:
             storage.delete_stored_path(application.resume)

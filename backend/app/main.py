@@ -55,7 +55,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["Retry-After"],
+    expose_headers=["Retry-After", "Content-Disposition"],
 )
 
 @app.middleware("http")
