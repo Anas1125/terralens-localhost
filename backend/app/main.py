@@ -1,6 +1,6 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -58,11 +58,33 @@ app.add_middleware(
     expose_headers=["Retry-After"],
 )
 
+@app.middleware("http")
+async def private_api_cache(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith(("/admin/", "/applications", "/contact")):
+        response.headers["Cache-Control"] = "private, no-store"
+    return response
+
+
+class PublicUploads(StaticFiles):
+    async def get_response(self, path, scope):
+        # StaticFiles normalizes paths; also reject symlinks resolving into resumes.
+        target = (UPLOADS_DIR / path).resolve()
+        root = UPLOADS_DIR.resolve()
+        try:
+            parts = target.relative_to(root).parts
+        except ValueError:
+            raise HTTPException(404)
+        if not parts or parts[0].casefold() == "applications":
+            raise HTTPException(404)
+        return await super().get_response(path, scope)
+
+
 # Local development only. In production files are served from Vercel Blob.
 if not USE_BLOB and UPLOADS_DIR.exists():
     app.mount(
         "/uploads",
-        StaticFiles(directory=str(UPLOADS_DIR)),
+        PublicUploads(directory=str(UPLOADS_DIR)),
         name="uploads",
     )
 

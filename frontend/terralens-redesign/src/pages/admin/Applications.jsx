@@ -3,6 +3,7 @@ import { Download, Trash2, Eye, X } from "lucide-react";
 import {
   getApplications,
   deleteApplication,
+  downloadResume,
 } from "../../api/applications";
 import { useToast } from "../../components/admin/ToastProvider";
 
@@ -50,19 +51,9 @@ export default function Applications() {
     }
   };
 
-  const getResumeUrl = (resume) => {
-    if (!resume) {
-      return null;
-    }
-
-    if (
-      resume.startsWith("http://") ||
-      resume.startsWith("https://")
-    ) {
-      return resume;
-    }
-
-    return `${import.meta.env.VITE_API_URL}${resume}`;
+  const handleResume = async (id) => {
+    try { await downloadResume(id); }
+    catch { showToast("Could not download resume. Legacy public files require migration.", "error"); }
   };
 
   const formatDate = (date) => {
@@ -215,7 +206,7 @@ export default function Applications() {
 
             <tbody>
               {applications.map((application) => {
-                const resumeUrl = getResumeUrl(application.resume);
+                const resumeUrl = application.resume;
 
                 return (
                   <tr
@@ -307,24 +298,10 @@ export default function Applications() {
                             gap: "8px",
                           }}
                         >
-                          <a
-                            href={resumeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={actionButtonStyle}
-                          >
-                            <Eye size={15} />
-                            View
-                          </a>
-
-                          <a
-                            href={resumeUrl}
-                            download
-                            style={downloadButtonStyle}
-                          >
+                          <button type="button" onClick={() => handleResume(application.id)} style={downloadButtonStyle}>
                             <Download size={15} />
                             Download
-                          </a>
+                          </button>
                         </div>
                       ) : (
                         <span

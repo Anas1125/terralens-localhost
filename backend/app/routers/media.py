@@ -154,7 +154,8 @@ def _ffprobe_is_video(file_path: Path) -> bool:
 @router.get("/")
 def list_media():
     try:
-        return storage.list_files(limit=1000)
+        return [item for item in storage.list_files(limit=1000)
+                if item['folder'].casefold() != 'applications']
     except storage.StorageError as error:
         raise HTTPException(status_code=502, detail=str(error))
 
@@ -169,7 +170,7 @@ def delete_media(
     filename: str,
     admin: str = Depends(get_current_admin),
 ):
-    if not is_safe_name(folder) or not is_safe_name(filename):
+    if folder.casefold() == 'applications' or not is_safe_name(folder) or not is_safe_name(filename):
         raise HTTPException(
             status_code=400,
             detail="Invalid path.",
@@ -194,7 +195,7 @@ def delete_media(
 def _check_upload_target(folder: str, raw_filename: str) -> tuple[str, str, str]:
     """Validate folder + filename. Returns (filename, extension, media_type)."""
 
-    if not is_safe_name(folder):
+    if folder.casefold() == 'applications' or not is_safe_name(folder):
         raise HTTPException(
             status_code=400,
             detail="Invalid upload folder.",
@@ -248,10 +249,10 @@ def create_upload_token(
     here. Locally (no Blob token) the frontend falls back to /upload.
     """
 
+    filename, extension, _ = _check_upload_target(folder, body.filename)
+
     if not storage.USE_BLOB:
         return {"mode": "server"}
-
-    filename, extension, _ = _check_upload_target(folder, body.filename)
 
     if body.size > MAX_FILE_SIZE:
         raise HTTPException(

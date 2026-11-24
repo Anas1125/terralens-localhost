@@ -29,3 +29,17 @@ export const deleteApplication = async (id) => {
 
   return data;
 };
+
+export const downloadResume = async (id) => {
+  const response = await api.get(`/applications/${id}/resume`, { responseType: "blob" });
+  const disposition = response.headers["content-disposition"] || "";
+  const extension = disposition.match(/resume-\d+(\.(?:pdf|png|jpg|jpeg))/i)?.[1] || "";
+  const url = URL.createObjectURL(response.data);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `resume-${id}${extension}`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
